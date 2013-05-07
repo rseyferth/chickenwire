@@ -1,0 +1,14 @@
+{
+    "name": "wipkip/chickenwire",
+    "description": "ChickenWire PHP Framework",
+    "authors": [
+        {
+            "name": "Ruben Seyferth",
+            "email": "ruben.seyferth@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "1.5.*",
+        "php-activerecord/php-activerecord": "1.*"
+    }
+}

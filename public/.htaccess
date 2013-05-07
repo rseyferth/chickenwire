@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Try cached page
+RewriteRule ^([^.]+)$ $1.html [QSA]
+RewriteCond %{REQUEST_FILENAME} !-f 	
+
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+php_flag magic_quotes_gpc off
+php_flag register_globals off
