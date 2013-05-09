@@ -11,7 +11,7 @@
 
 			// Is there a getter function available?
 			if (method_exists($this, '__get_' . $prop)) {
-				return call_user_method('__get_' . $prop, $this);
+				return call_user_func(array($this, '__get_' . $prop));
 			}
 
 			// Check if it is in accessable
@@ -40,11 +40,15 @@
 
 				// Property exists?
 				$propLocal = '_' . $prop;
-				if (isset($this->$propLocal)) {
-					$this->$propLocal = $value;
+				if (property_exists($this, $propLocal)) {
+					$this->$propLocal = $value;					
 				}
+				return;
 
 			}
+
+			// Just set it
+			$this->$prop = $value;
 
 		
 		}

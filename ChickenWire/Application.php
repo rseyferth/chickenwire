@@ -2,9 +2,14 @@
 
 	namespace ChickenWire;
 
+	use ChickenWire\Util\Http;
+	use ActiveRecord\Inflector;
+
 
 	class Application extends Core\Singleton
 	{
+
+		public static $inflector;
 
 		public static function boot()
 		{
@@ -26,41 +31,56 @@
 		public static $defaultSettings = array(
 			"webPath" => null,			// Root of the application as seen from the webserver (e.g. /my-application/ for http://www.my-domain.com/my-application/)
 			"httpPort" => null,			// The port for HTTP requests (only specify when it deviates from the default port 80)
-			"sslPort" => null 			// The port for HTTPS requests (only specify when it deviates from the default port 443)
+			"sslPort" => null, 			// The port for HTTPS requests (only specify when it deviates from the default port 443)
+
+			"applicationNamespace" => "Application",
+
+			"timezone" => ""
 		);
 
 
 
 		public $config;
 
+		protected $_request;
+		protected $_route;
+		protected $_controller;
+
 		protected function _boot() {
+
+			// Create local inflector
+			static::$inflector = Inflector::instance();
 
 			// Create configuration
 			$this->_configure();
 
 			// Create request
-			$request = new Request();
+			$this->_request = new Request();
 			
 			// Get route
-			$route = Route::match($request, $httpStatus, $urlParams);
+			$this->_route = Route::match($this->_request, $httpStatus, $urlParams);
 			
 			// Success?
 			if ($httpStatus === 200) {
 
-				// Store url params in request
-				$request->urlParams = $urlParams;
+				// Store url params and the route in request 
+				$this->_request->setUrlParams($urlParams);
+				$this->_request->route = $this->_route;
 
-				echo ("MATCH: " . $route);
-
-				var_dump($request->params);
-
+				// Load the controller
+				$controllerName = "\\" . $this->config->applicationNamespace . "\\Controllers\\" .  $this->_route->controller;
+				$this->_controller = new $controllerName($this->_request);
+				
 			} else {
 
+				//@TODO Error processing
+				Http::sendStatus($httpStatus);
 				echo ("HTTP Error: " . $httpStatus);
 
 			}
 			
 		}
+
 
 		/**
 		 * Load and apply configuration files
@@ -109,6 +129,12 @@
 				$config->set_default_connection($environment);
 
 			});
+
+			// Set the timezone
+			if ($this->config->timezone == '') {
+				throw new \Exception("You need to specify the timezone in the Application configuration.", 1);				
+			}
+			date_default_timezone_set($this->config->timezone);
 
 		}
 

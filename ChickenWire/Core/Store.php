@@ -23,6 +23,17 @@
 		public function __get($prop) {
 			return $this->get($prop);
 		}
+		public function __isset($prop) {
+			foreach ($this->_sources as $source) { 
+
+				// Has prop?
+				if (array_key_exists($prop, $source)) {
+					return true;
+				}
+
+			}
+			return false;
+		}
 
 		
 		public function get($prop) {

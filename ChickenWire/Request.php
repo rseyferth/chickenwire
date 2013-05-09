@@ -5,7 +5,7 @@
 	class Request extends Core\MagicObject
 	{
 
-		protected static $_propAccessible = array('uri', 'method', 'urlParams');
+		protected static $_propAccessible = array('uri', 'method', 'route');
 
 		protected $_uri;
 		protected $_method;
@@ -14,7 +14,16 @@
 		protected $_urlParams = array();
 		protected $_requestParams;
 
+		protected $_queryParamsStore = null;
+		protected $_urlParamsStore = null;
+		protected $_requestParamsStore = null;
+
+		protected $_route;
+		
 		public $params;
+
+
+		
 
 		public function __construct() 
 		{
@@ -49,14 +58,19 @@
 			}
 
 			// Combine all params into a nice store.
-			$this->_urlParams = array('test' => array('1', '2', '3'));
 			$this->params = new Core\Store(
 				$this->_urlParams,
 				$this->_requestParams,
 				$this->_queryParams);
 			$this->params->setReadOnly(true);
 
-			
+		}
+
+		public function setUrlParams($params) {
+
+			// Store it
+			$this->_urlParams = $params;
+
 		}
 
 
@@ -78,6 +92,26 @@
 		}
 
 
+		protected function __get_urlParams() {
+			if (is_null($this->_urlParamsStore)) {
+				$this->_urlParamsStore = new Core\Store($this->_urlParams);
+			}
+			return $this->_urlParamsStore;
+		}
+
+		protected function __get_queryParams() {
+			if (is_null($this->queryParamsStore)) {
+				$this->_queryParamsStore = new Core\Store($this->_queryParams);
+			}
+			return $this->_queryParamsStore;
+		}
+
+		public function __get_requestParams() {
+			if (is_null($this->_requestParamsStore)) {
+				$this->_requestParamsStore = new Core\Store($this->_requestParams);
+			}
+			return $this->_requestParamsStore;
+		}
 
 
 	}

@@ -2,12 +2,14 @@
 
 	namespace ChickenWire;
 
+	use \ActiveRecord\Inflector;
+
 	class Route extends Core\MagicObject
 	{
 
 		protected static $_routes = array();
 
-		protected static $_propAccessible = array('ssl', 'pattern', 'controller', 'action', 'methods', 'ssl');
+		protected static $_propAccessible = array('ssl', 'pattern', 'controller', 'action', 'methods', 'ssl', 'models', 'autoLoad', 'patternVariables', 'module');
 
 
 		public static function add($pattern, array $options) {
@@ -104,19 +106,77 @@
 		}
 
 
-		public static function resources($pattern, $modelClass, array $options = array()) {
+		public static function resources($modelClass, array $options = array()) {
+
+			// Store model in all routes
+			if (!is_array($modelClass)) { $modelClass = array($modelClass); }
+			$options['models'] = $modelClass;
+
+			// Default controller?
+			if (!array_key_exists('controller', $options)) {
+				$options['controller'] = $modelClass[count($modelClass) - 1] . 'Controller';
+			}
+
+			// Check the pattern
+			if (!array_key_exists('pattern', $options)) {
+
+				// Generate pattern automatically
+				$pattern = '';
+				foreach ($modelClass as $index => $model) {
+
+					// Add pattern for this model
+					$pattern .= '/' . Application::$inflector->tableize($model) . '/';
+
+					// Not last?
+					if ($index < sizeof($modelClass) - 1) {
+
+						// Add the model-id-variable
+						$pattern .= '{' . Application::$inflector->variablize($model) . "_id}";
+
+					}
+
+				}
+
+			} else {
+
+				// Is it an array?
+				$pattern = $options['pattern'];
+				if (!is_array($pattern)) {
+					$pattern = array($pattern);
+				}
+
+				// Not complete?
+				if (sizeof($pattern) != sizeof($modelClass)) {
+					throw new Exception("If you specify the pattern in a resources mapping, you need to specify a pattern for each Model.", 1);					
+				}
+
+				// Loop through models
+				$realPattern = '';
+				foreach ($modelClass as $index => $model) {
+
+					// Add pattern for this model
+					$realPattern .= $pattern[$index];
+
+					// Not last?
+					if ($index < sizeof($pattern) - 1) {
+
+						// Add the model-id-variable
+						$realPattern .= '{' . Application::$inflector->variablize($model) . "_id}";
+
+					}
+
+				}
+
+				// Done.
+				$pattern = $realPattern;
+
+
+			}
 
 			// Remove any trailing slashes
 			$pattern = rtrim($pattern, '/ ');
 
-			// Default controller?
-			if (!array_key_exists('controller', $options)) {
-				$options['controller'] = $modelClass . 'Controller';
-			}
-
-			// Store model in all routes
-			$options['model'] = $modelClass;
-
+			
 			// Index
 			Route::add($pattern, array_merge($options, array(
 				"methods" => "GET",
@@ -152,8 +212,67 @@
 				"methods" => "DELETE",
 				"action" => "destroy"
 			)));
-			
-			
+
+
+
+			// Any more for the collection?
+			if (array_key_exists("collection", $options)) {
+
+				// Not an array?
+				if (!is_array($options['collection'])) {
+					throw new \Exception("The 'collection' option needs to be an array containing one or more Route configurations to add to the collection ", 1);					
+				}
+
+				// Loop it
+				foreach ($options['collection'] as $coll) {
+
+					// Array or simple?
+					if (!is_array($coll)) {
+						$collPattern = $pattern . "/" . $coll;
+						$coll = array(
+							"methods" => array("GET"),
+							"action" => $coll
+						);
+					} else {
+						$collPattern = $pattern . "/" . $coll['pattern'];
+					}					
+
+					// Add route
+					Route::add($collPattern, array_merge($options, $coll));
+
+				}
+
+			}
+
+
+			// Any more for the member?
+			if (array_key_exists("member", $options)) {
+
+				// Not an array?
+				if (!is_array($options['member'])) {
+					throw new \Exception("The 'member' option needs to be an array containing one or more Route configurations to add to the member ", 1);					
+				}
+
+				// Loop it
+				foreach ($options['member'] as $coll) {
+
+					// Array or simple?
+					if (!is_array($coll)) {
+						$collPattern = $pattern . "/{#id}/" . $coll;
+						$coll = array(
+							"methods" => array("GET"),
+							"action" => $coll
+						);
+					} else {
+						$collPattern = $pattern . "/{#id}/" . $coll['pattern'];
+					}					
+
+					// Add route
+					Route::add($collPattern, array_merge($options, $coll));
+
+				}
+
+			}
 
 
 			
@@ -171,7 +290,11 @@
 		protected $_action;
 		protected $_methods;
 		protected $_ssl;
-		protected $_model;
+
+		protected $_models;
+		protected $_autoLoad;
+
+		protected $_module;
 
 		protected $_regexPattern;
 		protected $_patternVariables;
@@ -186,11 +309,13 @@
 			}
 
 			// Localize options
-			$this->_pattern = $pattern;
+			$this->_pattern = rtrim($pattern, '/ ');
 			$this->_controller = $options['controller'];
 			$this->_action = array_key_exists("action", $options) ? $options['action'] : 'index';
 			$this->_ssl = array_key_exists("ssl", $options) ? $options['ssl'] : 'index';
-			$this->_model = array_key_exists("model", $options) ? $options['model'] : null;
+			$this->_models = array_key_exists("models", $options) ? $options['models'] : null;
+			$this->_autoLoad = array_key_exists("autoLoad", $options) ? $options['autoLoad'] : true;
+			$this->_module = array_key_exists("module", $options) ? $options['module'] : '';
 
 			// Parse methods
 			if (!array_key_exists('methods', $options)) {
@@ -203,8 +328,7 @@
 
 			// Look for params in the pattern
 			preg_match_all("/({([^}]*)})/", $this->_pattern, $matches);
-			$this->_patternVariables = $matches[2];
-		
+			$this->_patternVariables = $matches[2];		
 
 			// Create regular expression to match this pattern
 			$this->_regexPattern = "/^" . 

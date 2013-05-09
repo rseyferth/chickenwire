@@ -2,8 +2,9 @@ RewriteEngine On
 
 # Try cached page
 RewriteRule ^([^.]+)$ $1.html [QSA]
-RewriteCond %{REQUEST_FILENAME} !-f 	
 
+# When the file does not exist send it to Chickenwire
+RewriteCond %{REQUEST_FILENAME} !-f 	
 RewriteRule ^(.*)$ index.php [QSA,L]
 
 php_flag magic_quotes_gpc off

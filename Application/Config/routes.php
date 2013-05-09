@@ -10,22 +10,15 @@
 			"ssl" => false,
 		));
 
-	Route::add("/page/{pagename}", 
-		array(
-			"controller" => "ApplicationController",
-			"action" => "page",
-			"methods" => "GET",
-			"ssl" => false,
-		));
-
-	Route::resources("/people", "Person", array(
-		"controller" => "PersonController"
+	Route::resources("Client", array(
+		"collection" => array(
+			"list"
+		),
+		"member" => array(
+			"promote"
+		)
 	));
-
-	Route::add("/deel/{#nummer}/sub/{gedeelte}", array(
-		"controller" => "djkfhsd",
-		"action" => "index"
-	));
+	Route::resources(array("Client", "Project"));
 
 
 ?>

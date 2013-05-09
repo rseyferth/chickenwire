@@ -2,18 +2,16 @@
 
 	namespace Application\Controllers;
 
-	class ApplicationController extends ChickenWire\Controller 
+	class ApplicationController extends \ChickenWire\Controller 
 	{
 
 
-		public function __construct() 
+		public function index()
 		{
 
-			echo("WE!");
-
+			echo ("Welkom!");
 
 		}
-
 
 
 	}
