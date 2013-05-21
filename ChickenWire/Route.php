@@ -131,7 +131,7 @@
 					if ($index < sizeof($modelClass) - 1) {
 
 						// Add the model-id-variable
-						$pattern .= '{' . Application::$inflector->variablize($model) . "_id}";
+						$pattern .= '{#' . Application::$inflector->variablize($model) . "_id}";
 
 					}
 
@@ -161,7 +161,7 @@
 					if ($index < sizeof($pattern) - 1) {
 
 						// Add the model-id-variable
-						$realPattern .= '{' . Application::$inflector->variablize($model) . "_id}";
+						$realPattern .= '{#' . Application::$inflector->variablize($model) . "_id}";
 
 					}
 
@@ -326,6 +326,12 @@
 				$this->_methods = preg_split('/\s/', $options['methods']);
 			}
 
+			// Prepend module to pattern and controller
+			if (!empty($this->_module)) {
+				$this->_pattern = '/' . Application::$inflector->variablize($this->_module) . $this->_pattern;
+				$this->_controller = $this->_module . "\\" . $this->_controller;
+			}
+			
 			// Look for params in the pattern
 			preg_match_all("/({([^}]*)})/", $this->_pattern, $matches);
 			$this->_patternVariables = $matches[2];		

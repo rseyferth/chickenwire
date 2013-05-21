@@ -10,7 +10,10 @@
 			"ssl" => false,
 		));
 
+
+
 	Route::resources("Client", array(
+		"module" => "BMK",
 		"collection" => array(
 			"list"
 		),
