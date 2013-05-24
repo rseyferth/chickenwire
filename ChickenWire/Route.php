@@ -11,10 +11,32 @@
 
 		protected static $_propAccessible = array('ssl', 'pattern', 'controller', 'action', 'methods', 'ssl', 'models', 'autoLoad', 'patternVariables', 'module');
 
+		protected static $_withModule = null;
 
 		public static function add($pattern, array $options) {
+
+			// With a module?
+			if (!is_null(self::$_withModule) && !array_key_exists("module", $options)) {
+				$options['module'] = self::$_withModule;
+			}
+
+			// Create and add
 			$route = new Route($pattern, $options);
 			array_push(self::$_routes, $route);
+		}
+
+		public static function withModule(Module $module) {
+
+			// Store module
+			self::$_withModule = $module;
+
+		}
+
+		public static function endWith() {
+
+			// Unset the module
+			self::$_withModule = null;
+
 		}
 
 		/**
@@ -116,6 +138,11 @@
 			if (!array_key_exists('controller', $options)) {
 				$options['controller'] = $modelClass[count($modelClass) - 1] . 'Controller';
 			}
+
+			// With a module?
+			if (!is_null(self::$_withModule) && !array_key_exists("module", $options)) {
+				$options['module'] = self::$_withModule;
+			}	
 
 			// Check the pattern
 			if (!array_key_exists('pattern', $options)) {
@@ -308,6 +335,8 @@
 				die;				
 			}
 
+
+
 			// Localize options
 			$this->_pattern = rtrim($pattern, '/ ');
 			$this->_controller = $options['controller'];
@@ -315,7 +344,12 @@
 			$this->_ssl = array_key_exists("ssl", $options) ? $options['ssl'] : 'index';
 			$this->_models = array_key_exists("models", $options) ? $options['models'] : null;
 			$this->_autoLoad = array_key_exists("autoLoad", $options) ? $options['autoLoad'] : true;
-			$this->_module = array_key_exists("module", $options) ? $options['module'] : '';
+			$this->_module = array_key_exists("module", $options) ? $options['module'] : null;
+
+			// Find module object
+			if (is_string($this->_module)) {
+				$this->_module = Module::get($this->_module);
+			}
 
 			// Parse methods
 			if (!array_key_exists('methods', $options)) {
@@ -328,10 +362,10 @@
 
 			// Prepend module to pattern and controller
 			if (!empty($this->_module)) {
-				$this->_pattern = '/' . Application::$inflector->variablize($this->_module) . $this->_pattern;
-				$this->_controller = $this->_module . "\\" . $this->_controller;
+				$this->_pattern = $this->_module->urlPrefix . $this->_pattern;
 			}
 			
+
 			// Look for params in the pattern
 			preg_match_all("/({([^}]*)})/", $this->_pattern, $matches);
 			$this->_patternVariables = $matches[2];		
@@ -349,6 +383,25 @@
 								),
 								str_replace("/", "\\/", $this->_pattern))
 						. "$/";
+
+		}
+
+		public function __get_controllerClass() {
+
+			// Part of a module?
+			if (is_null($this->_module)) {
+
+				// Use the application
+				$namespace = "\\" . Application::getConfiguration()->applicationNamespace . "\\Controllers";
+
+			} else {
+
+				// Use module namespace
+				$namespace = "\\" . $this->_module->namespace . "\\Controllers";
+
+			}
+
+			return $namespace . "\\" . $this->_controller;
 
 		}
 

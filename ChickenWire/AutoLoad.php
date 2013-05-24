@@ -11,6 +11,8 @@
 			require $filename;
 		}
 
+		// Check in loaded modules
+
 	}
 
 

@@ -35,7 +35,8 @@
 
 			"applicationNamespace" => "Application",
 
-			"timezone" => ""
+			"timezone" => "",
+			"autoLoadModules" => false
 		);
 
 
@@ -54,6 +55,11 @@
 			// Create configuration
 			$this->_configure();
 
+			// Auto load modules?
+			if ($this->config->autoLoadModules == true) {
+				$this->_loadModules();
+			}
+
 			// Create request
 			$this->_request = new Request();
 			
@@ -68,7 +74,7 @@
 				$this->_request->route = $this->_route;
 
 				// Load the controller
-				$controllerName = "\\" . $this->config->applicationNamespace . "\\Controllers\\" .  $this->_route->controller;
+				$controllerName = $this->_route->controllerClass;
 				$this->_controller = new $controllerName($this->_request);
 				
 			} else {
@@ -99,6 +105,7 @@
 			define("CONTROLLER_PATH", APP_PATH . "/Controllers");
 			define("MODEL_PATH", APP_PATH . "/Models");
 			define("VIEW_PATH", APP_PATH . "/Views");
+			define("MODULE_PATH", APP_ROOT . "/Modules");
 
 			// Include all php files in the config directory
 			$dh = opendir(CONFIG_PATH);
@@ -138,6 +145,24 @@
 
 		}
 
+		protected function _loadModules() 
+		{
+
+			// Check module directories
+			$dh = opendir(MODULE_PATH);
+			while (false !== ($filename = readdir($dh))) {
+
+				// Directory?
+				if (is_dir(MODULE_PATH . "/" . $filename) && !preg_match('/^\./', $filename)) {
+
+					// Load the module
+					Module::load($filename);
+
+				}
+
+			}
+
+		}
 
 
 	}
