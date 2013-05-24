@@ -12,15 +12,6 @@
 
 
 
-	Route::resources("Client", array(
-		"module" => "BMK",
-		"collection" => array(
-			"list"
-		),
-		"member" => array(
-			"promote"
-		)
-	));
 	Route::resources(array("Client", "Project"));
 
 

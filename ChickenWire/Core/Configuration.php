@@ -4,6 +4,7 @@
 
 	use ChickenWire\Util\Reflection;
 	use ChickenWire\Route;
+	use ChickenWire\Module;
 
 	class Configuration
 	{
