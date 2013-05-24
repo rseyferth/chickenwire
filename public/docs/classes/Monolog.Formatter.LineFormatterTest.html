@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \Monolog\Formatter\LineFormatterTest</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/Acme.html"><i class="icon-th"></i> Acme</a></li>
+<li><a href="../namespaces/ActiveRecord.html"><i class="icon-th"></i> ActiveRecord</a></li>
+<li><a href="../namespaces/Application.html"><i class="icon-th"></i> Application</a></li>
+<li><a href="../namespaces/ChickenWire.html"><i class="icon-th"></i> ChickenWire</a></li>
+<li><a href="../namespaces/Composer.html"><i class="icon-th"></i> Composer</a></li>
+<li><a href="../namespaces/Monolog.html"><i class="icon-th"></i> Monolog</a></li>
+<li><a href="../namespaces/NamespaceTest.html"><i class="icon-th"></i> NamespaceTest</a></li>
+<li><a href="../namespaces/Psr.html"><i class="icon-th"></i> Psr</a></li>
+<li><a href="../namespaces/foo.html"><i class="icon-th"></i> foo</a></li>
+<li><a href="../namespaces/global.html"><i class="icon-th"></i> global</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/ActiveRecord.html"><i class="icon-folder-open"></i> ActiveRecord</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1953</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">3</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list"><li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_testBatchFormat" title="testBatchFormat :: "><span class="description">testBatchFormat()
+        </span><pre>testBatchFormat()</pre></a></li>
+<li class="method public "><a href="#method_testDefFormatExtras" title="testDefFormatExtras :: "><span class="description">testDefFormatExtras()
+        </span><pre>testDefFormatExtras()</pre></a></li>
+<li class="method public "><a href="#method_testDefFormatWithArrayContext" title="testDefFormatWithArrayContext :: "><span class="description">testDefFormatWithArrayContext()
+        </span><pre>testDefFormatWithArrayContext()</pre></a></li>
+<li class="method public "><a href="#method_testDefFormatWithException" title="testDefFormatWithException :: "><span class="description">testDefFormatWithException()
+        </span><pre>testDefFormatWithException()</pre></a></li>
+<li class="method public "><a href="#method_testDefFormatWithObject" title="testDefFormatWithObject :: "><span class="description">testDefFormatWithObject()
+        </span><pre>testDefFormatWithObject()</pre></a></li>
+<li class="method public "><a href="#method_testDefFormatWithPreviousException" title="testDefFormatWithPreviousException :: "><span class="description">testDefFormatWithPreviousException()
+        </span><pre>testDefFormatWithPreviousException()</pre></a></li>
+<li class="method public "><a href="#method_testDefFormatWithString" title="testDefFormatWithString :: "><span class="description">testDefFormatWithString()
+        </span><pre>testDefFormatWithString()</pre></a></li>
+<li class="method public "><a href="#method_testFormatExtras" title="testFormatExtras :: "><span class="description">testFormatExtras()
+        </span><pre>testFormatExtras()</pre></a></li>
+</ul>
+</li></ul>
+</div>
+<div class="span8">
+<a id="\Monolog\Formatter\LineFormatterTest"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Monolog.html">Monolog</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/Monolog.Formatter.html">Formatter</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Monolog.Formatter.LineFormatterTest.html">LineFormatterTest</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description"></p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>covers</th>
+<td>\Monolog\Formatter\LineFormatter</td>
+</tr></table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_testBatchFormat"></a><div class="element clickable method public method_testBatchFormat" data-toggle="collapse" data-target=".method_testBatchFormat .collapse">
+<h2>testBatchFormat()
+        </h2>
+<pre>testBatchFormat() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_testDefFormatExtras"></a><div class="element clickable method public method_testDefFormatExtras" data-toggle="collapse" data-target=".method_testDefFormatExtras .collapse">
+<h2>testDefFormatExtras()
+        </h2>
+<pre>testDefFormatExtras() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_testDefFormatWithArrayContext"></a><div class="element clickable method public method_testDefFormatWithArrayContext" data-toggle="collapse" data-target=".method_testDefFormatWithArrayContext .collapse">
+<h2>testDefFormatWithArrayContext()
+        </h2>
+<pre>testDefFormatWithArrayContext() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_testDefFormatWithException"></a><div class="element clickable method public method_testDefFormatWithException" data-toggle="collapse" data-target=".method_testDefFormatWithException .collapse">
+<h2>testDefFormatWithException()
+        </h2>
+<pre>testDefFormatWithException() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_testDefFormatWithObject"></a><div class="element clickable method public method_testDefFormatWithObject" data-toggle="collapse" data-target=".method_testDefFormatWithObject .collapse">
+<h2>testDefFormatWithObject()
+        </h2>
+<pre>testDefFormatWithObject() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_testDefFormatWithPreviousException"></a><div class="element clickable method public method_testDefFormatWithPreviousException" data-toggle="collapse" data-target=".method_testDefFormatWithPreviousException .collapse">
+<h2>testDefFormatWithPreviousException()
+        </h2>
+<pre>testDefFormatWithPreviousException() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_testDefFormatWithString"></a><div class="element clickable method public method_testDefFormatWithString" data-toggle="collapse" data-target=".method_testDefFormatWithString .collapse">
+<h2>testDefFormatWithString()
+        </h2>
+<pre>testDefFormatWithString() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_testFormatExtras"></a><div class="element clickable method public method_testFormatExtras" data-toggle="collapse" data-target=".method_testFormatExtras .collapse">
+<h2>testFormatExtras()
+        </h2>
+<pre>testFormatExtras() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2013-05-21T12:03:44+02:00.<br></footer></div>
+</div>
+</body>
+</html>

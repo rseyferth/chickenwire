@@ -11,14 +11,22 @@
 
 		public static $inflector;
 
+		/**
+		 * Boot up the ChickenWire application
+		 * @return void
+		 */
 		public static function boot()
 		{
 
 			// Boot on instance
-			Application::instance()->_boot();
+			return Application::instance()->_boot();
 			
 		}
 
+		/**
+		 * Get the ChickenWire application configuration object
+		 * @return \ChickenWire\Core\Configuration The ChickenWire Configuration object
+		 */
 		public static function getConfiguration() {
 			return Application::instance()->config;
 		}
@@ -46,6 +54,10 @@
 		protected $_route;
 		protected $_controller;
 
+		/**
+		 * Boot up the application (internal function)
+		 * @return void
+		 */
 		protected function _boot() {
 
 			// Create local inflector
@@ -84,7 +96,7 @@
 
 		/**
 		 * Load and apply configuration files
-		 * @return [type] [description]
+		 * @return void
 		 */
 		protected function _configure() {
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+	<title><![CDATA[ChickenWire Documentation]]></title>
+  <parser>
+    <target>public/docs</target>
+  </parser>
+  <transformer>
+    <target>public/docs</target>
+  </transformer>
+  <files>
+    <directory>ChickenWire</directory>
+    <directory>Application</directory>
+    <directory>vendor/php-activerecord/php-activerecord/lib</directory>
+  </files>
+  <transformations>
+    <template name="responsive" />
+</transformations>
+</phpdoc>
