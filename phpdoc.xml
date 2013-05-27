@@ -2,10 +2,10 @@
 <phpdoc>
 	<title><![CDATA[ChickenWire Documentation]]></title>
   <parser>
-    <target>public/docs</target>
+    <target>Application/Public/docs</target>
   </parser>
   <transformer>
-    <target>public/docs</target>
+    <target>Application/Public/docs</target>
   </transformer>
   <files>
     <directory>ChickenWire</directory>

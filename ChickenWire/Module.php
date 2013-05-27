@@ -4,11 +4,80 @@
 
 	use \ChickenWire\Util\Str;
 
+	/**
+	 * Module class containing information on loaded modules
+	 *
+	 * A module is a seperate set of models, views and controllers contained
+	 * within your application. Modules have the same structure as an Application,
+	 * with the exception of the settings for how the module behaves inside the
+	 * Application. These settings can either be placed inside a Module.php file
+	 * in the module's root directory, for example:
+	 *
+	 * <b>Module.php</b>
+	 * <code>
+	 * 	$module->namespace = "SomeModule";
+	 * </code>
+	 *
+	 * This file will be automatically loaded when the module is loaded. You can optionally also
+	 * configure the module inline, through the load() method, like:
+	 *
+	 * <code>
+	 * Module::load("SomeModule");		// No extra configuration
+	 * Module::load("SomeModule", array(
+	 * 	"namespace" => "SomeModulesNamespace"		// Overriding default settings
+	 * ));
+	 * </code>
+	 *
+	 * When neither of the configuration options is used, the values will be guessed as follows:
+	 *
+	 * <table border="1" cellpadding="3">
+	 * <thead>
+	 * 	<tr>
+	 * 		<th>Setting</th>
+	 * 		<th>Guess</th>
+	 * 		<th>Example for SomeModule</th>
+	 * 		<th>Description</th>
+	 * 	</tr>
+	 * </thead>
+	 * <tbody>
+	 * 	<tr>
+	 * 		<td>namespace</td>
+	 * 		<td>The name of the Module</td>
+	 * 		<td>SomeModule</td>
+	 * 		<td>The PHP namespace for your module.</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>path</td>
+	 * 		<td>MODULE_PATH + name of the module</td>
+	 * 		<td>/srv/www/htdocs/Modules/SomeModule</td>
+	 * 		<td>The full root path of the module.</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>urlPrefix</td>
+	 * 		<td>/ + slugified name of the module</td>
+	 * 		<td>/somemodule</td>
+	 * 		<td>The prefix for all routes defined in this module. You can also enter an empty string, so the routes will be the same as the application.</td>
+	 * 	</tr>
+	 * </table>
+	 *
+	 * When you use autoLoadModules (see Application), all subdirectories in the Modules/ directory
+	 * will be automatically loaded, with no extra configuration (except the Module.php config file). It will
+	 * assume the name is the same as the directory name.
+	 *
+	 * @see  ChickenWire\Application
+	 * 
+	 * @package ChickenWire
+	 */
 	class Module extends Core\MagicObject {
 
 		protected static $_propAccessible = array("name", "path", "namespace", "urlPrefix");
 
 		protected static $_modules = array();
+
+		public static function &all() {
+			return self::$_modules;
+		}
+
 
 		public static function load($name, $options = array()) {
 

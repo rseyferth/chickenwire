@@ -6,6 +6,54 @@
 	use ChickenWire\Route;
 	use ChickenWire\Module;
 
+	/**
+	 * Configuration class for multiple environment configuration
+	 *
+	 * The Configuration class can be used to create a configuration for
+	 * one or more environments (usually development, test, and production). This class
+	 * is mainly used by the ChickenWire\Application class, to store all
+	 * framework configuration. On construction the Configuration will try to
+	 * load default settings from the calling/defined class. For example:
+	 *
+	 * <code>
+	 * class Application
+	 * {
+	 * 	static $defaultSettings = array(
+	 * 		"name" => "Not a real application."
+	 * 	);
+	 * 	
+	 * 	private $_settings;
+	 * 	function __construct() 
+	 * 	{
+	 * 		$this->_settings = new \ChickenWire\Core\Configuration();
+	 * 		echo $this->_settings->name;		// output: Not a real application.
+	 * 	}
+	 * }
+	 * </code>
+	 *
+	 * In the Application's config files the local variable $config is an
+	 * instance of this class. 
+	 *
+	 * Example of a configuration file:
+	 * <code>
+	 * // Set environment
+	 * $config->environment = ($_SERVER['HTTP_HOST'] == 'www.live-domain.com') ? 'production' : 'development';
+	 *
+	 * // Database (for each environment seperately)
+	 * $config->database = array(
+	 * 	'development' => 'mysql://root:guess@localhost/[dbname];charset=utf8',
+	 * 	'production' => 'mysql://[user]:[pass]@localhost/[dbname]-admin;charset=utf8'
+	 * );
+	 *
+	 * // Set timezone (for all environments)
+	 * $config->timezone = "Europe/Amsterdam";
+	 * </code>
+	 *
+	 * @property string $environment The environment we are currently in. This determines which value will be returned when you have configured multiple environments.
+	 * 
+	 * @package ChickenWire
+	 */
+
 	class Configuration
 	{
 
@@ -15,6 +63,10 @@
 		protected $_defaults = array();
 
 
+		/**
+		 * Create a new Configuration instance
+		 * @param string $class (default: the calling class) The class for which the configuration is meant. When you leave this null it will assume the class you call this constructor from.
+		 */
 		public function __construct($class = null) {
 
 			// Check if class is given
@@ -55,7 +107,9 @@
 
 		}
 
-
+		/**
+		 * @ignore
+		 */
 		public function __get($name) {
 
 			// Return it!
@@ -63,6 +117,9 @@
 
 		}
 
+		/**
+		 * @ignore
+		 */
 		public function __set($name, $value) {
 
 			// Set environment?

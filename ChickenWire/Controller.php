@@ -2,13 +2,44 @@
 
 	namespace ChickenWire;
 
+	/**
+	 * The ChickenWire controller class
+	 *
+	 * This is the basis for all Controllers in your Application. To create
+	 * a new controller simply extend this class. Any public function you
+	 * define in your controller can then be used to route to.
+	 *
+	 * <h3>Configurators</h3>
+	 * You can add one or more of the following configurators to your controller
+	 * to add features.
+	 *
+	 * <h4>requiresAuth</h4>
+	 * If your actions require a user to be logged in, you can define an Auth object
+	 * in your configuration, and specify its name in your controllers. See Auth for
+	 * more information.
+	 * 
+	 * <code>
+	 * static $requiresAuth = "BMK";			// Authentication required for all actions
+	 * static $requiresAuth = array("BMK", 
+	 * 	"except" => array("index", "show")		// No authentication required for <i>index</i> and <i>show</i> actions
+	 * );
+	 * static $requiresAuth = array("BMK", 
+	 * 	"only" => array("secret")				// Authentication only required for the <i>secret</i> action
+	 * );
+	 * </code>
+	 *
+	 * @see \ChickenWire\Auth
+	 * @see \ChickenWire\Route
+	 * 
+	 * @package ChickenWire
+	 */
 	class Controller extends Core\MagicObject
 	{
 
 		protected $request;
 
 
-		public function __construct($request) {
+		public function __construct(\ChickenWire\Request $request) {
 
 			// Localize
 			$this->request = $request;
@@ -87,8 +118,6 @@
 						// Find the record
 						$varName = Application::$inflector->variablize($model);
 						$this->$varName = $findMethod->invokeArgs(null, array($modelId));	
-;
-
 
 					} catch (\ActiveRecord\RecordNotFound $e) {
 						

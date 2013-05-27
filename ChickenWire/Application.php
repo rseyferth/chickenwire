@@ -6,9 +6,80 @@
 	use ActiveRecord\Inflector;
 
 
+	/**
+	 * ChickenWire Application Class
+	 *
+	 * The is the main Application class that handles the request
+	 * and outputs the requested content.
+	 * 
+	 * Configuration of the application can be done through files in your 
+	 * /Application/Config directory, or any of the Modules/ Config directories).
+	 * Any PHP file in those directories will be loaded upon booting of the 
+	 * application.
+	 *
+	 * Possible application settings are:
+	 * <table border="1" cellpadding="3">
+	 * <thead>
+	 * 	<tr>
+	 * 		<th>Property</th>
+	 * 		<th>Default value</th>
+	 * 		<th>Description</th>
+	 * 	</tr>
+	 * </thead>
+	 * <tbody>
+	 * 	<tr>
+	 * 		<td>applicationNamespace</td>
+	 * 		<td>"Application"</td>
+	 * 		<td>The PHP namespace for your Application.</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>autoLoadModules</td>
+	 * 		<td>false</td>
+	 * 		<td>Whether to automatically load all modules that are found in your /Modules/ directory. If you leave this on false, you'll have to load each module individually, through Module::load - this allows for more configuration options.</td>
+	 * 	</tr>
+	 * 	<tr>
+	 *  	<td>database</td>
+	 *  	<td></td>
+	 *  	<td>The ActiveRecord database connection to use.</td>
+	 * 	</tr>
+	 * 	<tr>
+	 *  	<td>httpPort</td>
+	 *  	<td>80</td>
+	 *  	<td>The port for HTTP requests (only specify when it deviates from the default port 80, otherwise the port number will be added to all generated urls)</td>
+	 * 	</tr>
+	 * 	<tr>
+	 *  	<td>sslPort</td>
+	 *  	<td>443</td>
+	 *  	<td>The port for HTTPS requests (only specify when it deviates from the default port 443, otherwise the port number will be added to all generated urls)</td>
+	 * 	</tr>
+	 * 	<tr>
+	 *  	<td>timezone</td>
+	 *  	<td></td>
+	 *  	<td>The timezone used for date/time functions. This needs to be a valid PHP timezone ({@link http://php.net/manual/en/timezones.php}), for example Europe/Amsterdam.</td>
+	 * 	</tr>
+	 * 	<tr>
+	 *  	<td>webPath</td>
+	 *  	<td>/</td>
+	 *  	<td>Root of the application as seen from the webserver (e.g. /my-application/ for http://www.my-domain.com/my-application/).</td>
+	 * 	</tr>
+	 * </tbody>
+	 * </table>
+	 *
+	 * Each of these settings can be defined specifically for each environment, or
+	 * for all environments at once (see Configuration). 
+	 * 
+	 * @see  \ChickenWire\Core\Configuration
+	 * @see  \ChickenWire\Module
+	 * 
+	 * @package ChickenWire
+	 */
 	class Application extends Core\Singleton
 	{
 
+		/**
+		 * The default inflector used throughout the Application
+		 * @var \ActiveRecord\Inflector
+		 */
 		public static $inflector;
 
 		/**
@@ -36,10 +107,15 @@
 
 		protected static $_instance;
 
+		/**
+		 * The default settings for the Application. These can be overridden in your config files.
+		 * 
+		 * @var array
+		 */
 		public static $defaultSettings = array(
-			"webPath" => null,			// Root of the application as seen from the webserver (e.g. /my-application/ for http://www.my-domain.com/my-application/)
-			"httpPort" => null,			// The port for HTTP requests (only specify when it deviates from the default port 80)
-			"sslPort" => null, 			// The port for HTTPS requests (only specify when it deviates from the default port 443)
+			"webPath" => null,			// 
+			"httpPort" => null,			// 
+			"sslPort" => null, 			// 
 
 			"applicationNamespace" => "Application",
 
@@ -48,7 +124,11 @@
 		);
 
 
-
+		/**
+		 * The Configuration object for the Application
+		 * 
+		 * @var \ChickenWire\Core\Configuration
+		 */
 		public $config;
 
 		protected $_request;

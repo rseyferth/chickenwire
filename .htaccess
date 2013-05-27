@@ -4,17 +4,23 @@ RewriteEngine On
 # Try cached page
 #RewriteRule ^([^.]+)$ $1.html [QSA]
 
-# Check if the file exists in the Application Public directory
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !^/Application/Public/
-RewriteRule ^(.*)$ Application/Public/$1
+# Does the file exist now? That's not allowed!!!
+#RewriteCond %{REQUEST_FILENAME} -f [OR]
+#RewriteCond %{REQUEST_FILENAME} -d
+#RewriteRule ^(.*)$ ChickenWire.php [L,G]
 
+
+# Check if the file exists in the Application Public directory
+RewriteCond 	  %{DOCUMENT_ROOT}/Application/Public/%{REQUEST_URI} -f [OR]
+RewriteCond 	  %{DOCUMENT_ROOT}/Application/Public/%{REQUEST_URI} -d
+RewriteRule ^(.+) %{DOCUMENT_ROOT}/Application/Public/$1 [L]
 
 # File not found in any of the static directories (>> redirect to ChickenWire)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ ChickenWire.php [QSA,L]
+RewriteRule ^(.*)$ ChickenWire.php [QSA]
 
 
 # PHP Settings
 php_flag magic_quotes_gpc off
 php_flag register_globals off
+php_flag html_errors on
+php_flag display_errors on

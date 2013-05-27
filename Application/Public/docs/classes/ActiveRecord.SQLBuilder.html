@@ -1,0 +1,562 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ChickenWire Documentation » \ActiveRecord\SQLBuilder</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ChickenWire Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ActiveRecord.html"><i class="icon-th"></i> ActiveRecord</a></li>
+<li><a href="../namespaces/Application.html"><i class="icon-th"></i> Application</a></li>
+<li><a href="../namespaces/ChickenWire.html"><i class="icon-th"></i> ChickenWire</a></li>
+<li><a href="../namespaces/global.html"><i class="icon-th"></i> global</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/ActiveRecord.html"><i class="icon-folder-open"></i> ActiveRecord</a></li>
+<li><a href="../packages/ChickenWire.html"><i class="icon-folder-open"></i> ChickenWire</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">393</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">3</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: Constructor."><span class="description">Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method___toString" title="__toString :: Returns the SQL string."><span class="description">Returns the SQL string.</span><pre>__toString()</pre></a></li>
+<li class="method public "><a href="#method_bind_values" title="bind_values :: Returns the bind values."><span class="description">Returns the bind values.</span><pre>bind_values()</pre></a></li>
+<li class="method public "><a href="#method_create_conditions_from_underscored_string" title='create_conditions_from_underscored_string :: Converts a string like "id_and_name_or_z" into a conditions value like array("id=? AND name=? OR z=?", values, .'><span class="description">Converts a string like "id_and_name_or_z" into a conditions value like array("id=? AND name=? OR z=?", values, .</span><pre>create_conditions_from_underscored_string()</pre></a></li>
+<li class="method public "><a href="#method_create_hash_from_underscored_string" title="create_hash_from_underscored_string :: Like create_conditions_from_underscored_string but returns a hash of name =&gt; value array instead."><span class="description">Like create_conditions_from_underscored_string but returns a hash of name =&gt; value array instead.</span><pre>create_hash_from_underscored_string()</pre></a></li>
+<li class="method public "><a href="#method_delete" title="delete :: "><span class="description">delete()
+        </span><pre>delete()</pre></a></li>
+<li class="method public "><a href="#method_get_where_values" title="get_where_values :: "><span class="description">get_where_values()
+        </span><pre>get_where_values()</pre></a></li>
+<li class="method public "><a href="#method_group" title="group :: "><span class="description">group()
+        </span><pre>group()</pre></a></li>
+<li class="method public "><a href="#method_having" title="having :: "><span class="description">having()
+        </span><pre>having()</pre></a></li>
+<li class="method public "><a href="#method_insert" title="insert :: "><span class="description">insert()
+        </span><pre>insert()</pre></a></li>
+<li class="method public "><a href="#method_joins" title="joins :: "><span class="description">joins()
+        </span><pre>joins()</pre></a></li>
+<li class="method public "><a href="#method_limit" title="limit :: "><span class="description">limit()
+        </span><pre>limit()</pre></a></li>
+<li class="method public "><a href="#method_offset" title="offset :: "><span class="description">offset()
+        </span><pre>offset()</pre></a></li>
+<li class="method public "><a href="#method_order" title="order :: "><span class="description">order()
+        </span><pre>order()</pre></a></li>
+<li class="method public "><a href="#method_reverse_order" title="reverse_order :: Reverses an order clause."><span class="description">Reverses an order clause.</span><pre>reverse_order()</pre></a></li>
+<li class="method public "><a href="#method_select" title="select :: "><span class="description">select()
+        </span><pre>select()</pre></a></li>
+<li class="method public "><a href="#method_to_s" title="to_s :: Returns the SQL string."><span class="description">Returns the SQL string.</span><pre>to_s()</pre></a></li>
+<li class="method public "><a href="#method_update" title="update :: "><span class="description">update()
+        </span><pre>update()</pre></a></li>
+<li class="method public "><a href="#method_where" title="where :: "><span class="description">where()
+        </span><pre>where()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="method private "><a href="#method_apply_where_conditions" title="apply_where_conditions :: "><span class="description">apply_where_conditions()
+        </span><pre>apply_where_conditions()</pre></a></li>
+<li class="method private "><a href="#method_build_delete" title="build_delete :: "><span class="description">build_delete()
+        </span><pre>build_delete()</pre></a></li>
+<li class="method private "><a href="#method_build_insert" title="build_insert :: "><span class="description">build_insert()
+        </span><pre>build_insert()</pre></a></li>
+<li class="method private "><a href="#method_build_select" title="build_select :: "><span class="description">build_select()
+        </span><pre>build_select()</pre></a></li>
+<li class="method private "><a href="#method_build_update" title="build_update :: "><span class="description">build_update()
+        </span><pre>build_update()</pre></a></li>
+<li class="method private "><a href="#method_prepend_table_name_to_fields" title="prepend_table_name_to_fields :: prepends table name to hash of field names to get around ambiguous fields when SQL builder
+has joins"><span class="description">prepends table name to hash of field names to get around ambiguous fields when SQL builder
+has joins</span><pre>prepend_table_name_to_fields()</pre></a></li>
+<li class="method private "><a href="#method_quoted_key_names" title="quoted_key_names :: "><span class="description">quoted_key_names()
+        </span><pre>quoted_key_names()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="property private "><a href="#property_connection" title="$connection :: "><span class="description"></span><pre>$connection</pre></a></li>
+<li class="property private "><a href="#property_data" title="$data :: "><span class="description"></span><pre>$data</pre></a></li>
+<li class="property private "><a href="#property_group" title="$group :: "><span class="description"></span><pre>$group</pre></a></li>
+<li class="property private "><a href="#property_having" title="$having :: "><span class="description"></span><pre>$having</pre></a></li>
+<li class="property private "><a href="#property_joins" title="$joins :: "><span class="description"></span><pre>$joins</pre></a></li>
+<li class="property private "><a href="#property_limit" title="$limit :: "><span class="description"></span><pre>$limit</pre></a></li>
+<li class="property private "><a href="#property_offset" title="$offset :: "><span class="description"></span><pre>$offset</pre></a></li>
+<li class="property private "><a href="#property_operation" title="$operation :: "><span class="description"></span><pre>$operation</pre></a></li>
+<li class="property private "><a href="#property_order" title="$order :: "><span class="description"></span><pre>$order</pre></a></li>
+<li class="property private "><a href="#property_select" title="$select :: "><span class="description"></span><pre>$select</pre></a></li>
+<li class="property private "><a href="#property_sequence" title="$sequence :: "><span class="description"></span><pre>$sequence</pre></a></li>
+<li class="property private "><a href="#property_table" title="$table :: "><span class="description"></span><pre>$table</pre></a></li>
+<li class="property private "><a href="#property_update" title="$update :: "><span class="description"></span><pre>$update</pre></a></li>
+<li class="property private "><a href="#property_where" title="$where :: "><span class="description"></span><pre>$where</pre></a></li>
+<li class="property private "><a href="#property_where_values" title="$where_values :: "><span class="description"></span><pre>$where_values</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\ActiveRecord\SQLBuilder"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ActiveRecord.html">ActiveRecord</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ActiveRecord.SQLBuilder.html">SQLBuilder</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Helper class for building sql statements progmatically.</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/ActiveRecord.html">ActiveRecord</a></td>
+</tr></table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Constructor.</h2>
+<pre>__construct(<a href="../classes/ActiveRecord.Connection.html">\ActiveRecord\Connection</a> $connection, string $table) : <a href="../classes/ActiveRecord.SQLBuilder.html">\ActiveRecord\SQLBuilder</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$connection</h4>
+<code><a href="../classes/ActiveRecord.Connection.html">\ActiveRecord\Connection</a></code><p>A database connection object</p></div>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>Name of a table</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/ActiveRecord.ActiveRecordException.html">\ActiveRecord\ActiveRecordException</a></code></th>
+<td>if connection was invalid</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/ActiveRecord.SQLBuilder.html">\ActiveRecord\SQLBuilder</a></code></div>
+</div></div>
+</div>
+<a id="method___toString"></a><div class="element clickable method public method___toString" data-toggle="collapse" data-target=".method___toString .collapse">
+<h2>Returns the SQL string.</h2>
+<pre>__toString() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_bind_values"></a><div class="element clickable method public method_bind_values" data-toggle="collapse" data-target=".method_bind_values .collapse">
+<h2>Returns the bind values.</h2>
+<pre>bind_values() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a id="method_create_conditions_from_underscored_string"></a><div class="element clickable method public method_create_conditions_from_underscored_string" data-toggle="collapse" data-target=".method_create_conditions_from_underscored_string .collapse">
+<h2>Converts a string like "id_and_name_or_z" into a conditions value like array("id=? AND name=? OR z=?", values, .</h2>
+<pre>create_conditions_from_underscored_string(\ActiveRecord\Connection $connection, $name, $values, $map) : \ActiveRecord\A</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>..).</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$connection</h4>
+<code><a href="../classes/ActiveRecord.Connection.html">\ActiveRecord\Connection</a></code>
+</div>
+<div class="subelement argument">
+<h4>$name</h4><p>Underscored string</p></div>
+<div class="subelement argument">
+<h4>$values</h4><p>Array of values for the field names. This is used
+  to determine what kind of bind marker to use: =?, IN(?), IS NULL</p>
+</div>
+<div class="subelement argument">
+<h4>$map</h4><p>A hash of "mapped_column_name" => "real_column_name"</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\ActiveRecord\A</code>conditions array in the form array(sql_string, value1, value2,...)</div>
+</div></div>
+</div>
+<a id="method_create_hash_from_underscored_string"></a><div class="element clickable method public method_create_hash_from_underscored_string" data-toggle="collapse" data-target=".method_create_hash_from_underscored_string .collapse">
+<h2>Like create_conditions_from_underscored_string but returns a hash of name =&gt; value array instead.</h2>
+<pre>create_hash_from_underscored_string(string $name, $values, $map) : array</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>A string containing attribute names connected with _and_ or _or_</p></div>
+<div class="subelement argument"><h4>$values</h4></div>
+<div class="subelement argument">
+<h4>$map</h4><p>A hash of "mapped_column_name" => "real_column_name"</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>A hash of array(name => value, ...)</div>
+</div></div>
+</div>
+<a id="method_delete"></a><div class="element clickable method public method_delete" data-toggle="collapse" data-target=".method_delete .collapse">
+<h2>delete()
+        </h2>
+<pre>delete() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_get_where_values"></a><div class="element clickable method public method_get_where_values" data-toggle="collapse" data-target=".method_get_where_values .collapse">
+<h2>get_where_values()
+        </h2>
+<pre>get_where_values() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_group"></a><div class="element clickable method public method_group" data-toggle="collapse" data-target=".method_group .collapse">
+<h2>group()
+        </h2>
+<pre>group($group) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$group</h4></div>
+</div></div>
+</div>
+<a id="method_having"></a><div class="element clickable method public method_having" data-toggle="collapse" data-target=".method_having .collapse">
+<h2>having()
+        </h2>
+<pre>having($having) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$having</h4></div>
+</div></div>
+</div>
+<a id="method_insert"></a><div class="element clickable method public method_insert" data-toggle="collapse" data-target=".method_insert .collapse">
+<h2>insert()
+        </h2>
+<pre>insert($hash, $pk, $sequence_name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$hash</h4></div>
+<div class="subelement argument"><h4>$pk</h4></div>
+<div class="subelement argument"><h4>$sequence_name</h4></div>
+</div></div>
+</div>
+<a id="method_joins"></a><div class="element clickable method public method_joins" data-toggle="collapse" data-target=".method_joins .collapse">
+<h2>joins()
+        </h2>
+<pre>joins($joins) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$joins</h4></div>
+</div></div>
+</div>
+<a id="method_limit"></a><div class="element clickable method public method_limit" data-toggle="collapse" data-target=".method_limit .collapse">
+<h2>limit()
+        </h2>
+<pre>limit($limit) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$limit</h4></div>
+</div></div>
+</div>
+<a id="method_offset"></a><div class="element clickable method public method_offset" data-toggle="collapse" data-target=".method_offset .collapse">
+<h2>offset()
+        </h2>
+<pre>offset($offset) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$offset</h4></div>
+</div></div>
+</div>
+<a id="method_order"></a><div class="element clickable method public method_order" data-toggle="collapse" data-target=".method_order .collapse">
+<h2>order()
+        </h2>
+<pre>order($order) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$order</h4></div>
+</div></div>
+</div>
+<a id="method_reverse_order"></a><div class="element clickable method public method_reverse_order" data-toggle="collapse" data-target=".method_reverse_order .collapse">
+<h2>Reverses an order clause.</h2>
+<pre>reverse_order($order) </pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$order</h4></div>
+</div></div>
+</div>
+<a id="method_select"></a><div class="element clickable method public method_select" data-toggle="collapse" data-target=".method_select .collapse">
+<h2>select()
+        </h2>
+<pre>select($select) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$select</h4></div>
+</div></div>
+</div>
+<a id="method_to_s"></a><div class="element clickable method public method_to_s" data-toggle="collapse" data-target=".method_to_s .collapse">
+<h2>Returns the SQL string.</h2>
+<pre>to_s() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>see</th>
+<td><a href="">\ActiveRecord\__toString</a></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_update"></a><div class="element clickable method public method_update" data-toggle="collapse" data-target=".method_update .collapse">
+<h2>update()
+        </h2>
+<pre>update($mixed) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$mixed</h4></div>
+</div></div>
+</div>
+<a id="method_where"></a><div class="element clickable method public method_where" data-toggle="collapse" data-target=".method_where .collapse">
+<h2>where()
+        </h2>
+<pre>where() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_apply_where_conditions"></a><div class="element clickable method private method_apply_where_conditions" data-toggle="collapse" data-target=".method_apply_where_conditions .collapse">
+<h2>apply_where_conditions()
+        </h2>
+<pre>apply_where_conditions($args) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$args</h4></div>
+</div></div>
+</div>
+<a id="method_build_delete"></a><div class="element clickable method private method_build_delete" data-toggle="collapse" data-target=".method_build_delete .collapse">
+<h2>build_delete()
+        </h2>
+<pre>build_delete() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_build_insert"></a><div class="element clickable method private method_build_insert" data-toggle="collapse" data-target=".method_build_insert .collapse">
+<h2>build_insert()
+        </h2>
+<pre>build_insert() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_build_select"></a><div class="element clickable method private method_build_select" data-toggle="collapse" data-target=".method_build_select .collapse">
+<h2>build_select()
+        </h2>
+<pre>build_select() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_build_update"></a><div class="element clickable method private method_build_update" data-toggle="collapse" data-target=".method_build_update .collapse">
+<h2>build_update()
+        </h2>
+<pre>build_update() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_prepend_table_name_to_fields"></a><div class="element clickable method private method_prepend_table_name_to_fields" data-toggle="collapse" data-target=".method_prepend_table_name_to_fields .collapse">
+<h2>prepends table name to hash of field names to get around ambiguous fields when SQL builder
+has joins</h2>
+<pre>prepend_table_name_to_fields(array $hash) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$hash</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>$new</div>
+</div></div>
+</div>
+<a id="method_quoted_key_names"></a><div class="element clickable method private method_quoted_key_names" data-toggle="collapse" data-target=".method_quoted_key_names .collapse">
+<h2>quoted_key_names()
+        </h2>
+<pre>quoted_key_names() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_connection"> </a><div class="element clickable property private property_connection" data-toggle="collapse" data-target=".property_connection .collapse">
+<h2></h2>
+<pre>$connection </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_data"> </a><div class="element clickable property private property_data" data-toggle="collapse" data-target=".property_data .collapse">
+<h2></h2>
+<pre>$data </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_group"> </a><div class="element clickable property private property_group" data-toggle="collapse" data-target=".property_group .collapse">
+<h2></h2>
+<pre>$group </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_having"> </a><div class="element clickable property private property_having" data-toggle="collapse" data-target=".property_having .collapse">
+<h2></h2>
+<pre>$having </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_joins"> </a><div class="element clickable property private property_joins" data-toggle="collapse" data-target=".property_joins .collapse">
+<h2></h2>
+<pre>$joins </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_limit"> </a><div class="element clickable property private property_limit" data-toggle="collapse" data-target=".property_limit .collapse">
+<h2></h2>
+<pre>$limit </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_offset"> </a><div class="element clickable property private property_offset" data-toggle="collapse" data-target=".property_offset .collapse">
+<h2></h2>
+<pre>$offset </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_operation"> </a><div class="element clickable property private property_operation" data-toggle="collapse" data-target=".property_operation .collapse">
+<h2></h2>
+<pre>$operation </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_order"> </a><div class="element clickable property private property_order" data-toggle="collapse" data-target=".property_order .collapse">
+<h2></h2>
+<pre>$order </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_select"> </a><div class="element clickable property private property_select" data-toggle="collapse" data-target=".property_select .collapse">
+<h2></h2>
+<pre>$select </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_sequence"> </a><div class="element clickable property private property_sequence" data-toggle="collapse" data-target=".property_sequence .collapse">
+<h2></h2>
+<pre>$sequence </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_table"> </a><div class="element clickable property private property_table" data-toggle="collapse" data-target=".property_table .collapse">
+<h2></h2>
+<pre>$table </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_update"> </a><div class="element clickable property private property_update" data-toggle="collapse" data-target=".property_update .collapse">
+<h2></h2>
+<pre>$update </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_where"> </a><div class="element clickable property private property_where" data-toggle="collapse" data-target=".property_where .collapse">
+<h2></h2>
+<pre>$where </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_where_values"> </a><div class="element clickable property private property_where_values" data-toggle="collapse" data-target=".property_where_values .collapse">
+<h2></h2>
+<pre>$where_values </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2013-05-27T17:32:19+02:00.<br></footer></div>
+</div>
+</body>
+</html>

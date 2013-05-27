@@ -1,0 +1,546 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ChickenWire Documentation » \ActiveRecord\Table</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ChickenWire Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ActiveRecord.html"><i class="icon-th"></i> ActiveRecord</a></li>
+<li><a href="../namespaces/Application.html"><i class="icon-th"></i> Application</a></li>
+<li><a href="../namespaces/ChickenWire.html"><i class="icon-th"></i> ChickenWire</a></li>
+<li><a href="../namespaces/global.html"><i class="icon-th"></i> global</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/ActiveRecord.html"><i class="icon-folder-open"></i> ActiveRecord</a></li>
+<li><a href="../packages/ChickenWire.html"><i class="icon-folder-open"></i> ChickenWire</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">393</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">3</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_clear_cache" title="clear_cache :: "><span class="description">clear_cache()
+        </span><pre>clear_cache()</pre></a></li>
+<li class="method public "><a href="#method_create_joins" title="create_joins :: "><span class="description">create_joins()
+        </span><pre>create_joins()</pre></a></li>
+<li class="method public "><a href="#method_delete" title="delete :: "><span class="description">delete()
+        </span><pre>delete()</pre></a></li>
+<li class="method public "><a href="#method_find" title="find :: "><span class="description">find()
+        </span><pre>find()</pre></a></li>
+<li class="method public "><a href="#method_find_by_sql" title="find_by_sql :: "><span class="description">find_by_sql()
+        </span><pre>find_by_sql()</pre></a></li>
+<li class="method public "><a href="#method_get_column_by_inflected_name" title="get_column_by_inflected_name :: "><span class="description">get_column_by_inflected_name()
+        </span><pre>get_column_by_inflected_name()</pre></a></li>
+<li class="method public "><a href="#method_get_fully_qualified_table_name" title="get_fully_qualified_table_name :: "><span class="description">get_fully_qualified_table_name()
+        </span><pre>get_fully_qualified_table_name()</pre></a></li>
+<li class="method public "><a href="#method_get_relationship" title="get_relationship :: Retrieve a relationship object for this table."><span class="description">Retrieve a relationship object for this table.</span><pre>get_relationship()</pre></a></li>
+<li class="method public "><a href="#method_has_relationship" title="has_relationship :: Does a given relationship exist?"><span class="description">Does a given relationship exist?</span><pre>has_relationship()</pre></a></li>
+<li class="method public "><a href="#method_insert" title="insert :: "><span class="description">insert()
+        </span><pre>insert()</pre></a></li>
+<li class="method public "><a href="#method_load" title="load :: "><span class="description">load()
+        </span><pre>load()</pre></a></li>
+<li class="method public "><a href="#method_options_to_sql" title="options_to_sql :: "><span class="description">options_to_sql()
+        </span><pre>options_to_sql()</pre></a></li>
+<li class="method public "><a href="#method_reestablish_connection" title="reestablish_connection :: "><span class="description">reestablish_connection()
+        </span><pre>reestablish_connection()</pre></a></li>
+<li class="method public "><a href="#method_update" title="update :: "><span class="description">update()
+        </span><pre>update()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="method private "><a href="#method_add_relationship" title="add_relationship :: Add a relationship."><span class="description">Add a relationship.</span><pre>add_relationship()</pre></a></li>
+<li class="method private "><a href="#method_execute_eager_load" title="execute_eager_load :: Executes an eager load of a given named relationship for this table."><span class="description">Executes an eager load of a given named relationship for this table.</span><pre>execute_eager_load()</pre></a></li>
+<li class="method private "><a href="#method_get_meta_data" title="get_meta_data :: "><span class="description">get_meta_data()
+        </span><pre>get_meta_data()</pre></a></li>
+<li class="method private "><a href="#method_map_names" title="map_names :: Replaces any aliases used in a hash based condition."><span class="description">Replaces any aliases used in a hash based condition.</span><pre>map_names()</pre></a></li>
+<li class="method private "><a href="#method_process_data" title="process_data :: "><span class="description">process_data()
+        </span><pre>process_data()</pre></a></li>
+<li class="method private "><a href="#method_set_associations" title="set_associations :: "><span class="description">set_associations()
+        </span><pre>set_associations()</pre></a></li>
+<li class="method private "><a href="#method_set_delegates" title="set_delegates :: Rebuild the delegates array into format that we can more easily work with in Model."><span class="description">Rebuild the delegates array into format that we can more easily work with in Model.</span><pre>set_delegates()</pre></a></li>
+<li class="method private "><a href="#method_set_primary_key" title="set_primary_key :: "><span class="description">set_primary_key()
+        </span><pre>set_primary_key()</pre></a></li>
+<li class="method private "><a href="#method_set_sequence_name" title="set_sequence_name :: "><span class="description">set_sequence_name()
+        </span><pre>set_sequence_name()</pre></a></li>
+<li class="method private "><a href="#method_set_setters_and_getters" title="set_setters_and_getters :: "><span class="description">set_setters_and_getters()
+        </span><pre>set_setters_and_getters()</pre></a></li>
+<li class="method private "><a href="#method_set_table_name" title="set_table_name :: "><span class="description">set_table_name()
+        </span><pre>set_table_name()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul>
+<li class="property public "><a href="#property_callback" title="$callback :: A instance of CallBack for this model/table"><span class="description"></span><pre>$callback</pre></a></li>
+<li class="property public "><a href="#property_class" title="$class :: "><span class="description"></span><pre>$class</pre></a></li>
+<li class="property public "><a href="#property_columns" title="$columns :: "><span class="description"></span><pre>$columns</pre></a></li>
+<li class="property public "><a href="#property_conn" title="$conn :: "><span class="description"></span><pre>$conn</pre></a></li>
+<li class="property public "><a href="#property_db_name" title="$db_name :: Name of the database (optional)"><span class="description"></span><pre>$db_name</pre></a></li>
+<li class="property public "><a href="#property_last_sql" title="$last_sql :: "><span class="description"></span><pre>$last_sql</pre></a></li>
+<li class="property public "><a href="#property_pk" title="$pk :: "><span class="description"></span><pre>$pk</pre></a></li>
+<li class="property public "><a href="#property_sequence" title="$sequence :: Name of the sequence for this table (optional)."><span class="description"></span><pre>$sequence</pre></a></li>
+<li class="property public "><a href="#property_table" title="$table :: Name of the table."><span class="description"></span><pre>$table</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="property private "><a href="#property_cache" title="$cache :: "><span class="description"></span><pre>$cache</pre></a></li>
+<li class="property private "><a href="#property_relationships" title="$relationships :: List of relationships for this table."><span class="description"></span><pre>$relationships</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\ActiveRecord\Table"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ActiveRecord.html">ActiveRecord</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ActiveRecord.Table.html">Table</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Manages reading and writing to a database table.</p>
+<div class="details">
+<div class="long_description"><p>This class manages a database table and is used by the Model class for
+reading and writing to its database table. There is one instance of Table
+for every table you have a model for.</p></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/ActiveRecord.html">ActiveRecord</a></td>
+</tr></table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($class_name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$class_name</h4></div>
+</div></div>
+</div>
+<a id="method_clear_cache"></a><div class="element clickable method public method_clear_cache" data-toggle="collapse" data-target=".method_clear_cache .collapse">
+<h2>clear_cache()
+        </h2>
+<pre>clear_cache($model_class_name) </pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$model_class_name</h4></div>
+</div></div>
+</div>
+<a id="method_create_joins"></a><div class="element clickable method public method_create_joins" data-toggle="collapse" data-target=".method_create_joins .collapse">
+<h2>create_joins()
+        </h2>
+<pre>create_joins($joins) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$joins</h4></div>
+</div></div>
+</div>
+<a id="method_delete"></a><div class="element clickable method public method_delete" data-toggle="collapse" data-target=".method_delete .collapse">
+<h2>delete()
+        </h2>
+<pre>delete($data) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$data</h4></div>
+</div></div>
+</div>
+<a id="method_find"></a><div class="element clickable method public method_find" data-toggle="collapse" data-target=".method_find .collapse">
+<h2>find()
+        </h2>
+<pre>find($options) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$options</h4></div>
+</div></div>
+</div>
+<a id="method_find_by_sql"></a><div class="element clickable method public method_find_by_sql" data-toggle="collapse" data-target=".method_find_by_sql .collapse">
+<h2>find_by_sql()
+        </h2>
+<pre>find_by_sql($sql, $values, $readonly, $includes) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$sql</h4></div>
+<div class="subelement argument"><h4>$values</h4></div>
+<div class="subelement argument"><h4>$readonly</h4></div>
+<div class="subelement argument"><h4>$includes</h4></div>
+</div></div>
+</div>
+<a id="method_get_column_by_inflected_name"></a><div class="element clickable method public method_get_column_by_inflected_name" data-toggle="collapse" data-target=".method_get_column_by_inflected_name .collapse">
+<h2>get_column_by_inflected_name()
+        </h2>
+<pre>get_column_by_inflected_name($inflected_name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$inflected_name</h4></div>
+</div></div>
+</div>
+<a id="method_get_fully_qualified_table_name"></a><div class="element clickable method public method_get_fully_qualified_table_name" data-toggle="collapse" data-target=".method_get_fully_qualified_table_name .collapse">
+<h2>get_fully_qualified_table_name()
+        </h2>
+<pre>get_fully_qualified_table_name($quote_name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$quote_name</h4></div>
+</div></div>
+</div>
+<a id="method_get_relationship"></a><div class="element clickable method public method_get_relationship" data-toggle="collapse" data-target=".method_get_relationship .collapse">
+<h2>Retrieve a relationship object for this table.</h2>
+<pre>get_relationship($name, $strict) : \ActiveRecord\Relationship</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Strict as true will throw an error
+if the relationship name does not exist.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4><p>string name of Relationship</p></div>
+<div class="subelement argument">
+<h4>$strict</h4><p>bool</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/ActiveRecord.RelationshipException.html">\ActiveRecord\RelationshipException</a></code></th>
+<td></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\ActiveRecord\Relationship</code>or null</div>
+</div></div>
+</div>
+<a id="method_has_relationship"></a><div class="element clickable method public method_has_relationship" data-toggle="collapse" data-target=".method_has_relationship .collapse">
+<h2>Does a given relationship exist?</h2>
+<pre>has_relationship($name) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4><p>string name of Relationship</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_insert"></a><div class="element clickable method public method_insert" data-toggle="collapse" data-target=".method_insert .collapse">
+<h2>insert()
+        </h2>
+<pre>insert($data, $pk, $sequence_name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$data</h4></div>
+<div class="subelement argument"><h4>$pk</h4></div>
+<div class="subelement argument"><h4>$sequence_name</h4></div>
+</div></div>
+</div>
+<a id="method_load"></a><div class="element clickable method public method_load" data-toggle="collapse" data-target=".method_load .collapse">
+<h2>load()
+        </h2>
+<pre>load($model_class_name) </pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$model_class_name</h4></div>
+</div></div>
+</div>
+<a id="method_options_to_sql"></a><div class="element clickable method public method_options_to_sql" data-toggle="collapse" data-target=".method_options_to_sql .collapse">
+<h2>options_to_sql()
+        </h2>
+<pre>options_to_sql($options) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$options</h4></div>
+</div></div>
+</div>
+<a id="method_reestablish_connection"></a><div class="element clickable method public method_reestablish_connection" data-toggle="collapse" data-target=".method_reestablish_connection .collapse">
+<h2>reestablish_connection()
+        </h2>
+<pre>reestablish_connection($close) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$close</h4></div>
+</div></div>
+</div>
+<a id="method_update"></a><div class="element clickable method public method_update" data-toggle="collapse" data-target=".method_update .collapse">
+<h2>update()
+        </h2>
+<pre>update($data, $where) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$data</h4></div>
+<div class="subelement argument"><h4>$where</h4></div>
+</div></div>
+</div>
+<a id="method_add_relationship"></a><div class="element clickable method private method_add_relationship" data-toggle="collapse" data-target=".method_add_relationship .collapse">
+<h2>Add a relationship.</h2>
+<pre>add_relationship(\ActiveRecord\Relationship $relationship) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$relationship</h4>
+<code>\ActiveRecord\Relationship</code><p>a Relationship object</p></div>
+</div></div>
+</div>
+<a id="method_execute_eager_load"></a><div class="element clickable method private method_execute_eager_load" data-toggle="collapse" data-target=".method_execute_eager_load .collapse">
+<h2>Executes an eager load of a given named relationship for this table.</h2>
+<pre>execute_eager_load($models, $attrs, $includes) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$models</h4><p>array found modesl for this table</p></div>
+<div class="subelement argument">
+<h4>$attrs</h4><p>array of attrs from $models</p>
+</div>
+<div class="subelement argument">
+<h4>$includes</h4><p>array eager load directives</p></div>
+</div></div>
+</div>
+<a id="method_get_meta_data"></a><div class="element clickable method private method_get_meta_data" data-toggle="collapse" data-target=".method_get_meta_data .collapse">
+<h2>get_meta_data()
+        </h2>
+<pre>get_meta_data() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_map_names"></a><div class="element clickable method private method_map_names" data-toggle="collapse" data-target=".method_map_names .collapse">
+<h2>Replaces any aliases used in a hash based condition.</h2>
+<pre>map_names($hash, $map) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$hash</h4><p>array A hash</p></div>
+<div class="subelement argument">
+<h4>$map</h4><p>array Hash of used_name => real_name</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Array with any aliases replaced with their read field name</div>
+</div></div>
+</div>
+<a id="method_process_data"></a><div class="element clickable method private method_process_data" data-toggle="collapse" data-target=".method_process_data .collapse">
+<h2>process_data()
+        </h2>
+<pre>process_data($hash) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$hash</h4></div>
+</div></div>
+</div>
+<a id="method_set_associations"></a><div class="element clickable method private method_set_associations" data-toggle="collapse" data-target=".method_set_associations .collapse">
+<h2>set_associations()
+        </h2>
+<pre>set_associations() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_set_delegates"></a><div class="element clickable method private method_set_delegates" data-toggle="collapse" data-target=".method_set_delegates .collapse">
+<h2>Rebuild the delegates array into format that we can more easily work with in Model.</h2>
+<pre>set_delegates() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Will end up consisting of array of:</p>
+
+<p>array('delegate' => array('field1','field2',...),
+      'to'       => 'delegate_to_relationship',
+      'prefix'  => 'prefix')</p></div></div></div>
+</div>
+<a id="method_set_primary_key"></a><div class="element clickable method private method_set_primary_key" data-toggle="collapse" data-target=".method_set_primary_key .collapse">
+<h2>set_primary_key()
+        </h2>
+<pre>set_primary_key() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_set_sequence_name"></a><div class="element clickable method private method_set_sequence_name" data-toggle="collapse" data-target=".method_set_sequence_name .collapse">
+<h2>set_sequence_name()
+        </h2>
+<pre>set_sequence_name() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_set_setters_and_getters"></a><div class="element clickable method private method_set_setters_and_getters" data-toggle="collapse" data-target=".method_set_setters_and_getters .collapse">
+<h2>set_setters_and_getters()
+        </h2>
+<pre>set_setters_and_getters() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>deprecated</th>
+<td>Model.php now checks for get|set_ methods via method_exists so there is no need for declaring static g|setters.</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_set_table_name"></a><div class="element clickable method private method_set_table_name" data-toggle="collapse" data-target=".method_set_table_name .collapse">
+<h2>set_table_name()
+        </h2>
+<pre>set_table_name() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_callback"> </a><div class="element clickable property public property_callback" data-toggle="collapse" data-target=".property_callback .collapse">
+<h2></h2>
+<pre>$callback : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>static</th>
+<td></td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_class"> </a><div class="element clickable property public property_class" data-toggle="collapse" data-target=".property_class .collapse">
+<h2></h2>
+<pre>$class </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_columns"> </a><div class="element clickable property public property_columns" data-toggle="collapse" data-target=".property_columns .collapse">
+<h2></h2>
+<pre>$columns </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_conn"> </a><div class="element clickable property public property_conn" data-toggle="collapse" data-target=".property_conn .collapse">
+<h2></h2>
+<pre>$conn </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_db_name"> </a><div class="element clickable property public property_db_name" data-toggle="collapse" data-target=".property_db_name .collapse">
+<h2></h2>
+<pre>$db_name </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_last_sql"> </a><div class="element clickable property public property_last_sql" data-toggle="collapse" data-target=".property_last_sql .collapse">
+<h2></h2>
+<pre>$last_sql </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_pk"> </a><div class="element clickable property public property_pk" data-toggle="collapse" data-target=".property_pk .collapse">
+<h2></h2>
+<pre>$pk </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_sequence"> </a><div class="element clickable property public property_sequence" data-toggle="collapse" data-target=".property_sequence .collapse">
+<h2></h2>
+<pre>$sequence </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Defaults to {$table}_seq</p></div></div></div>
+</div>
+<a id="property_table"> </a><div class="element clickable property public property_table" data-toggle="collapse" data-target=".property_table .collapse">
+<h2></h2>
+<pre>$table </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_cache"> </a><div class="element clickable property private property_cache" data-toggle="collapse" data-target=".property_cache .collapse">
+<h2></h2>
+<pre>$cache </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_relationships"> </a><div class="element clickable property private property_relationships" data-toggle="collapse" data-target=".property_relationships .collapse">
+<h2></h2>
+<pre>$relationships </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2013-05-27T17:32:19+02:00.<br></footer></div>
+</div>
+</body>
+</html>

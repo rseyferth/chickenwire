@@ -1,0 +1,3062 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>ChickenWire Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/black-tie/jquery-ui-1.8.2.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/default.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script></head><body><script type="text/javascript">
+          $(document).ready(function()
+          {
+            $(".filetree").treeview({
+              animated: "fast",
+              collapsed: true,
+              persist: "cookie"
+            });
+          });
+
+          function jq_escape(myid)
+          {
+            return '#' + myid.replace(/(#|\$|:|\.|\(|\))/g, '\\$1');
+          }
+
+          function applySearchHash()
+          {
+            hashes = document.location.hash.substr(1, document.location.hash.length);
+            if (hashes != "")
+            {
+              hashes = hashes.split('/');
+              $.each(hashes, function(index, hash)
+              {
+                node = $(jq_escape(hash));
+                switch (node[0].nodeName)
+                {
+                  case 'DIV':
+                    tabs = node.parents('.tabs');
+                    $(tabs[0]).tabs('select', '#' + hash)
+                    break;
+                  case 'A':
+                    window.scrollTo(0, node.offset().top);
+                    break;
+                }
+              });
+            }
+          }
+
+          jQuery(function()
+          {
+            jQuery(".tabs").tabs();
+            applySearchHash();
+          });
+        </script><div id="maincontainer"><div id="header"><h1>ChickenWire Documentation<img src="images/top-stopper.png"></img></h1></div><ul xmlns="" id="menu">
+<li><a href="graph.html">Class diagram</a></li>
+<li><a href="markers.html">TODO / Markers</a></li>
+<li><a href="parse_markers.html">Errors</a></li>
+</ul>
+<div id="content_container"><div xmlns="" id="content">
+<h1>vendor/php-activerecord/php-activerecord/lib/Serialization.php</h1>
+<div class="file_menu">
+<a href="#classes">Classes</a> |</div>
+<div class="properties">
+<h1>Properties</h1>
+<label class="property-key">package</label><div class="property-value"></div>
+</div>
+<a name="classes"></a><h2>Classes</h2>
+<div id="Serialization" class="class">
+<h3>Serialization</h3>
+<div class="properties">
+<h1>Properties</h1>
+<label class="property-key">Extends</label><div class="property-value">
+         </div>
+<label class="property-key">Implements</label><div class="property-value"> 
+      </div>
+<label class="property-key">link</label><div class="property-value">
+<a title="" href="http://www.phpactiverecord.org/guides/utilities#topic-serialization">http://www.phpactiverecord.org/guides/utilities#topic-serialization</a>
+             
+        </div>
+<label class="property-key">package</label><div class="property-value">
+<a title="">ActiveRecord</a>
+             
+        </div>
+<label class="property-key">Abstract</label><div class="property-value">Yes 
+      </div>
+<label class="property-key">Final</label><div class="property-value">No 
+      </div>
+</div>
+<h4>Description</h4>
+<em>Base class for Model serializers.</em><br><p>All serializers support the following options:</p>
+
+<ul>
+<li><b>only:</b> a string or array of attributes to be included.</li>
+<li><b>except:</b> a string or array of attributes to be excluded.</li>
+<li><b>methods:</b> a string or array of methods to invoke. The method's name will be used as a key for the final attributes array
+along with the method's returned value</li>
+<li><b>include:</b> a string or array of associated models to include in the final serialized product.</li>
+<li><b>only_method:</b> a method that's called and only the resulting array is serialized
+<li><b>skip_instruct:</b> set to true to skip the <?xml ...?> declaration.</li>
+</ul>
+
+<p>Example usage:</p>
+
+<pre><code># include the attributes id and name
+# run $model->encoded_description() and include its return value
+# include the comments association
+# include posts association with its own options (nested)
+$model->to_json(array(
+  'only' => array('id','name', 'encoded_description'),
+  'methods' => array('encoded_description'),
+  'include' => array('comments', 'posts' => array('only' => 'id'))
+));
+
+# except the password field from being included
+$model->to_xml(array('except' => 'password')));
+</code></pre><br><div id="methods_Serialization">
+<h4>Methods</h4>
+<a style="font-style: italic;" href="#Serialization::__construct()">__construct</a>,
+      <a style="font-style: italic;" href="#Serialization::__toString()">__toString</a>,
+      <a style="font-style: italic;" href="#Serialization::check_except()">check_except</a>,
+      <a style="font-style: italic;" href="#Serialization::check_include()">check_include</a>,
+      <a style="font-style: italic;" href="#Serialization::check_methods()">check_methods</a>,
+      <a style="font-style: italic;" href="#Serialization::check_only()">check_only</a>,
+      <a style="font-style: italic;" href="#Serialization::check_only_method()">check_only_method</a>,
+      <a style="font-style: italic;" href="#Serialization::options_to_a()">options_to_a</a>,
+      <a style="font-style: italic;" href="#Serialization::parse_options()">parse_options</a>,
+      <a style="font-style: italic;" href="#Serialization::to_a()">to_a</a>,
+      <a style="font-style: italic;" href="#Serialization::to_s()">to_s</a>,
+      <div class="method">
+<a id="Serialization::__construct()"></a><h3>__construct<span class="nb-faded-text">(
+          <a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a>
+             
+            $model,
+          array
+             
+            $options,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">\ActiveRecord\Serialization</span>
+</h3>
+<h4>Description</h4>
+<em>Constructs a {@link Serialization} object.</em><br><h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$model</td>
+<td style="white-space: normal;"><a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a></td>
+<td><p>The model to serialize</p></td>
+<td></td>
+</tr>
+<tr>
+<td>$options</td>
+<td style="white-space: normal;">array</td>
+<td><p>&$options Options for serialization</p>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>\ActiveRecord\Serialization</td>
+<td></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::__toString()"></a><h3>__toString<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the serialized object as a string.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>see</td>
+<td>\ActiveRecord\to_s</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::check_except()"></a><h3>check_except<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::check_include()"></a><h3>check_include<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::check_methods()"></a><h3>check_methods<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::check_only()"></a><h3>check_only<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::check_only_method()"></a><h3>check_only_method<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::options_to_a()"></a><h3>options_to_a<span class="nb-faded-text">(
+          
+             
+            $key,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody><tr>
+<td>$key</td>
+<td style="white-space: normal;">n/a</td>
+<td></td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::parse_options()"></a><h3>parse_options<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::to_a()"></a><h3>to_a<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">array</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the attributes array.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>array</td>
+<td></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="Serialization::to_s()"></a><h3>to_s<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Performs the serialization.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div id="properties_Serialization">
+<h4>Properties</h4>
+<a href="#Serialization::%24DATETIME_FORMAT">$DATETIME_FORMAT</a>,
+      <a href="#Serialization::%24attributes">$attributes</a>,
+      <a href="#Serialization::%24includes_with_class_name_element">$includes_with_class_name_element</a>,
+      <a href="#Serialization::%24model">$model</a>,
+      <a href="#Serialization::%24options">$options</a>,
+      <div class="method">
+<a id="Serialization::$DATETIME_FORMAT"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$DATETIME_FORMAT
+          =
+          'iso8601'</h3>
+<em>The default format to serialize DateTime objects to.</em><br><small></small><br><br>
+</div>
+<div class="method">
+<a id="Serialization::$attributes"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$attributes
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="Serialization::$includes_with_class_name_element"></a><h3>
+<span class="nb-faded-text">boolean 
+          protected 
+          </span>$includes_with_class_name_element
+          =
+          false</h3>
+<em>Set this to true if the serializer needs to create a nested array keyed
+on the name of the included classes such as for xml serialization.</em><br><small>&lt;p&gt;Setting this to true will produce the following attributes array when
+the include option was used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    'permission' =&gt; array(
+      array('id' =&gt; 100, 'name' =&gt; 'admin'),
+      array('id' =&gt; 101, 'name' =&gt; 'normal')
+    )
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Setting to false will produce this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    array('id' =&gt; 100, 'name' =&gt; 'admin'),
+    array('id' =&gt; 101, 'name' =&gt; 'normal')
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;</small><br><br>
+</div>
+<div class="method">
+<a id="Serialization::$model"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$model
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="Serialization::$options"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$options
+          =
+          </h3>
+<em></em><br>
+</div>
+</div>
+<div style="clear: both"></div>
+</div>
+<div id="ArraySerializer" class="class">
+<h3>ArraySerializer</h3>
+<div class="properties">
+<h1>Properties</h1>
+<label class="property-key">Extends</label><div class="property-value">
+<a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization">\ActiveRecord\Serialization</a>
+         </div>
+<label class="property-key">Implements</label><div class="property-value"> 
+      </div>
+<label class="property-key">package</label><div class="property-value">
+<a title="">ActiveRecord</a>
+             
+        </div>
+<label class="property-key">Abstract</label><div class="property-value">No 
+      </div>
+<label class="property-key">Final</label><div class="property-value">No 
+      </div>
+</div>
+<h4>Description</h4>
+<em>Array serializer.</em><br><p>All serializers support the following options:</p>
+
+<ul>
+<li><b>only:</b> a string or array of attributes to be included.</li>
+<li><b>except:</b> a string or array of attributes to be excluded.</li>
+<li><b>methods:</b> a string or array of methods to invoke. The method's name will be used as a key for the final attributes array
+along with the method's returned value</li>
+<li><b>include:</b> a string or array of associated models to include in the final serialized product.</li>
+<li><b>only_method:</b> a method that's called and only the resulting array is serialized
+<li><b>skip_instruct:</b> set to true to skip the <?xml ...?> declaration.</li>
+</ul>
+
+<p>Example usage:</p>
+
+<pre><code># include the attributes id and name
+# run $model->encoded_description() and include its return value
+# include the comments association
+# include posts association with its own options (nested)
+$model->to_json(array(
+  'only' => array('id','name', 'encoded_description'),
+  'methods' => array('encoded_description'),
+  'include' => array('comments', 'posts' => array('only' => 'id'))
+));
+
+# except the password field from being included
+$model->to_xml(array('except' => 'password')));
+</code></pre><br><div id="methods_ArraySerializer">
+<h4>Methods</h4>
+<a style="font-style: italic;" href="#ArraySerializer::__construct()">__construct</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::__toString()">__toString</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::check_except()">check_except</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::check_include()">check_include</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::check_methods()">check_methods</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::check_only()">check_only</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::check_only_method()">check_only_method</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::options_to_a()">options_to_a</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::parse_options()">parse_options</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::to_a()">to_a</a>,
+      <a style="font-style: italic;" href="#ArraySerializer::to_s()">to_s</a>,
+      <div class="method">
+<a id="ArraySerializer::__construct()"></a><h3>__construct<span class="nb-faded-text">(
+          <a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a>
+             
+            $model,
+          array
+             
+            $options,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">\ActiveRecord\Serialization</span>
+</h3>
+<h4>Description</h4>
+<em>Constructs a {@link Serialization} object.</em><br><h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$model</td>
+<td style="white-space: normal;"><a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a></td>
+<td><p>The model to serialize</p></td>
+<td></td>
+</tr>
+<tr>
+<td>$options</td>
+<td style="white-space: normal;">array</td>
+<td><p>&$options Options for serialization</p>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>\ActiveRecord\Serialization</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::__construct()"><small>\ActiveRecord\Serialization::__construct()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::__toString()"></a><h3>__toString<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the serialized object as a string.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>see</td>
+<td>\ActiveRecord\to_s</td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::__toString()"><small>\ActiveRecord\Serialization::__toString()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::check_except()"></a><h3>check_except<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_except()"><small>\ActiveRecord\Serialization::check_except()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::check_include()"></a><h3>check_include<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_include()"><small>\ActiveRecord\Serialization::check_include()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::check_methods()"></a><h3>check_methods<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_methods()"><small>\ActiveRecord\Serialization::check_methods()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::check_only()"></a><h3>check_only<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_only()"><small>\ActiveRecord\Serialization::check_only()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::check_only_method()"></a><h3>check_only_method<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_only_method()"><small>\ActiveRecord\Serialization::check_only_method()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::options_to_a()"></a><h3>options_to_a<span class="nb-faded-text">(
+          
+             
+            $key,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody><tr>
+<td>$key</td>
+<td style="white-space: normal;">n/a</td>
+<td></td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::options_to_a()"><small>\ActiveRecord\Serialization::options_to_a()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::parse_options()"></a><h3>parse_options<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::parse_options()"><small>\ActiveRecord\Serialization::parse_options()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::to_a()"></a><h3>to_a<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">array</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the attributes array.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>array</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::to_a()"><small>\ActiveRecord\Serialization::to_a()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="ArraySerializer::to_s()"></a><h3>to_s<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Performs the serialization.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div id="properties_ArraySerializer">
+<h4>Properties</h4>
+<a href="#ArraySerializer::%24DATETIME_FORMAT">$DATETIME_FORMAT</a>,
+      <a href="#ArraySerializer::%24attributes">$attributes</a>,
+      <a href="#ArraySerializer::%24include_root">$include_root</a>,
+      <a href="#ArraySerializer::%24includes_with_class_name_element">$includes_with_class_name_element</a>,
+      <a href="#ArraySerializer::%24model">$model</a>,
+      <a href="#ArraySerializer::%24options">$options</a>,
+      <div class="method">
+<a id="ArraySerializer::$DATETIME_FORMAT"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$DATETIME_FORMAT
+          =
+          'iso8601'</h3>
+<em>The default format to serialize DateTime objects to.</em><br><small></small><br><br>
+</div>
+<div class="method">
+<a id="ArraySerializer::$attributes"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$attributes
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="ArraySerializer::$include_root"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$include_root
+          =
+          false</h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="ArraySerializer::$includes_with_class_name_element"></a><h3>
+<span class="nb-faded-text">boolean 
+          protected 
+          </span>$includes_with_class_name_element
+          =
+          false</h3>
+<em>Set this to true if the serializer needs to create a nested array keyed
+on the name of the included classes such as for xml serialization.</em><br><small>&lt;p&gt;Setting this to true will produce the following attributes array when
+the include option was used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    'permission' =&gt; array(
+      array('id' =&gt; 100, 'name' =&gt; 'admin'),
+      array('id' =&gt; 101, 'name' =&gt; 'normal')
+    )
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Setting to false will produce this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    array('id' =&gt; 100, 'name' =&gt; 'admin'),
+    array('id' =&gt; 101, 'name' =&gt; 'normal')
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;</small><br><br>
+</div>
+<div class="method">
+<a id="ArraySerializer::$model"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$model
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="ArraySerializer::$options"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$options
+          =
+          </h3>
+<em></em><br>
+</div>
+</div>
+<div style="clear: both"></div>
+</div>
+<div id="JsonSerializer" class="class">
+<h3>JsonSerializer</h3>
+<div class="properties">
+<h1>Properties</h1>
+<label class="property-key">Extends</label><div class="property-value">
+<a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer">\ActiveRecord\ArraySerializer</a>
+         </div>
+<label class="property-key">Implements</label><div class="property-value"> 
+      </div>
+<label class="property-key">package</label><div class="property-value">
+<a title="">ActiveRecord</a>
+             
+        </div>
+<label class="property-key">Abstract</label><div class="property-value">No 
+      </div>
+<label class="property-key">Final</label><div class="property-value">No 
+      </div>
+</div>
+<h4>Description</h4>
+<em>JSON serializer.</em><br><p>All serializers support the following options:</p>
+
+<ul>
+<li><b>only:</b> a string or array of attributes to be included.</li>
+<li><b>except:</b> a string or array of attributes to be excluded.</li>
+<li><b>methods:</b> a string or array of methods to invoke. The method's name will be used as a key for the final attributes array
+along with the method's returned value</li>
+<li><b>include:</b> a string or array of associated models to include in the final serialized product.</li>
+<li><b>only_method:</b> a method that's called and only the resulting array is serialized
+<li><b>skip_instruct:</b> set to true to skip the <?xml ...?> declaration.</li>
+</ul>
+
+<p>Example usage:</p>
+
+<pre><code># include the attributes id and name
+# run $model->encoded_description() and include its return value
+# include the comments association
+# include posts association with its own options (nested)
+$model->to_json(array(
+  'only' => array('id','name', 'encoded_description'),
+  'methods' => array('encoded_description'),
+  'include' => array('comments', 'posts' => array('only' => 'id'))
+));
+
+# except the password field from being included
+$model->to_xml(array('except' => 'password')));
+</code></pre><br><div id="methods_JsonSerializer">
+<h4>Methods</h4>
+<a style="font-style: italic;" href="#JsonSerializer::__construct()">__construct</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::__toString()">__toString</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::check_except()">check_except</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::check_include()">check_include</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::check_methods()">check_methods</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::check_only()">check_only</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::check_only_method()">check_only_method</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::options_to_a()">options_to_a</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::parse_options()">parse_options</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::to_a()">to_a</a>,
+      <a style="font-style: italic;" href="#JsonSerializer::to_s()">to_s</a>,
+      <div class="method">
+<a id="JsonSerializer::__construct()"></a><h3>__construct<span class="nb-faded-text">(
+          <a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a>
+             
+            $model,
+          array
+             
+            $options,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">\ActiveRecord\Serialization</span>
+</h3>
+<h4>Description</h4>
+<em>Constructs a {@link Serialization} object.</em><br><h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$model</td>
+<td style="white-space: normal;"><a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a></td>
+<td><p>The model to serialize</p></td>
+<td></td>
+</tr>
+<tr>
+<td>$options</td>
+<td style="white-space: normal;">array</td>
+<td><p>&$options Options for serialization</p>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>\ActiveRecord\Serialization</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::__construct()"><small>\ActiveRecord\Serialization::__construct()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::__construct()"><small>\ActiveRecord\ArraySerializer::__construct()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::__toString()"></a><h3>__toString<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the serialized object as a string.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>see</td>
+<td>\ActiveRecord\to_s</td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::__toString()"><small>\ActiveRecord\Serialization::__toString()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::__toString()"><small>\ActiveRecord\ArraySerializer::__toString()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::check_except()"></a><h3>check_except<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_except()"><small>\ActiveRecord\Serialization::check_except()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::check_except()"><small>\ActiveRecord\ArraySerializer::check_except()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::check_include()"></a><h3>check_include<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_include()"><small>\ActiveRecord\Serialization::check_include()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::check_include()"><small>\ActiveRecord\ArraySerializer::check_include()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::check_methods()"></a><h3>check_methods<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_methods()"><small>\ActiveRecord\Serialization::check_methods()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::check_methods()"><small>\ActiveRecord\ArraySerializer::check_methods()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::check_only()"></a><h3>check_only<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_only()"><small>\ActiveRecord\Serialization::check_only()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::check_only()"><small>\ActiveRecord\ArraySerializer::check_only()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::check_only_method()"></a><h3>check_only_method<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_only_method()"><small>\ActiveRecord\Serialization::check_only_method()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::check_only_method()"><small>\ActiveRecord\ArraySerializer::check_only_method()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::options_to_a()"></a><h3>options_to_a<span class="nb-faded-text">(
+          
+             
+            $key,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody><tr>
+<td>$key</td>
+<td style="white-space: normal;">n/a</td>
+<td></td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::options_to_a()"><small>\ActiveRecord\Serialization::options_to_a()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::options_to_a()"><small>\ActiveRecord\ArraySerializer::options_to_a()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::parse_options()"></a><h3>parse_options<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::parse_options()"><small>\ActiveRecord\Serialization::parse_options()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::parse_options()"><small>\ActiveRecord\ArraySerializer::parse_options()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::to_a()"></a><h3>to_a<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">array</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the attributes array.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>array</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::to_a()"><small>\ActiveRecord\Serialization::to_a()</small></a></td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CArraySerializer::to_a()"><small>\ActiveRecord\ArraySerializer::to_a()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="JsonSerializer::to_s()"></a><h3>to_s<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Performs the serialization.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div id="properties_JsonSerializer">
+<h4>Properties</h4>
+<a href="#JsonSerializer::%24DATETIME_FORMAT">$DATETIME_FORMAT</a>,
+      <a href="#JsonSerializer::%24attributes">$attributes</a>,
+      <a href="#JsonSerializer::%24include_root">$include_root</a>,
+      <a href="#JsonSerializer::%24includes_with_class_name_element">$includes_with_class_name_element</a>,
+      <a href="#JsonSerializer::%24model">$model</a>,
+      <a href="#JsonSerializer::%24options">$options</a>,
+      <div class="method">
+<a id="JsonSerializer::$DATETIME_FORMAT"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$DATETIME_FORMAT
+          =
+          'iso8601'</h3>
+<em>The default format to serialize DateTime objects to.</em><br><small></small><br><br>
+</div>
+<div class="method">
+<a id="JsonSerializer::$attributes"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$attributes
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="JsonSerializer::$include_root"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$include_root
+          =
+          false</h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="JsonSerializer::$includes_with_class_name_element"></a><h3>
+<span class="nb-faded-text">boolean 
+          protected 
+          </span>$includes_with_class_name_element
+          =
+          false</h3>
+<em>Set this to true if the serializer needs to create a nested array keyed
+on the name of the included classes such as for xml serialization.</em><br><small>&lt;p&gt;Setting this to true will produce the following attributes array when
+the include option was used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    'permission' =&gt; array(
+      array('id' =&gt; 100, 'name' =&gt; 'admin'),
+      array('id' =&gt; 101, 'name' =&gt; 'normal')
+    )
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Setting to false will produce this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    array('id' =&gt; 100, 'name' =&gt; 'admin'),
+    array('id' =&gt; 101, 'name' =&gt; 'normal')
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;</small><br><br>
+</div>
+<div class="method">
+<a id="JsonSerializer::$model"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$model
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="JsonSerializer::$options"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$options
+          =
+          </h3>
+<em></em><br>
+</div>
+</div>
+<div style="clear: both"></div>
+</div>
+<div id="XmlSerializer" class="class">
+<h3>XmlSerializer</h3>
+<div class="properties">
+<h1>Properties</h1>
+<label class="property-key">Extends</label><div class="property-value">
+<a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization">\ActiveRecord\Serialization</a>
+         </div>
+<label class="property-key">Implements</label><div class="property-value"> 
+      </div>
+<label class="property-key">package</label><div class="property-value">
+<a title="">ActiveRecord</a>
+             
+        </div>
+<label class="property-key">Abstract</label><div class="property-value">No 
+      </div>
+<label class="property-key">Final</label><div class="property-value">No 
+      </div>
+</div>
+<h4>Description</h4>
+<em>XML serializer.</em><br><p>All serializers support the following options:</p>
+
+<ul>
+<li><b>only:</b> a string or array of attributes to be included.</li>
+<li><b>except:</b> a string or array of attributes to be excluded.</li>
+<li><b>methods:</b> a string or array of methods to invoke. The method's name will be used as a key for the final attributes array
+along with the method's returned value</li>
+<li><b>include:</b> a string or array of associated models to include in the final serialized product.</li>
+<li><b>only_method:</b> a method that's called and only the resulting array is serialized
+<li><b>skip_instruct:</b> set to true to skip the <?xml ...?> declaration.</li>
+</ul>
+
+<p>Example usage:</p>
+
+<pre><code># include the attributes id and name
+# run $model->encoded_description() and include its return value
+# include the comments association
+# include posts association with its own options (nested)
+$model->to_json(array(
+  'only' => array('id','name', 'encoded_description'),
+  'methods' => array('encoded_description'),
+  'include' => array('comments', 'posts' => array('only' => 'id'))
+));
+
+# except the password field from being included
+$model->to_xml(array('except' => 'password')));
+</code></pre><br><div id="methods_XmlSerializer">
+<h4>Methods</h4>
+<a style="font-style: italic;" href="#XmlSerializer::__construct()">__construct</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::__toString()">__toString</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::check_except()">check_except</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::check_include()">check_include</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::check_methods()">check_methods</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::check_only()">check_only</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::check_only_method()">check_only_method</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::options_to_a()">options_to_a</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::parse_options()">parse_options</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::to_a()">to_a</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::to_s()">to_s</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::write()">write</a>,
+      <a style="font-style: italic;" href="#XmlSerializer::xml_encode()">xml_encode</a>,
+      <div class="method">
+<a id="XmlSerializer::__construct()"></a><h3>__construct<span class="nb-faded-text">(
+          <a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a>
+             
+            $model,
+          array
+             
+            $options,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">\ActiveRecord\Serialization</span>
+</h3>
+<h4>Description</h4>
+<em>Constructs a {@link Serialization} object.</em><br><h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$model</td>
+<td style="white-space: normal;"><a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a></td>
+<td><p>The model to serialize</p></td>
+<td></td>
+</tr>
+<tr>
+<td>$options</td>
+<td style="white-space: normal;">array</td>
+<td><p>&$options Options for serialization</p>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>\ActiveRecord\Serialization</td>
+<td></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::__toString()"></a><h3>__toString<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the serialized object as a string.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>see</td>
+<td>\ActiveRecord\to_s</td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::__toString()"><small>\ActiveRecord\Serialization::__toString()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::check_except()"></a><h3>check_except<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_except()"><small>\ActiveRecord\Serialization::check_except()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::check_include()"></a><h3>check_include<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_include()"><small>\ActiveRecord\Serialization::check_include()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::check_methods()"></a><h3>check_methods<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_methods()"><small>\ActiveRecord\Serialization::check_methods()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::check_only()"></a><h3>check_only<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_only()"><small>\ActiveRecord\Serialization::check_only()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::check_only_method()"></a><h3>check_only_method<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_only_method()"><small>\ActiveRecord\Serialization::check_only_method()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::options_to_a()"></a><h3>options_to_a<span class="nb-faded-text">(
+          
+             
+            $key,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody><tr>
+<td>$key</td>
+<td style="white-space: normal;">n/a</td>
+<td></td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::options_to_a()"><small>\ActiveRecord\Serialization::options_to_a()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::parse_options()"></a><h3>parse_options<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::parse_options()"><small>\ActiveRecord\Serialization::parse_options()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::to_a()"></a><h3>to_a<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">array</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the attributes array.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>array</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::to_a()"><small>\ActiveRecord\Serialization::to_a()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::to_s()"></a><h3>to_s<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Performs the serialization.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::write()"></a><h3>write<span class="nb-faded-text">(
+          
+             
+            $data,
+          
+             
+            $tag
+            = null,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$data</td>
+<td style="white-space: normal;">n/a</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>$tag</td>
+<td style="white-space: normal;">n/a</td>
+<td></td>
+<td>null</td>
+</tr>
+</tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="XmlSerializer::xml_encode()"></a><h3>xml_encode<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div id="properties_XmlSerializer">
+<h4>Properties</h4>
+<a href="#XmlSerializer::%24DATETIME_FORMAT">$DATETIME_FORMAT</a>,
+      <a href="#XmlSerializer::%24attributes">$attributes</a>,
+      <a href="#XmlSerializer::%24includes_with_class_name_element">$includes_with_class_name_element</a>,
+      <a href="#XmlSerializer::%24model">$model</a>,
+      <a href="#XmlSerializer::%24options">$options</a>,
+      <a href="#XmlSerializer::%24writer">$writer</a>,
+      <div class="method">
+<a id="XmlSerializer::$DATETIME_FORMAT"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$DATETIME_FORMAT
+          =
+          'iso8601'</h3>
+<em>The default format to serialize DateTime objects to.</em><br><small></small><br><br>
+</div>
+<div class="method">
+<a id="XmlSerializer::$attributes"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$attributes
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="XmlSerializer::$includes_with_class_name_element"></a><h3>
+<span class="nb-faded-text">boolean 
+          protected 
+          </span>$includes_with_class_name_element
+          =
+          false</h3>
+<em>Set this to true if the serializer needs to create a nested array keyed
+on the name of the included classes such as for xml serialization.</em><br><small>&lt;p&gt;Setting this to true will produce the following attributes array when
+the include option was used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    'permission' =&gt; array(
+      array('id' =&gt; 100, 'name' =&gt; 'admin'),
+      array('id' =&gt; 101, 'name' =&gt; 'normal')
+    )
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Setting to false will produce this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    array('id' =&gt; 100, 'name' =&gt; 'admin'),
+    array('id' =&gt; 101, 'name' =&gt; 'normal')
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;</small><br><br>
+</div>
+<div class="method">
+<a id="XmlSerializer::$model"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$model
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="XmlSerializer::$options"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$options
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="XmlSerializer::$writer"></a><h3>
+<span class="nb-faded-text"> 
+          private 
+          </span>$writer
+          =
+          </h3>
+<em></em><br>
+</div>
+</div>
+<div style="clear: both"></div>
+</div>
+<div id="CsvSerializer" class="class">
+<h3>CsvSerializer</h3>
+<div class="properties">
+<h1>Properties</h1>
+<label class="property-key">Extends</label><div class="property-value">
+<a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization">\ActiveRecord\Serialization</a>
+         </div>
+<label class="property-key">Implements</label><div class="property-value"> 
+      </div>
+<label class="property-key">package</label><div class="property-value">
+<a title="">ActiveRecord</a>
+             
+        </div>
+<label class="property-key">Abstract</label><div class="property-value">No 
+      </div>
+<label class="property-key">Final</label><div class="property-value">No 
+      </div>
+</div>
+<h4>Description</h4>
+<em>CSV serializer.</em><br><p>All serializers support the following options:</p>
+
+<ul>
+<li><b>only:</b> a string or array of attributes to be included.</li>
+<li><b>except:</b> a string or array of attributes to be excluded.</li>
+<li><b>methods:</b> a string or array of methods to invoke. The method's name will be used as a key for the final attributes array
+along with the method's returned value</li>
+<li><b>include:</b> a string or array of associated models to include in the final serialized product.</li>
+<li><b>only_method:</b> a method that's called and only the resulting array is serialized
+<li><b>skip_instruct:</b> set to true to skip the <?xml ...?> declaration.</li>
+</ul>
+
+<p>Example usage:</p>
+
+<pre><code># include the attributes id and name
+# run $model->encoded_description() and include its return value
+# include the comments association
+# include posts association with its own options (nested)
+$model->to_json(array(
+  'only' => array('id','name', 'encoded_description'),
+  'methods' => array('encoded_description'),
+  'include' => array('comments', 'posts' => array('only' => 'id'))
+));
+
+# except the password field from being included
+$model->to_xml(array('except' => 'password')));
+</code></pre><br><div id="methods_CsvSerializer">
+<h4>Methods</h4>
+<a style="font-style: italic;" href="#CsvSerializer::__construct()">__construct</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::__toString()">__toString</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::check_except()">check_except</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::check_include()">check_include</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::check_methods()">check_methods</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::check_only()">check_only</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::check_only_method()">check_only_method</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::header()">header</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::options_to_a()">options_to_a</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::parse_options()">parse_options</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::row()">row</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::to_a()">to_a</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::to_csv()">to_csv</a>,
+      <a style="font-style: italic;" href="#CsvSerializer::to_s()">to_s</a>,
+      <div class="method">
+<a id="CsvSerializer::__construct()"></a><h3>__construct<span class="nb-faded-text">(
+          <a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a>
+             
+            $model,
+          array
+             
+            $options,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">\ActiveRecord\Serialization</span>
+</h3>
+<h4>Description</h4>
+<em>Constructs a {@link Serialization} object.</em><br><h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$model</td>
+<td style="white-space: normal;"><a href="vendor.php-activerecord.php-activerecord.lib.Model.html#%5CActiveRecord%5CModel">\ActiveRecord\Model</a></td>
+<td><p>The model to serialize</p></td>
+<td></td>
+</tr>
+<tr>
+<td>$options</td>
+<td style="white-space: normal;">array</td>
+<td><p>&$options Options for serialization</p>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>\ActiveRecord\Serialization</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::__construct()"><small>\ActiveRecord\Serialization::__construct()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::__toString()"></a><h3>__toString<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the serialized object as a string.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>see</td>
+<td>\ActiveRecord\to_s</td>
+</tr>
+<tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::__toString()"><small>\ActiveRecord\Serialization::__toString()</small></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::check_except()"></a><h3>check_except<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_except()"><small>\ActiveRecord\Serialization::check_except()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::check_include()"></a><h3>check_include<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_include()"><small>\ActiveRecord\Serialization::check_include()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::check_methods()"></a><h3>check_methods<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_methods()"><small>\ActiveRecord\Serialization::check_methods()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::check_only()"></a><h3>check_only<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_only()"><small>\ActiveRecord\Serialization::check_only()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::check_only_method()"></a><h3>check_only_method<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::check_only_method()"><small>\ActiveRecord\Serialization::check_only_method()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::header()"></a><h3>header<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::options_to_a()"></a><h3>options_to_a<span class="nb-faded-text">(
+          
+             
+            $key,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody><tr>
+<td>$key</td>
+<td style="white-space: normal;">n/a</td>
+<td></td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::options_to_a()"><small>\ActiveRecord\Serialization::options_to_a()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::parse_options()"></a><h3>parse_options<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::parse_options()"><small>\ActiveRecord\Serialization::parse_options()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::row()"></a><h3>row<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::to_a()"></a><h3>to_a<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">array</span>
+</h3>
+<h4>Description</h4>
+<em>Returns the attributes array.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>array</td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Tags</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>inherited_from</td>
+<td><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#%5CActiveRecord%5CSerialization::to_a()"><small>\ActiveRecord\Serialization::to_a()</small></a></td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::to_csv()"></a><h3>to_csv<span class="nb-faded-text">(
+          
+             
+            $arr,
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">n/a</span>
+</h3>
+<h4>Arguments</h4>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody><tr>
+<td>$arr</td>
+<td style="white-space: normal;">n/a</td>
+<td></td>
+<td></td>
+</tr></tbody>
+</table>
+<h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>n/a</td>
+<td>n/a</td>
+</tr></tbody>
+</table>
+</div>
+<div class="method">
+<a id="CsvSerializer::to_s()"></a><h3>to_s<span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+        <span class="nb-faded-text">string</span>
+</h3>
+<h4>Description</h4>
+<em>Performs the serialization.</em><br><h4>Return value</h4>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td>string</td>
+<td></td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div id="properties_CsvSerializer">
+<h4>Properties</h4>
+<a href="#CsvSerializer::%24DATETIME_FORMAT">$DATETIME_FORMAT</a>,
+      <a href="#CsvSerializer::%24attributes">$attributes</a>,
+      <a href="#CsvSerializer::%24delimiter">$delimiter</a>,
+      <a href="#CsvSerializer::%24enclosure">$enclosure</a>,
+      <a href="#CsvSerializer::%24includes_with_class_name_element">$includes_with_class_name_element</a>,
+      <a href="#CsvSerializer::%24model">$model</a>,
+      <a href="#CsvSerializer::%24options">$options</a>,
+      <div class="method">
+<a id="CsvSerializer::$DATETIME_FORMAT"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$DATETIME_FORMAT
+          =
+          'iso8601'</h3>
+<em>The default format to serialize DateTime objects to.</em><br><small></small><br><br>
+</div>
+<div class="method">
+<a id="CsvSerializer::$attributes"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$attributes
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="CsvSerializer::$delimiter"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$delimiter
+          =
+          ','</h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="CsvSerializer::$enclosure"></a><h3>
+<span class="nb-faded-text"> 
+          public 
+          static </span>$enclosure
+          =
+          '"'</h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="CsvSerializer::$includes_with_class_name_element"></a><h3>
+<span class="nb-faded-text">boolean 
+          protected 
+          </span>$includes_with_class_name_element
+          =
+          false</h3>
+<em>Set this to true if the serializer needs to create a nested array keyed
+on the name of the included classes such as for xml serialization.</em><br><small>&lt;p&gt;Setting this to true will produce the following attributes array when
+the include option was used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    'permission' =&gt; array(
+      array('id' =&gt; 100, 'name' =&gt; 'admin'),
+      array('id' =&gt; 101, 'name' =&gt; 'normal')
+    )
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Setting to false will produce this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$user = array('id' =&gt; 1, 'name' =&gt; 'Tito',
+  'permissions' =&gt; array(
+    array('id' =&gt; 100, 'name' =&gt; 'admin'),
+    array('id' =&gt; 101, 'name' =&gt; 'normal')
+  )
+);
+&lt;/code&gt;&lt;/pre&gt;</small><br><br>
+</div>
+<div class="method">
+<a id="CsvSerializer::$model"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$model
+          =
+          </h3>
+<em></em><br>
+</div>
+<div class="method">
+<a id="CsvSerializer::$options"></a><h3>
+<span class="nb-faded-text"> 
+          protected 
+          </span>$options
+          =
+          </h3>
+<em></em><br>
+</div>
+</div>
+<div style="clear: both"></div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://www.phpdoc.org">phpDocumentor 2.0.0a12</a>.</small></div><div id="index"><div class="padder"><script xmlns="" type="text/javascript">
+      $(function() {
+
+        var is_chrome = /chrome/.test( navigator.userAgent.toLowerCase() );
+        var is_local = /file:\/\//.test(document.location.href);
+        if (is_chrome && is_local)
+        {
+          // search is disabled on chrome with local files due to http://code.google.com/p/chromium/issues/detail?id=40787
+          return;
+        }
+
+        $("#search_box").show();
+        var search_index = {};
+        $.ajax({
+          url: "search_index.xml",
+          dataType: ($.browser.msie) ? "text" : "xml",
+          error: function(data) {
+            alert('An error occurred using the search data');
+          },
+          success: function( data ) {
+            var xml;
+            if (typeof data == "string") {
+              xml = new ActiveXObject("Microsoft.XMLDOM");
+              xml.async = false;
+              xml.loadXML(data);
+            } else {
+              xml = data;
+            }
+
+            search_index = $("node", xml).map(function() {
+              type = $("type", this).text();
+              return {
+                value: $("value", this).text(),
+                label: '<img src="images/icons/'+type+'.png" align="absmiddle">'+$("value", this).text(),
+                id: $("id", this).text(),
+              };
+            }).get();
+
+            $("#search_box").autocomplete({
+              source: search_index,
+              select: function(event, ui) {
+                // redirect to the documentation
+                if ((parent) && (parent.content))
+                {
+                  parent.content.document.location = ''+ui.item.id;
+                }
+                else
+                {
+                  jQuery(document).location = ''+ui.item.id;
+                }
+                applySearchHash();
+              }
+            });
+          }
+        });
+      });
+    </script><input id="search_box"></input><div class="section">
+<h1>Namespaces</h1>
+<ul id="namespaces-" class="filetree">
+<li class="closed">
+<span class="folder">ActiveRecord</span><ul>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#AbstractRelationship">AbstractRelationship</a><br><small>Abstract class that all relationships must extend from.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ActiveRecordException">ActiveRecordException</a><br><small>Generic base exception for all ActiveRecord specific errors.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#ArraySerializer">ArraySerializer</a><br><small>Array serializer.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#BelongsTo">BelongsTo</a><br><small>Belongs to relationship.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Cache.html#Cache">Cache</a><br><small>Cache::get(&#39;the-cache-key&#39;, function() {
+ # this gets executed when cache is stale
+ return "your cacheable datas";
+});</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.CallBack.html#CallBack">CallBack</a><br><small>Callbacks allow the programmer to hook into the life cycle of a {@link Model}.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Column.html#Column">Column</a><br><small>Class for a table column.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Config.html#Config">Config</a><br><small>Manages configuration options for ActiveRecord.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ConfigException">ConfigException</a><br><small>Thrown for configuration problems.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Connection.html#Connection">Connection</a><br><small>The base class for database connection adapters.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.ConnectionManager.html#ConnectionManager">ConnectionManager</a><br><small>Singleton to manage any and all database connections.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#CsvSerializer">CsvSerializer</a><br><small>CSV serializer.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#DatabaseException">DatabaseException</a><br><small>Thrown when there was an error performing a database operation.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.DateTime.html#DateTime">DateTime</a><br><small>An extension of PHP&#39;s DateTime class to provide dirty flagging and easier formatting options.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Validations.html#Errors">Errors</a><br><small>Class that holds {@link Validations} errors.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Expressions.html#Expressions">Expressions</a><br><small>Templating like class for building SQL statements.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ExpressionsException">ExpressionsException</a><br><small>Thrown by {@link Expressions}.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#HasAndBelongsToMany">HasAndBelongsToMany</a><br><small>Abstract class that all relationships must extend from.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#HasMany">HasMany</a><br><small>One-to-many relationship.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#HasManyThroughAssociationException">HasManyThroughAssociationException</a><br><small>Thrown for has many thru exceptions.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#HasOne">HasOne</a><br><small>One-to-one relationship.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Inflector.html#Inflector">Inflector</a><br><small></small></span></li>
+<li><span class="interface"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#InterfaceRelationship">InterfaceRelationship</a><br><small>Interface for a table relationship.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#JsonSerializer">JsonSerializer</a><br><small>JSON serializer.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.cache.Memcache.html#Memcache">Memcache</a><br><small></small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Model.html#Model">Model</a><br><small>The base class for your models.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ModelException">ModelException</a><br><small>Thrown by {@link Model}.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.adapters.MysqlAdapter.html#MysqlAdapter">MysqlAdapter</a><br><small>Adapter for MySQL.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.adapters.OciAdapter.html#OciAdapter">OciAdapter</a><br><small>Adapter for OCI (not completed yet).</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.adapters.PgsqlAdapter.html#PgsqlAdapter">PgsqlAdapter</a><br><small>Adapter for Postgres (not completed yet)</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ReadOnlyException">ReadOnlyException</a><br><small>Thrown when attempting to perform a write operation on a {@link Model} that is in read-only mode.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#RecordNotFound">RecordNotFound</a><br><small>Thrown when a record cannot be found.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Reflections.html#Reflections">Reflections</a><br><small>Simple class that caches reflections of classes.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#RelationshipException">RelationshipException</a><br><small>Thrown for relationship exceptions.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.SQLBuilder.html#SQLBuilder">SQLBuilder</a><br><small>Helper class for building sql statements progmatically.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#Serialization">Serialization</a><br><small>Base class for Model serializers.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Singleton.html#Singleton">Singleton</a><br><small>This implementation of the singleton pattern does not conform to the strong definition
+given by the "Gang of Four." The __construct() method has not be privatized so that
+a singleton pattern is capable of being achieved; however, multiple instantiations are also
+possible.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.adapters.SqliteAdapter.html#SqliteAdapter">SqliteAdapter</a><br><small>Adapter for SQLite.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Inflector.html#StandardInflector">StandardInflector</a><br><small></small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Table.html#Table">Table</a><br><small>Manages reading and writing to a database table.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#UndefinedPropertyException">UndefinedPropertyException</a><br><small>Thrown when attempting to access an invalid property on a {@link Model}.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Utils.html#Utils">Utils</a><br><small>Some internal utility functions.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Validations.html#Validations">Validations</a><br><small>Manages validations for a {@link Model}.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ValidationsArgumentError">ValidationsArgumentError</a><br><small>Thrown for validations exceptions.</small></span></li>
+<li><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#XmlSerializer">XmlSerializer</a><br><small>XML serializer.</small></span></li>
+</ul>
+</li>
+<li class="closed">
+<span class="folder">Application</span><ul>
+<li class="closed">
+<span class="folder">Controllers</span><ul>
+<li><span class="class"><a href="Application.Controllers.ApplicationController.html#ApplicationController">ApplicationController</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li><span class="class"><a href="Application.Controllers.ProjectController.html#ProjectController">ProjectController</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+</ul>
+</li>
+<li class="closed">
+<span class="folder">Models</span><ul>
+<li><span class="class"><a href="Application.Models.Client.html#Client">Client</a><br><small>The base class for your models.</small></span></li>
+<li><span class="class"><a href="Application.Models.Project.html#Project">Project</a><br><small>The base class for your models.</small></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="closed">
+<span class="folder">ChickenWire</span><ul>
+<li><span class="class"><a href="ChickenWire.Application.html#Application">Application</a><br><small>ChickenWire Application Class</small></span></li>
+<li><span class="class"><a href="ChickenWire.Auth.html#Auth">Auth</a><br><small>Authentication class for user authentication</small></span></li>
+<li><span class="class"><a href="ChickenWire.Controller.html#Controller">Controller</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li><span class="class"><a href="ChickenWire.Model.html#Model">Model</a><br><small>The base class for your models.</small></span></li>
+<li><span class="class"><a href="ChickenWire.Module.html#Module">Module</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li><span class="class"><a href="ChickenWire.Request.html#Request">Request</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li><span class="class"><a href="ChickenWire.Route.html#Route">Route</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li class="closed">
+<span class="folder">Core</span><ul>
+<li><span class="class"><a href="ChickenWire.Core.Configuration.html#Configuration">Configuration</a><br><small>Configuration class for multiple environment configuration</small></span></li>
+<li><span class="class"><a href="ChickenWire.Core.MagicObject.html#MagicObject">MagicObject</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li><span class="class"><a href="ChickenWire.Core.Store.html#Store">Store</a><br><small>The Store class is a dictionary with type validation</small></span></li>
+</ul>
+</li>
+<li class="closed">
+<span class="folder">Util</span><ul>
+<li><span class="class"><a href="ChickenWire.Util.Http.html#Http">Http</a><br><small></small></span></li>
+<li><span class="class"><a href="ChickenWire.Util.Reflection.html#Reflection">Reflection</a><br><small></small></span></li>
+<li><span class="class"><a href="ChickenWire.Util.Str.html#Str">Str</a><br><small></small></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="closed">
+<span class="folder">global</span><ul></ul>
+</li>
+</ul>
+</div><div class="section">
+<h1>Packages</h1>
+<ul id="packages-" class="filetree">
+<li class="closed">
+<span class="folder">ActiveRecord</span><ul id="packages_ActiveRecord" class="filetree">
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#AbstractRelationship">AbstractRelationship</a><br><small>Abstract class that all relationships must extend from.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ActiveRecordException">ActiveRecordException</a><br><small>Generic base exception for all ActiveRecord specific errors.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#ArraySerializer">ArraySerializer</a><br><small>Array serializer.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#BelongsTo">BelongsTo</a><br><small>Belongs to relationship.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.CallBack.html#CallBack">CallBack</a><br><small>Callbacks allow the programmer to hook into the life cycle of a {@link Model}.</small></span></li>
+<li class="closed"><span class="class"><a href="Application.Models.Client.html#Client">Client</a><br><small>The base class for your models.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Column.html#Column">Column</a><br><small>Class for a table column.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Config.html#Config">Config</a><br><small>Manages configuration options for ActiveRecord.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ConfigException">ConfigException</a><br><small>Thrown for configuration problems.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Connection.html#Connection">Connection</a><br><small>The base class for database connection adapters.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.ConnectionManager.html#ConnectionManager">ConnectionManager</a><br><small>Singleton to manage any and all database connections.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#CsvSerializer">CsvSerializer</a><br><small>CSV serializer.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#DatabaseException">DatabaseException</a><br><small>Thrown when there was an error performing a database operation.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.DateTime.html#DateTime">DateTime</a><br><small>An extension of PHP&#39;s DateTime class to provide dirty flagging and easier formatting options.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Validations.html#Errors">Errors</a><br><small>Class that holds {@link Validations} errors.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Expressions.html#Expressions">Expressions</a><br><small>Templating like class for building SQL statements.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ExpressionsException">ExpressionsException</a><br><small>Thrown by {@link Expressions}.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#HasAndBelongsToMany">HasAndBelongsToMany</a><br><small>Abstract class that all relationships must extend from.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#HasMany">HasMany</a><br><small>One-to-many relationship.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#HasManyThroughAssociationException">HasManyThroughAssociationException</a><br><small>Thrown for has many thru exceptions.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#HasOne">HasOne</a><br><small>One-to-one relationship.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Inflector.html#Inflector">Inflector</a><br><small></small></span></li>
+<li class="closed"><span class="interface"><a href="vendor.php-activerecord.php-activerecord.lib.Relationship.html#InterfaceRelationship">InterfaceRelationship</a><br><small>Interface for a table relationship.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#JsonSerializer">JsonSerializer</a><br><small>JSON serializer.</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Model.html#Model">Model</a><br><small>The base class for your models.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Model.html#Model">Model</a><br><small>The base class for your models.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ModelException">ModelException</a><br><small>Thrown by {@link Model}.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.adapters.MysqlAdapter.html#MysqlAdapter">MysqlAdapter</a><br><small>Adapter for MySQL.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.adapters.OciAdapter.html#OciAdapter">OciAdapter</a><br><small>Adapter for OCI (not completed yet).</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.adapters.PgsqlAdapter.html#PgsqlAdapter">PgsqlAdapter</a><br><small>Adapter for Postgres (not completed yet)</small></span></li>
+<li class="closed"><span class="class"><a href="Application.Models.Project.html#Project">Project</a><br><small>The base class for your models.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ReadOnlyException">ReadOnlyException</a><br><small>Thrown when attempting to perform a write operation on a {@link Model} that is in read-only mode.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#RecordNotFound">RecordNotFound</a><br><small>Thrown when a record cannot be found.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Reflections.html#Reflections">Reflections</a><br><small>Simple class that caches reflections of classes.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#RelationshipException">RelationshipException</a><br><small>Thrown for relationship exceptions.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.SQLBuilder.html#SQLBuilder">SQLBuilder</a><br><small>Helper class for building sql statements progmatically.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#Serialization">Serialization</a><br><small>Base class for Model serializers.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Singleton.html#Singleton">Singleton</a><br><small>This implementation of the singleton pattern does not conform to the strong definition
+given by the "Gang of Four." The __construct() method has not be privatized so that
+a singleton pattern is capable of being achieved; however, multiple instantiations are also
+possible.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.adapters.SqliteAdapter.html#SqliteAdapter">SqliteAdapter</a><br><small>Adapter for SQLite.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Inflector.html#StandardInflector">StandardInflector</a><br><small></small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Table.html#Table">Table</a><br><small>Manages reading and writing to a database table.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#UndefinedPropertyException">UndefinedPropertyException</a><br><small>Thrown when attempting to access an invalid property on a {@link Model}.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Utils.html#Utils">Utils</a><br><small>Some internal utility functions.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Validations.html#Validations">Validations</a><br><small>Manages validations for a {@link Model}.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Exceptions.html#ValidationsArgumentError">ValidationsArgumentError</a><br><small>Thrown for validations exceptions.</small></span></li>
+<li class="closed"><span class="class"><a href="vendor.php-activerecord.php-activerecord.lib.Serialization.html#XmlSerializer">XmlSerializer</a><br><small>XML serializer.</small></span></li>
+</ul>
+</li>
+<li class="closed">
+<span class="folder">ChickenWire</span><ul id="packages_ChickenWire" class="filetree">
+<li class="closed"><span class="class"><a href="ChickenWire.Application.html#Application">Application</a><br><small>ChickenWire Application Class</small></span></li>
+<li class="closed"><span class="class"><a href="Application.Controllers.ApplicationController.html#ApplicationController">ApplicationController</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Auth.html#Auth">Auth</a><br><small>Authentication class for user authentication</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Core.Configuration.html#Configuration">Configuration</a><br><small>Configuration class for multiple environment configuration</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Controller.html#Controller">Controller</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Core.MagicObject.html#MagicObject">MagicObject</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Module.html#Module">Module</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li class="closed"><span class="class"><a href="Application.Controllers.ProjectController.html#ProjectController">ProjectController</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Request.html#Request">Request</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Route.html#Route">Route</a><br><small>MagicObject class facilitates easy use of getters and setters.</small></span></li>
+<li class="closed"><span class="class"><a href="ChickenWire.Core.Store.html#Store">Store</a><br><small>The Store class is a dictionary with type validation</small></span></li>
+</ul>
+</li>
+<li class="closed">
+<span class="folder">Default</span><ul id="packages_Default" class="filetree"></ul>
+</li>
+</ul>
+</div>
+</div></div><div id="footer"><div class="padder"></div></div></div></body></html>

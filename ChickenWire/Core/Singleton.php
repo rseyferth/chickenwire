@@ -2,12 +2,20 @@
 
 	namespace ChickenWire\Core;
 
+	/**
+	 * Simple implementation of the singleton pattern.
+	 */
+
 	abstract class Singleton
 	{
 
 		protected function __construct() {}
 
-		public static function &instance() {
+		/**
+		 * Retrieve the instance (or create it, if it's not already created)
+		 * @return mixed The instance of this class.
+		 */
+		public static function instance() {
 
 			// Not created yet?
 			if (!static::$_instance) {

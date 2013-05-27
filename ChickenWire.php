@@ -8,4 +8,5 @@
 	// Now boot the application
 	Application::boot();
 
+
 ?>
