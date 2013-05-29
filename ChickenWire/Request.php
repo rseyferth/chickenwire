@@ -5,7 +5,7 @@
 	class Request extends Core\MagicObject
 	{
 
-		protected static $_propAccessible = array('uri', 'method', 'route');
+		protected static $_propRead = array('uri', 'method', 'route');
 
 		protected $_uri;
 		protected $_method;

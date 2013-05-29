@@ -141,6 +141,9 @@
 		 */
 		protected function _boot() {
 
+			// Start session :)
+			session_start();
+
 			// Create local inflector
 			static::$inflector = Inflector::instance();
 

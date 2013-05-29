@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>ChickenWire Documentation » \ChickenWire\Core\Configuration</title>
+<title>ChickenWire Documentation » \ChickenWire\Auth\AuthResult</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -64,159 +64,137 @@
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
-                    <ul>
-<li class="method public "><a href="#method___construct" title="__construct :: Create a new Configuration instance"><span class="description">Create a new Configuration instance</span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_allFor" title="allFor :: Get the values of the given setting for each environment"><span class="description">Get the values of the given setting for each environment</span><pre>allFor()</pre></a></li>
-<li class="method public "><a href="#method_load" title="load :: Load a PHP configuration file inside the context of this configuration"><span class="description">Load a PHP configuration file inside the context of this configuration</span><pre>load()</pre></a></li>
-</ul>
+                    <ul><li class="method public "><a href="#method___construct" title="__construct :: Create a new Authentication Result"><span class="description">Create a new Authentication Result</span><pre>__construct()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties
-                    <ul><li class="property public "><a href="#property_environment" title="$environment :: The environment we are currently in. This determines which value will be returned when you have configured multiple environments."><span class="description"></span><pre>$environment</pre></a></li></ul>
-</li>
-<li class="nav-header protected">» Protected
                     <ul>
-<li class="property protected "><a href="#property__defaults" title="$_defaults :: "><span class="description"></span><pre>$_defaults</pre></a></li>
-<li class="property protected "><a href="#property__envSettings" title="$_envSettings :: "><span class="description"></span><pre>$_envSettings</pre></a></li>
-<li class="property protected "><a href="#property__environment" title="$_environment :: "><span class="description"></span><pre>$_environment</pre></a></li>
+<li class="property public "><a href="#property_message" title="$message :: Human-readable result"><span class="description"></span><pre>$message</pre></a></li>
+<li class="property public "><a href="#property_result" title="$result :: Result code (one of the constants)"><span class="description"></span><pre>$result</pre></a></li>
+<li class="property public "><a href="#property_success" title="$success :: Boolean value indicating authentication success"><span class="description"></span><pre>$success</pre></a></li>
+<li class="property public "><a href="#property_user" title="$user :: The Model instance for the authenticated user."><span class="description"></span><pre>$user</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul><li class="property private "><a href="#property__messages" title="$_messages :: "><span class="description"></span><pre>$_messages</pre></a></li></ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_ACCOUNT_SUSPENDED" title="ACCOUNT_SUSPENDED :: "><span class="description">ACCOUNT_SUSPENDED</span><pre>ACCOUNT_SUSPENDED</pre></a></li>
+<li class="constant  "><a href="#constant_INCORRECT_PASSWORD" title="INCORRECT_PASSWORD :: "><span class="description">INCORRECT_PASSWORD</span><pre>INCORRECT_PASSWORD</pre></a></li>
+<li class="constant  "><a href="#constant_SUCCESS" title="SUCCESS :: "><span class="description">SUCCESS</span><pre>SUCCESS</pre></a></li>
+<li class="constant  "><a href="#constant_USER_NOT_FOUND" title="USER_NOT_FOUND :: "><span class="description">USER_NOT_FOUND</span><pre>USER_NOT_FOUND</pre></a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="span8">
-<a id="\ChickenWire\Core\Configuration"></a><ul class="breadcrumb">
+<a id="\ChickenWire\Auth\AuthResult"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/ChickenWire.html">ChickenWire</a></li>
 <li>
-<span class="divider">\</span><a href="../namespaces/ChickenWire.Core.html">Core</a>
+<span class="divider">\</span><a href="../namespaces/ChickenWire.Auth.html">Auth</a>
 </li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/ChickenWire.Core.Configuration.html">Configuration</a>
+<span class="divider">\</span><a href="../classes/ChickenWire.Auth.AuthResult.html">AuthResult</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Configuration class for multiple environment configuration</p>
+<p class="short_description">Authentication result</p>
 <div class="details">
-<div class="long_description"><p>The Configuration class can be used to create a configuration for
-one or more environments (usually development, test, and production). This class
-is mainly used by the ChickenWire\Application class, to store all
-framework configuration. On construction the Configuration will try to
-load default settings from the calling/defined class. For example:</p>
-
-<pre><code>class Application
-{
-    static $defaultSettings = array(
-        "name" => "Not a real application."
-    );
-
-    private $_settings;
-    function __construct()
-    {
-        $this->_settings = new \ChickenWire\Core\Configuration();
-        echo $this->_settings->name;        // output: Not a real application.
-    }
-}
-</code></pre>
-
-<p>In the Application's config files the local variable $config is an
-instance of this class.</p>
-
-<p>Example of a configuration file:</p>
-
-<pre><code>// Set environment
-$config->environment = ($_SERVER['HTTP_HOST'] == 'www.live-domain.com') ? 'production' : 'development';
-
-// Database (for each environment seperately)
-$config->database = array(
-    'development' => 'mysql://root:guess@localhost/[dbname];charset=utf8',
-    'production' => 'mysql://[user]:[pass]@localhost/[dbname]-admin;charset=utf8'
-);
-
-// Set timezone (for all environments)
-$config->timezone = "Europe/Amsterdam";
-</code></pre></div>
-<table class="table table-bordered"><tr>
+<div class="long_description"><p>The AuthResult class is used as a return value for authentication
+validation in Auth.</p></div>
+<table class="table table-bordered">
+<tr>
+<th>see</th>
+<td><a href="ChickenWire.Auth.Auth.html#%5CChickenWire%5CAuth%5CAuth">\ChickenWire\Auth\Auth</a></td>
+</tr>
+<tr>
 <th>package</th>
 <td><a href="../packages/ChickenWire.html">ChickenWire</a></td>
-</tr></table>
+</tr>
+</table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
-<h2>Create a new Configuration instance</h2>
-<pre>__construct(string $class) </pre>
+<h2>Create a new Authentication Result</h2>
+<pre>__construct(string $result, \ChickenWire\Model $user, string $message) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$class</h4>
-<code>string</code><p>(default: the calling class) The class for which the configuration is meant. When you leave this null it will assume the class you call this constructor from.</p>
+<h4>$result</h4>
+<code>string</code><p>Result code (one of the constants)</p>
 </div>
-</div></div>
-</div>
-<a id="method_allFor"></a><div class="element clickable method public method_allFor" data-toggle="collapse" data-target=".method_allFor .collapse">
-<h2>Get the values of the given setting for each environment</h2>
-<pre>allFor(string $name) : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$name</h4>
-<code>string</code><p>The settings to retrieve</p></div>
-<h3>Returns</h3>
-<div class="subelement response"><code>array</code></div>
-</div></div>
+<h4>$user</h4>
+<code><a href="../classes/ChickenWire.Model.html">\ChickenWire\Model</a></code><p>(default: null) The authenticated user's Model instance</p>
 </div>
-<a id="method_load"></a><div class="element clickable method public method_load" data-toggle="collapse" data-target=".method_load .collapse">
-<h2>Load a PHP configuration file inside the context of this configuration</h2>
-<pre>load(string $file) : void</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$file</h4>
-<code>string</code><p>The PHP file to load</p></div>
+<h4>$message</h4>
+<code>string</code><p>(default: "") When empty, a default message will be used for the result.</p>
+</div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_environment"> </a><div class="element clickable property public property_environment" data-toggle="collapse" data-target=".property_environment .collapse">
+<a id="property_message"> </a><div class="element clickable property public property_message" data-toggle="collapse" data-target=".property_message .collapse">
 <h2></h2>
-<pre>$environment : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>magic</th>
-<td></td>
-</tr>
-<tr>
-<th>property</th>
-<td>The environment we are currently in. This determines which value will be returned when you have configured multiple environments.</td>
-</tr>
-</table>
-</div></div>
-</div>
-<a id="property__defaults"> </a><div class="element clickable property protected property__defaults" data-toggle="collapse" data-target=".property__defaults .collapse">
-<h2></h2>
-<pre>$_defaults </pre>
+<pre>$message : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property__envSettings"> </a><div class="element clickable property protected property__envSettings" data-toggle="collapse" data-target=".property__envSettings .collapse">
+<a id="property_result"> </a><div class="element clickable property public property_result" data-toggle="collapse" data-target=".property_result .collapse">
 <h2></h2>
-<pre>$_envSettings </pre>
+<pre>$result : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property__environment"> </a><div class="element clickable property protected property__environment" data-toggle="collapse" data-target=".property__environment .collapse">
+<a id="property_success"> </a><div class="element clickable property public property_success" data-toggle="collapse" data-target=".property_success .collapse">
 <h2></h2>
-<pre>$_environment </pre>
+<pre>$success : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_user"> </a><div class="element clickable property public property_user" data-toggle="collapse" data-target=".property_user .collapse">
+<h2></h2>
+<pre>$user : <a href="../classes/ChickenWire.Model.html">\ChickenWire\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>(Only present on success)</p></div></div></div>
+</div>
+<a id="property__messages"> </a><div class="element clickable property private property__messages" data-toggle="collapse" data-target=".property__messages .collapse">
+<h2></h2>
+<pre>$_messages </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_ACCOUNT_SUSPENDED"> </a><div class="element clickable constant  constant_ACCOUNT_SUSPENDED" data-toggle="collapse" data-target=".constant_ACCOUNT_SUSPENDED .collapse">
+<h2>ACCOUNT_SUSPENDED</h2>
+<pre>ACCOUNT_SUSPENDED </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_INCORRECT_PASSWORD"> </a><div class="element clickable constant  constant_INCORRECT_PASSWORD" data-toggle="collapse" data-target=".constant_INCORRECT_PASSWORD .collapse">
+<h2>INCORRECT_PASSWORD</h2>
+<pre>INCORRECT_PASSWORD </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_SUCCESS"> </a><div class="element clickable constant  constant_SUCCESS" data-toggle="collapse" data-target=".constant_SUCCESS .collapse">
+<h2>SUCCESS</h2>
+<pre>SUCCESS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_USER_NOT_FOUND"> </a><div class="element clickable constant  constant_USER_NOT_FOUND" data-toggle="collapse" data-target=".constant_USER_NOT_FOUND .collapse">
+<h2>USER_NOT_FOUND</h2>
+<pre>USER_NOT_FOUND </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

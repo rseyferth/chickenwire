@@ -2,6 +2,8 @@
 
 	namespace ChickenWire;
 
+	use \ChickenWire\Auth\Auth;
+
 	/**
 	 * The ChickenWire controller class
 	 *
@@ -36,14 +38,21 @@
 	class Controller extends Core\MagicObject
 	{
 
+		static $requiresAuth = null;
+
 		protected $request;
+		protected $auth;
 
 
-		public function __construct(\ChickenWire\Request $request) {
+		public function __construct(\ChickenWire\Request $request, $execute = true) {
 
 			// Localize
 			$this->request = $request;
 
+			// Don't execute?
+			if ($execute == false) {
+				return;
+			}
 
 			// Auto loading a model?
 			if (!is_null($this->route->models) && $this->route->autoLoad === true) {
@@ -65,12 +74,108 @@
 
 				}
 
+				// Do we need authentication?
+				if ($this->_checkAuth() == false) {
+					return;
+				}
+
 				// Call action
 				$reflection->invoke($this);
 
 			} else {
 
 				throw new \Exception("There is no method '" . $action . "' on " . get_class($this), 1);				
+
+			}
+
+
+		}
+
+		/**
+		 * Check if current action needs authentication, and if it is validated
+		 * @return boolean Whether authentication passed
+		 */
+		private function _checkAuth()
+		{
+
+			// Not needed?
+			if (is_null(static::$requiresAuth) || empty(static::$requiresAuth)) {
+				return true;
+			}
+
+			// Get auth
+			$auth = static::$requiresAuth;
+
+			// Is there an except clause?
+			if (is_array($auth) && array_key_exists("except", $auth)) {
+
+				// Is my method in it?
+				if (in_array($this->route->action, $auth['except'])) {
+					return true;
+				}
+
+			}
+
+			// Is there an only clause?
+			if (is_array($auth) && array_key_exists("only", $auth)) {
+
+				// Is my method in it?
+				if (!in_array($this->route->action, $auth['only'])) {
+					return true;
+				}
+
+			}
+
+			// Get auth name
+			$authName = is_array($auth) ? $auth[0] : $auth;
+
+			// Find auth object
+			$this->auth = Auth::get($authName);
+			
+			// Is it authenticated?
+			if ($this->auth->isAuthenticated() !== true) {
+
+				// Call login controller action
+				$this->_invokeAuthLoginAction();
+				return false;
+
+			} else {
+
+				// We're in!
+				return true;
+
+			}
+
+
+		}
+
+		/**
+		 * Invoke the Login action for the Controller's Auth object
+		 * @return void
+		 */
+		private function _invokeAuthLoginAction()
+		{
+
+			// Try to instatiate the login controller (without executing the request)
+			$login = new $this->auth->loginController($this->request, false);
+			
+			// Does it have the method?
+			if (method_exists($login, $this->auth->loginAction)) {
+
+				// Is it public?
+				$reflection = new \ReflectionMethod($login, $this->auth->loginAction);
+				if (!$reflection->isPublic()) {
+
+					throw new \Exception("The method '" . $this->auth->loginAction . "' on " . get_class($login) . " is not public.", 1);				
+
+				}
+
+				// Call action
+				$reflection->invoke($login);
+
+			} else {
+
+				throw new \Exception("There is no method '" . $this->auth->loginAction . "' on " . get_class($login), 1);				
 
 			}
 

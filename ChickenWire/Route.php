@@ -9,7 +9,7 @@
 
 		protected static $_routes = array();
 
-		protected static $_propAccessible = array('ssl', 'pattern', 'controller', 'action', 'methods', 'ssl', 'models', 'autoLoad', 'patternVariables', 'module');
+		protected static $_propReadWrite = array('ssl', 'pattern', 'controller', 'action', 'methods', 'ssl', 'models', 'autoLoad', 'patternVariables', 'module');
 
 		protected static $_withModule = null;
 
@@ -145,7 +145,7 @@
 			}	
 
 			// Check the pattern
-			if (!array_key_exists('pattern', $options)) {
+				if (!array_key_exists('pattern', $options)) {
 
 				// Generate pattern automatically
 				$pattern = '';

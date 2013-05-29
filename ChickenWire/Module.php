@@ -70,7 +70,7 @@
 	 */
 	class Module extends Core\MagicObject {
 
-		protected static $_propAccessible = array("name", "path", "namespace", "urlPrefix");
+		protected static $_propRead = array("name", "path", "namespace", "urlPrefix");
 
 		protected static $_modules = array();
 

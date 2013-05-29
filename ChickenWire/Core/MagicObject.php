@@ -7,8 +7,10 @@
 	 *
 	 * By extending MagicObject the class will have a __get and __set
 	 * function, that allows properties to be made accessible. You
-	 * can define a static array in your class called $_propAccessible,
-	 * containing your local variables that should be made public.
+	 * can define static arrays in your class called $_propRead,
+	 * $_propWrite, and $propReadWrite, containing your local variables that 
+	 * should be made public. All your local private/protected variables
+	 * should be prefixed with an underscore.
 	 *
 	 * You can also define specific getters and setters through __get_prop
 	 * and __set_prop.
@@ -17,7 +19,8 @@
 	 * <code>
 	 * class Person extends \ChickenWire\Core\MagicObject
 	 * {
-	 * 		protected static $_propAccessible = array('firstname', 'lastname');
+	 * 		protected static $_propReadWrite = array('firstname');
+	 * 		protected static $_propRead = array('lastname');
 	 *
 	 * 		protected $_firstname;
 	 * 		protected $_lastname;
@@ -55,7 +58,9 @@
 	abstract class MagicObject
 	{
 
-		protected static $_propAccessible = null;
+		protected static $_propReadWrite = null;
+		protected static $_propRead = null;
+		protected static $_propWrite = null;
 
 		/**
 		 * @ignore
@@ -67,8 +72,9 @@
 				return call_user_func(array($this, '__get_' . $prop));
 			}
 
-			// Check if it is in accessable
-			if (!is_null(static::$_propAccessible) && in_array($prop, static::$_propAccessible)) {
+			// Check if it is in read/write or read array
+			if ((!is_null(static::$_propRead) && in_array($prop, static::$_propRead)) ||
+				(!is_null(static::$_propReadWrite) && in_array($prop, static::$_propReadWrite))) {
 
 				// Property exists?
 				$propLocal = '_' . $prop;
@@ -91,8 +97,9 @@
 				return call_user_method_array('__set_' . $prop, $this, array($value));
 			}
 
-			// Check if it is in accessable
-			if (!is_null(static::$_propAccessible) && in_array($prop, static::$_propAccessible)) {
+			// Check if it is in read/write or write array
+			if ((!is_null(static::$_propWrite) && in_array($prop, static::$_propWrite)) ||
+				(!is_null(static::$_propReadWrite) && in_array($prop, static::$_propReadWrite))) {
 
 				// Property exists?
 				$propLocal = '_' . $prop;

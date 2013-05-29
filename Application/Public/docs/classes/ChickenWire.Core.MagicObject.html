@@ -38,7 +38,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">393</span></a></li>
+                <span class="label label-info">412</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
                 <span class="label label-info">1</span>
@@ -67,7 +67,11 @@
                     <ul></ul>
 </li>
 <li class="nav-header protected">» Protected
-                    <ul><li class="property protected "><a href="#property__propAccessible" title="$_propAccessible :: "><span class="description"></span><pre>$_propAccessible</pre></a></li></ul>
+                    <ul>
+<li class="property protected "><a href="#property__propRead" title="$_propRead :: "><span class="description"></span><pre>$_propRead</pre></a></li>
+<li class="property protected "><a href="#property__propReadWrite" title="$_propReadWrite :: "><span class="description"></span><pre>$_propReadWrite</pre></a></li>
+<li class="property protected "><a href="#property__propWrite" title="$_propWrite :: "><span class="description"></span><pre>$_propWrite</pre></a></li>
+</ul>
 </li>
 </ul>
 </div>
@@ -89,8 +93,10 @@
 <div class="details">
 <div class="long_description"><p>By extending MagicObject the class will have a __get and __set
 function, that allows properties to be made accessible. You
-can define a static array in your class called $_propAccessible,
-containing your local variables that should be made public.</p>
+can define static arrays in your class called $_propRead,
+$_propWrite, and $propReadWrite, containing your local variables that
+should be made public. All your local private/protected variables
+should be prefixed with an underscore.</p>
 
 <p>You can also define specific getters and setters through __get_prop
 and __set_prop.</p>
@@ -99,7 +105,8 @@ and __set_prop.</p>
 
 <pre><code>class Person extends \ChickenWire\Core\MagicObject
 {
-        protected static $_propAccessible = array('firstname', 'lastname');
+        protected static $_propReadWrite = array('firstname');
+        protected static $_propRead = array('lastname');
 
         protected $_firstname;
         protected $_lastname;
@@ -135,9 +142,21 @@ echo $john->name;       // output: Jane Derringer
 </tr></table>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a id="property__propAccessible"> </a><div class="element clickable property protected property__propAccessible" data-toggle="collapse" data-target=".property__propAccessible .collapse">
+<a id="property__propRead"> </a><div class="element clickable property protected property__propRead" data-toggle="collapse" data-target=".property__propRead .collapse">
 <h2></h2>
-<pre>$_propAccessible </pre>
+<pre>$_propRead </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__propReadWrite"> </a><div class="element clickable property protected property__propReadWrite" data-toggle="collapse" data-target=".property__propReadWrite .collapse">
+<h2></h2>
+<pre>$_propReadWrite </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__propWrite"> </a><div class="element clickable property protected property__propWrite" data-toggle="collapse" data-target=".property__propWrite .collapse">
+<h2></h2>
+<pre>$_propWrite </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
@@ -148,7 +167,7 @@ echo $john->name;       // output: Jane Derringer
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-05-27T17:32:18+02:00.<br></footer></div>
+            generated on 2013-05-29T20:03:25+02:00.<br></footer></div>
 </div>
 </body>
 </html>

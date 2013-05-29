@@ -9,7 +9,7 @@
 
 		public function index() {
 
-			echo("INDEX!");
+			echo ('Welkom.');
 
 		}
 

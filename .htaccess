@@ -4,11 +4,6 @@ RewriteEngine On
 # Try cached page
 #RewriteRule ^([^.]+)$ $1.html [QSA]
 
-# Does the file exist now? That's not allowed!!!
-#RewriteCond %{REQUEST_FILENAME} -f [OR]
-#RewriteCond %{REQUEST_FILENAME} -d
-#RewriteRule ^(.*)$ ChickenWire.php [L,G]
-
 
 # Check if the file exists in the Application Public directory
 RewriteCond 	  %{DOCUMENT_ROOT}/Application/Public/%{REQUEST_URI} -f [OR]

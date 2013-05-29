@@ -1,12 +1,13 @@
 <?php
 
-	use ChickenWire\Auth;
+	use ChickenWire\Auth\Auth;
 
 	Auth::add("BMK", array(
 
-		"model" => "\BMK\Models\User",
-		"type" => Auth::SALT,
-		"loginAction" => "\BMK\Controllers\SessionController::login"
+		"model" => "\BMK\Models\BMKUser",
+		"type" => Auth::BLOWFISH,
+		"loginAction" => "\BMK\Controllers\SessionController::login",
+		"rotateSalt" => true
 
 	));
 	

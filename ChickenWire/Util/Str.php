@@ -204,6 +204,32 @@
 		}
 
 
+		/**
+		 * Encrypt password using Blowfish, with an optional salt added
+		 * @param  string  $password The password to encrypt
+		 * @param  string  $salt     A salt to add to the password
+		 * @param  integer $rounds   (default: 6) The number of rounds to process (Note that a high number will increase security, but also increase processor time)
+		 * @return string 	The encrypted/hashed password
+		 */
+		public static function encryptPassword($password, $salt = "", $rounds = 6)
+		{
+
+			// Encrypt!
+			$bcrypt = new \Bcrypt\Bcrypt('', $rounds);
+			return $bcrypt->hash($salt . $password);
+
+		}
+
+		public static function verifyPassword($plain, $hashed, $salt = '', $rounds = 6)
+		{
+			
+			// Do it!
+			$bcrypt = new \Bcrypt\Bcrypt($salt, $rounds);
+			return $bcrypt->verify($plain, $hashed);	
+
+		}
+
+
 
 	}
 

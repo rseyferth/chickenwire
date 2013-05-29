@@ -9,6 +9,7 @@
     ],
     "require": {
         "monolog/monolog": "1.5.*",
-        "php-activerecord/php-activerecord": "1.*"
+        "php-activerecord/php-activerecord": "1.*",
+        "eddieantonio/bcrypt": "0.3.0"
     }
 }

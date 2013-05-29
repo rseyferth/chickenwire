@@ -1,21 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project version="2.0.0a12" title="ChickenWire Documentation">
-  <file path="ChickenWire/Model.php" hash="e7ceb418da126dd51c909a6a72f25204" package="Default">
-    <class final="false" abstract="false" namespace="ChickenWire" line="13" package="ChickenWire">
+  <file path="ChickenWire/Model.php" hash="98d794122047c11141a00994ed8a810a" package="Default">
+    <class final="false" abstract="false" namespace="ChickenWire" line="88" package="ChickenWire">
       <extends>\ActiveRecord\Model</extends>
       <name>Model</name>
       <full_name>\ChickenWire\Model</full_name>
-      <docblock line="5">
+      <docblock line="8">
         <description>The ChickenWire Model class</description>
-        <long-description>&lt;p&gt;This extends the ActiveRecord Model, adding a few extra features. (Document!!!)&lt;/p&gt;</long-description>
-        <tag line="5" name="package" description="ChickenWire"/>
+        <long-description>&lt;p&gt;This extends the ActiveRecord Model, adding a few extra features.&lt;/p&gt;
+
+&lt;h3&gt;Authentication model&lt;/h3&gt;
+
+&lt;p&gt;To create a Model for authentication, using the Auth class, you can use
+the configurator $authModel. A simple example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class User extends \ChickenWire\Model
+{
+    static $authModel = \ChickenWire\Auth\Auth::BLOWFISH;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or, even simpler:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;static $authModel = true;        // Blowfish is the default encryption
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can also specify extra options, using an array instead:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class User extends \ChickenWire\Model
+{
+    static $authModel = array(
+        "type" =&gt; \ChickenWire\Auth\Auth::BLOWFISH,
+        "passwordField" =&gt; "userpassword"
+    );
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The following options are available:&lt;/p&gt;
+
+&lt;table border="1" cellpadding="3"&gt;
+&lt;thead&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Option&lt;/th&gt;
+        &lt;th&gt;Default value&lt;/th&gt;
+        &lt;th&gt;Description&lt;/th&gt;
+    &lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td&gt;passwordField&lt;/td&gt;
+        &lt;td&gt;"password"&lt;/td&gt;
+        &lt;td&gt;The database column name for the password.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;salt&lt;/td&gt;
+        &lt;td&gt;&lt;i&gt;null&lt;/i&gt;&lt;/td&gt;
+        &lt;td&gt;The salt to use for all passwords. When you leave this &lt;i&gt;null&lt;/i&gt; a random salt will be generated.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;saltField&lt;/td&gt;
+        &lt;td&gt;"salt"&lt;/td&gt;
+        &lt;td&gt;The database column name for the salt.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;saltLength&lt;/td&gt;
+        &lt;td&gt;16&lt;/td&gt;
+        &lt;td&gt;The length of generated salts.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;type&lt;/td&gt;
+        &lt;td&gt;&lt;/td&gt;
+        &lt;td&gt;The encryption type (Auth::BLOWFISH or Auth::MD5). For more information see Auth.&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; See Auth for a complete picture.&lt;/p&gt;</long-description>
+        <tag line="8" name="see" description="\ChickenWire\Auth\Auth" refers="\ChickenWire\Auth\Auth"/>
+        <tag line="8" name="package" description="ChickenWire"/>
       </docblock>
+      <property final="false" static="true" visibility="public" line="91" namespace="ChickenWire" package="Default">
+        <name>$authModel</name>
+        <default/>
+      </property>
+      <property final="false" static="true" visibility="private" line="94" namespace="ChickenWire" package="Default">
+        <name>$_cwInitialized</name>
+        <default>false</default>
+      </property>
+      <property final="false" static="true" visibility="private" line="96" namespace="ChickenWire" package="Default">
+        <name>$_authSettings</name>
+        <default>null</default>
+      </property>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire" line="99" package="ChickenWire">
+        <name>table</name>
+        <full_name>table</full_name>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="private" namespace="ChickenWire" line="121" package="ChickenWire">
+        <name>_initializeCW</name>
+        <full_name>_initializeCW</full_name>
+        <docblock line="116">
+          <description>Initialize ChickenWire featues</description>
+          <long-description/>
+          <tag line="116" name="param" description="The Table object to work with" type="\ActiveRecord\Table" variable="$table">
+            <type by_reference="false">\ActiveRecord\Table</type>
+          </tag>
+          <tag line="116" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="121">
+          <name>$table</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="private" namespace="ChickenWire" line="140" package="ChickenWire">
+        <name>_interpretAuthSettings</name>
+        <full_name>_interpretAuthSettings</full_name>
+        <docblock line="136">
+          <description>Read the $authModel settings, and apply default settings, etc.</description>
+          <long-description/>
+          <tag line="136" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ChickenWire" line="199" package="ChickenWire">
+        <name>_setAuthValues</name>
+        <full_name>_setAuthValues</full_name>
+        <docblock line="196">
+          <description>Apply authentication values to the record (before save)</description>
+          <long-description/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="257" package="ChickenWire">
+        <name>resaltPassword</name>
+        <full_name>resaltPassword</full_name>
+        <docblock line="251">
+          <description>Re-encrypt the password</description>
+          <long-description/>
+          <tag line="251" name="param" description="The plain text password to re-encrypt" type="string" variable="$password">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="251" name="param" description="(default: '') Optional salt to encrypt with. If you leave this empty, a random salt will be generated." type="string" variable="$salt">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="251" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+        <argument line="257">
+          <name>$password</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="257">
+          <name>$salt</name>
+          <default>''</default>
+          <type/>
+        </argument>
+      </method>
     </class>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Model.php</error>
+      <error line="91" code="50018">No DocBlock was found for property $authModel</error>
+      <error line="94" code="50018">No DocBlock was found for property $_cwInitialized</error>
+      <error line="96" code="50018">No DocBlock was found for property $_authSettings</error>
+      <error line="99" code="50010">No DocBlock was found for method table()</error>
     </parse_markers>
   </file>
-  <file path="ChickenWire/Route.php" hash="f662e3cf1d0bec2c6bb2b439ae3a1a7d" package="Default">
+  <file path="ChickenWire/Route.php" hash="c3a143430839dd80aefc74aa0f57e92b" package="Default">
     <class final="false" abstract="false" namespace="ChickenWire" line="7" package="Default">
       <extends>\ChickenWire\Core\MagicObject</extends>
       <name>Route</name>
@@ -25,7 +179,7 @@
         <default>array()</default>
       </property>
       <property final="false" static="true" visibility="protected" line="12" namespace="ChickenWire" package="Default">
-        <name>$_propAccessible</name>
+        <name>$_propReadWrite</name>
         <default>array('ssl', 'pattern', 'controller', 'action', 'methods', 'ssl', 'models', 'autoLoad', 'patternVariables', 'module')</default>
       </property>
       <property final="false" static="true" visibility="protected" line="14" namespace="ChickenWire" package="Default">
@@ -180,7 +334,7 @@
       <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Route.php</error>
       <error line="7" code="50000">No DocBlock was found for \ChickenWire\Route</error>
       <error line="10" code="50018">No DocBlock was found for property $_routes</error>
-      <error line="12" code="50018">No DocBlock was found for property $_propAccessible</error>
+      <error line="12" code="50018">No DocBlock was found for property $_propReadWrite</error>
       <error line="14" code="50018">No DocBlock was found for property $_withModule</error>
       <error line="315" code="50018">No DocBlock was found for property $_pattern</error>
       <error line="316" code="50018">No DocBlock was found for property $_controller</error>
@@ -202,7 +356,532 @@
       <error line="411" code="50010">No DocBlock was found for method __toString()</error>
     </parse_markers>
   </file>
-  <file path="ChickenWire/Util/Str.php" hash="ce24f12eb40e8708e9b8ea900037a728" package="Default">
+  <file path="ChickenWire/Auth/AuthResult.php" hash="18ea2a5ec919a54d530c1e573a5d3cae" package="Default">
+    <class final="false" abstract="false" namespace="ChickenWire\Auth" line="18" package="ChickenWire">
+      <extends/>
+      <name>AuthResult</name>
+      <full_name>\ChickenWire\Auth\AuthResult</full_name>
+      <docblock line="5">
+        <description>Authentication result</description>
+        <long-description>&lt;p&gt;The AuthResult class is used as a return value for authentication
+validation in Auth.&lt;/p&gt;</long-description>
+        <tag line="5" name="see" description="\ChickenWire\Auth\Auth" refers="\ChickenWire\Auth\Auth"/>
+        <tag line="5" name="package" description="ChickenWire"/>
+      </docblock>
+      <constant namespace="ChickenWire\Auth" line="21" package="ChickenWire">
+        <name>SUCCESS</name>
+        <full_name>SUCCESS</full_name>
+        <value>"SUCCESS"</value>
+      </constant>
+      <constant namespace="ChickenWire\Auth" line="22" package="ChickenWire">
+        <name>USER_NOT_FOUND</name>
+        <full_name>USER_NOT_FOUND</full_name>
+        <value>"USER_NOT_FOUND"</value>
+      </constant>
+      <constant namespace="ChickenWire\Auth" line="23" package="ChickenWire">
+        <name>INCORRECT_PASSWORD</name>
+        <full_name>INCORRECT_PASSWORD</full_name>
+        <value>"INCORRECT_PASSWORD"</value>
+      </constant>
+      <constant namespace="ChickenWire\Auth" line="24" package="ChickenWire">
+        <name>ACCOUNT_SUSPENDED</name>
+        <full_name>ACCOUNT_SUSPENDED</full_name>
+        <value>"ACCOUNT_SUSPENDED"</value>
+      </constant>
+      <property final="false" static="true" visibility="private" line="26" namespace="ChickenWire\Auth" package="Default">
+        <name>$_messages</name>
+        <default>array(self::SUCCESS =&gt; "Authentication was successful.", self::USER_NOT_FOUND =&gt; "The user could not be found.", self::INCORRECT_PASSWORD =&gt; "The given password was incorrect.", self::ACCOUNT_SUSPENDED =&gt; "The account is suspended.")</default>
+      </property>
+      <property final="false" static="false" visibility="public" line="37" namespace="ChickenWire\Auth" package="Default">
+        <name>$success</name>
+        <default/>
+        <docblock line="33">
+          <description>Boolean value indicating authentication success</description>
+          <long-description/>
+          <tag line="33" name="var" description="" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="43" namespace="ChickenWire\Auth" package="Default">
+        <name>$result</name>
+        <default/>
+        <docblock line="39">
+          <description>Result code (one of the constants)</description>
+          <long-description/>
+          <tag line="39" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="49" namespace="ChickenWire\Auth" package="Default">
+        <name>$message</name>
+        <default/>
+        <docblock line="45">
+          <description>Human-readable result</description>
+          <long-description/>
+          <tag line="45" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="55" namespace="ChickenWire\Auth" package="Default">
+        <name>$user</name>
+        <default/>
+        <docblock line="51">
+          <description>The Model instance for the authenticated user.</description>
+          <long-description>&lt;p&gt;(Only present on success)&lt;/p&gt;</long-description>
+          <tag line="51" name="var" description="" type="\ChickenWire\Model">
+            <type by_reference="false">\ChickenWire\Model</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Auth" line="64" package="ChickenWire">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="57">
+          <description>Create a new Authentication Result</description>
+          <long-description/>
+          <tag line="57" name="param" description="Result code (one of the constants)" type="string" variable="$result">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="57" name="param" description="(default: null) The authenticated user's Model instance" type="\ChickenWire\Model" variable="$user">
+            <type by_reference="false">\ChickenWire\Model</type>
+          </tag>
+          <tag line="57" name="param" description="(default: &quot;&quot;) When empty, a default message will be used for the result." type="string" variable="$message">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="64">
+          <name>$result</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="64">
+          <name>$user</name>
+          <default>null</default>
+          <type>\ChickenWire\Model</type>
+        </argument>
+        <argument line="64">
+          <name>$message</name>
+          <default>""</default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Auth/AuthResult.php</error>
+      <error line="26" code="50018">No DocBlock was found for property $_messages</error>
+    </parse_markers>
+  </file>
+  <file path="ChickenWire/Auth/Auth.php" hash="f0de46d22bd68ce4748ea4aa274730e9" package="Default">
+    <class final="false" abstract="false" namespace="ChickenWire\Auth" line="124" package="ChickenWire">
+      <extends>\ChickenWire\Core\MagicObject</extends>
+      <name>Auth</name>
+      <full_name>\ChickenWire\Auth\Auth</full_name>
+      <docblock line="7">
+        <description>Authentication class for user authentication</description>
+        <long-description>&lt;p&gt;This class is used for user authentication. In your configuration files you can
+add the Auth objects to the framework through Auth::add(). Then in your controller(s)
+you set the static $requiresAuth variable. Lastly you'll configure your user Model.&lt;/p&gt;
+
+&lt;h3&gt;Logging in and out&lt;/h3&gt;
+
+&lt;p&gt;To create or destroy a session you can use the &lt;b&gt;login&lt;/b&gt; and &lt;b&gt;logout&lt;/b&gt; methods,
+respectively.&lt;/p&gt;
+
+&lt;p&gt;You might have a session controller that looked like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class SessionController extends \ChickenWire\Controller
+{
+    static $requiresAuth = array("Admin",
+        "only" =&gt; "delete"
+    );
+
+    public function add()
+    {
+        //... Render your login form
+    }
+    public function create()
+    {
+        $auth = \ChickenWire\Auth\Auth::get("Admin");
+        $result = $auth-&gt;login($this-&gt;params-&gt;username, $this-&gt;params-&gt;password);
+
+        if ($result-&gt;success) {
+            $this-&gt;redirect('/admin/', array(
+                'flash' =&gt; 'Welcome ' . $result-&gt;user-&gt;name
+            ));
+        } else {
+            //... Show login form again.
+        }
+
+    }
+    public function delete()
+    {
+        $this-&gt;auth-&gt;logout();
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;Configuration&lt;/h3&gt;
+
+&lt;h4&gt;Auth configuration&lt;/h4&gt;
+
+&lt;p&gt;Configuration example (in your Application/Config/ directory):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Auth::add("&lt;b&gt;Admin&lt;/b&gt;", array(
+    "model" =&gt; "\Application\Models\User",
+    "type" =&gt; &lt;b&gt;Auth::BLOWFISH&lt;/b&gt;,
+    "rotateSalt" =&gt; true,
+    "loginAction" =&gt; "\Application\Controllers\SessionController::add"
+));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For all options see the constructor.&lt;/p&gt;
+
+&lt;h4&gt;Configure your controller&lt;/h4&gt;
+
+&lt;p&gt;To enable authentication for a controller, you can use the configurator $requiresAuth:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class MyController extends \ChickenWire\Controller
+{
+    static $requiresAuth = "&lt;b&gt;Admin&lt;/b&gt;";
+
+    [...]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For more information on configuring your controllers (specific methods, etc.), see Controller::$requiresAuth.&lt;/p&gt;
+
+&lt;h4&gt;Create model for Blowfish&lt;/h4&gt;
+
+&lt;p&gt;If you choose Auth::BLOWFISH authentication, your Model's table needs to have the following columns:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;username&lt;/b&gt; (varchar)&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;password&lt;/b&gt; (varchar)&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;salt&lt;/b&gt; (varchar)&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;lastlogin_at&lt;/b&gt; (timestamp)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then simply set the configurator to &lt;i&gt;true&lt;/i&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class User extends \ChickenWire\Model
+{
+    static $authModel = &lt;b&gt;Auth::BLOWFISH&lt;/b&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or, even simpler:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;static $authModel = true;        // Blowfish is the default encryption
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;Create model for MD5&lt;/h4&gt;
+
+&lt;p&gt;If you choose Auth::MD5 instead, you'll need the following columns:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;username&lt;/b&gt; (varchar)&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;password&lt;/b&gt; (varchar)&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;lastlogin_at&lt;/b&gt; (timestamp)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then configure your model as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class User extends \ChickenWire\Model
+{
+    static $authModel = Auth::MD5;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;b&gt;Note: &lt;/b&gt; This is a simple authentication, without salt, and generally deemed insecure.&lt;/p&gt;</long-description>
+        <tag line="7" name="see" description="\ChickenWire\Auth\Controller::$requiresAuth" refers="\ChickenWire\Auth\Controller::$requiresAuth"/>
+        <tag line="7" name="package" description="ChickenWire"/>
+      </docblock>
+      <constant namespace="ChickenWire\Auth" line="134" package="ChickenWire">
+        <name>MD5</name>
+        <full_name>MD5</full_name>
+        <value>"MD5"</value>
+        <docblock line="127">
+          <description>MD5 authentication</description>
+          <long-description>&lt;p&gt;This uses simple one-way hashing, where
+the password is stored in the database without a salt, as
+a md5 hash.&lt;/p&gt;</long-description>
+        </docblock>
+      </constant>
+      <constant namespace="ChickenWire\Auth" line="145" package="ChickenWire">
+        <name>BLOWFISH</name>
+        <full_name>BLOWFISH</full_name>
+        <value>"BLOWFISH"</value>
+        <docblock line="136">
+          <description>Blowfish authentication with salt</description>
+          <long-description>&lt;p&gt;Salted authentication uses a salt that is stored in the
+database next to the encrypted password. This salt is unique
+per user and can be changed on each update for added security
+The salt is concatenated with the actual password in the hash.
+The password will be encrypted using Blowfish.&lt;/p&gt;</long-description>
+        </docblock>
+      </constant>
+      <property final="false" static="true" visibility="protected" line="148" namespace="ChickenWire\Auth" package="Default">
+        <name>$_auths</name>
+        <default>array()</default>
+      </property>
+      <property final="false" static="true" visibility="protected" line="150" namespace="ChickenWire\Auth" package="Default">
+        <name>$_propRead</name>
+        <default>array("loginController", "loginAction", "name", "result", "user")</default>
+      </property>
+      <property final="false" static="true" visibility="protected" line="152" namespace="ChickenWire\Auth" package="Default">
+        <name>$_sessionPrefix</name>
+        <default>"ChickenWireAuthentication"</default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="201" namespace="ChickenWire\Auth" package="Default">
+        <name>$_name</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="202" namespace="ChickenWire\Auth" package="Default">
+        <name>$_model</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="203" namespace="ChickenWire\Auth" package="Default">
+        <name>$_type</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="204" namespace="ChickenWire\Auth" package="Default">
+        <name>$_usernameField</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="205" namespace="ChickenWire\Auth" package="Default">
+        <name>$_passwordField</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="206" namespace="ChickenWire\Auth" package="Default">
+        <name>$_saltField</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="207" namespace="ChickenWire\Auth" package="Default">
+        <name>$_lastloginField</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="208" namespace="ChickenWire\Auth" package="Default">
+        <name>$_loginController</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="209" namespace="ChickenWire\Auth" package="Default">
+        <name>$_loginAction</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="210" namespace="ChickenWire\Auth" package="Default">
+        <name>$_rotateSalt</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="212" namespace="ChickenWire\Auth" package="Default">
+        <name>$_reflModel</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="214" namespace="ChickenWire\Auth" package="Default">
+        <name>$_result</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="215" namespace="ChickenWire\Auth" package="Default">
+        <name>$_authenticated</name>
+        <default></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="216" namespace="ChickenWire\Auth" package="Default">
+        <name>$_user</name>
+        <default></default>
+      </property>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire\Auth" line="162" package="ChickenWire">
+        <name>add</name>
+        <full_name>add</full_name>
+        <docblock line="155">
+          <description>Add a new authentication to the framework</description>
+          <long-description></long-description>
+          <tag line="155" name="param" description="The reference key for this Auth object" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="155" name="param" description="Array with options" type="array" variable="$options">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="155" name="see" description="\ChickenWire\Auth\__construct()" refers="\ChickenWire\Auth\__construct()"/>
+          <tag line="155" name="return" description="The newly created Auth." type="\ChickenWire\Auth\Auth">
+            <type by_reference="false">\ChickenWire\Auth\Auth</type>
+          </tag>
+        </docblock>
+        <argument line="162">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="162">
+          <name>$options</name>
+          <default></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire\Auth" line="182" package="ChickenWire">
+        <name>get</name>
+        <full_name>get</full_name>
+        <docblock line="177">
+          <description>Retrieve a previously defined Auth by its name</description>
+          <long-description></long-description>
+          <tag line="177" name="param" description="Name as used when the Auth was configured" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="177" name="return" description="The Auth object" type="\ChickenWire\Auth\Auth">
+            <type by_reference="false">\ChickenWire\Auth\Auth</type>
+          </tag>
+        </docblock>
+        <argument line="182">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire\Auth" line="195" package="ChickenWire">
+        <name>all</name>
+        <full_name>all</full_name>
+        <docblock line="191">
+          <description>Get the array of Auth objects defined (by reference)</description>
+          <long-description></long-description>
+          <tag line="191" name="return" description="(Reference to) array containing all Auth objects that were added through Auth::add()." type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Auth" line="238" package="ChickenWire">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="218">
+          <description>Create a new Auth object</description>
+          <long-description>&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; You should not use this constructor directly, but use Auth::add() instead.&lt;/p&gt;</long-description>
+          <tag line="218" name="param" description="The name of this authentication" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="218" name="param" description="Array of options:&#10;&lt;ul&gt;&#10;&lt;li&gt;&lt;b&gt;model&lt;/b&gt; The full classname of the model to use for authentication&lt;/li&gt;&#10;&lt;li&gt;&lt;b&gt;loginAction&lt;/b&gt; The controller and method to call when authentication fails. E.g.: \BMK\Controllers\SessionController::login&lt;/li&gt;&#10;&lt;li&gt;&lt;b&gt;type&lt;/b&gt; (default: Auth::SALT) The type of encryption/authentication to use (Auth::MD5 or Auth::SALT).&lt;/li&gt;&#10;&lt;li&gt;&lt;b&gt;rotateSalt&lt;/b&gt; (default: false) Whether to generate a new random salt and re-encrypt the password, each time a user is validated.&lt;/li&gt;&#10;&lt;li&gt;&lt;b&gt;usernameField&lt;/b&gt;&#9;(default: username) The name of the field in the model that contains the username.&#10;&lt;li&gt;&lt;b&gt;passwordField&lt;/b&gt;&#9;(default: password) The name of the field in the model that contains the (encrypted) password.&#10;&lt;li&gt;&lt;b&gt;saltField&lt;/b&gt;&#9;(default: salt) The name of the field in the model that contains the salt.&#10;&lt;li&gt;&lt;b&gt;lastloginField&lt;/b&gt; (default: lastlogin_at) The name of the field in the model that contains the timestamp of the last login. If this field is not found, the last login time will not be stored.&#10;&lt;/ul&gt;" type="array" variable="$options">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="238">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="238">
+          <name>$options</name>
+          <default></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Auth" line="297" package="ChickenWire">
+        <name>login</name>
+        <full_name>login</full_name>
+        <docblock line="289">
+          <description>Validate the given username and password and store
+the session is authentication is successful.</description>
+          <long-description></long-description>
+          <tag line="289" name="param" description="The username for the user to validate." type="string" variable="$username">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="289" name="param" description="The unencrypted password for the user to validate." type="string" variable="$password">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="289" name="return" description="Result object containing information of authentication" type="\ChickenWire\Auth\AuthResult">
+            <type by_reference="false">\ChickenWire\Auth\AuthResult</type>
+          </tag>
+        </docblock>
+        <argument line="297">
+          <name>$username</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="297">
+          <name>$password</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Auth" line="329" package="ChickenWire">
+        <name>logout</name>
+        <full_name>logout</full_name>
+        <docblock line="325">
+          <description>Log out current user</description>
+          <long-description></long-description>
+          <tag line="325" name="return" description="Wheter logout was successful" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Auth" line="355" package="ChickenWire">
+        <name>validate</name>
+        <full_name>validate</full_name>
+        <docblock line="348">
+          <description>Validate the given username and password.</description>
+          <long-description></long-description>
+          <tag line="348" name="param" description="The username for the user to validate." type="string" variable="$username">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="348" name="param" description="The unencrypted password for the user to validate." type="string" variable="$password">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="348" name="return" description="Whether user validation was successful." type="\ChickenWire\Auth\AuthResult">
+            <type by_reference="false">\ChickenWire\Auth\AuthResult</type>
+          </tag>
+        </docblock>
+        <argument line="355">
+          <name>$username</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="355">
+          <name>$password</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Auth" line="422" package="ChickenWire">
+        <name>isAuthenticated</name>
+        <full_name>isAuthenticated</full_name>
+        <docblock line="418">
+          <description>Check if the current session is authenticated for this Auth instance</description>
+          <long-description></long-description>
+          <tag line="418" name="return" description="True if authenticated, false when not authenticated." type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ChickenWire\Auth" line="467" package="ChickenWire">
+        <name>_initModel</name>
+        <full_name>_initModel</full_name>
+        <docblock line="463">
+          <description>Initialize the model class (reflection)</description>
+          <long-description></long-description>
+          <tag line="463" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Auth/Auth.php</error>
+      <error line="148" code="50018">No DocBlock was found for property $_auths</error>
+      <error line="150" code="50018">No DocBlock was found for property $_propRead</error>
+      <error line="152" code="50018">No DocBlock was found for property $_sessionPrefix</error>
+      <error line="201" code="50018">No DocBlock was found for property $_name</error>
+      <error line="202" code="50018">No DocBlock was found for property $_model</error>
+      <error line="203" code="50018">No DocBlock was found for property $_type</error>
+      <error line="204" code="50018">No DocBlock was found for property $_usernameField</error>
+      <error line="205" code="50018">No DocBlock was found for property $_passwordField</error>
+      <error line="206" code="50018">No DocBlock was found for property $_saltField</error>
+      <error line="207" code="50018">No DocBlock was found for property $_lastloginField</error>
+      <error line="208" code="50018">No DocBlock was found for property $_loginController</error>
+      <error line="209" code="50018">No DocBlock was found for property $_loginAction</error>
+      <error line="210" code="50018">No DocBlock was found for property $_rotateSalt</error>
+      <error line="212" code="50018">No DocBlock was found for property $_reflModel</error>
+      <error line="214" code="50018">No DocBlock was found for property $_result</error>
+      <error line="215" code="50018">No DocBlock was found for property $_authenticated</error>
+      <error line="216" code="50018">No DocBlock was found for property $_user</error>
+    </parse_markers>
+  </file>
+  <file path="ChickenWire/Util/Str.php" hash="8a8f371b9c6af1dfa6be7760cb50a5dc" package="Default">
     <class final="false" abstract="false" namespace="ChickenWire\Util" line="5" package="Default">
       <extends/>
       <name>Str</name>
@@ -359,6 +1038,65 @@
           <type/>
         </argument>
       </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire\Util" line="214" package="Default">
+        <name>encryptPassword</name>
+        <full_name>encryptPassword</full_name>
+        <docblock line="207">
+          <description>Encrypt password using Blowfish, with an optional salt added</description>
+          <long-description/>
+          <tag line="207" name="param" description="The password to encrypt" type="string" variable="$password">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="207" name="param" description="A salt to add to the password" type="string" variable="$salt">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="207" name="param" description="(default: 6) The number of rounds to process (Note that a high number will increase security, but also increase processor time)" type="integer" variable="$rounds">
+            <type by_reference="false">integer</type>
+          </tag>
+          <tag line="207" name="return" description="The encrypted/hashed password" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="214">
+          <name>$password</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="214">
+          <name>$salt</name>
+          <default>""</default>
+          <type/>
+        </argument>
+        <argument line="214">
+          <name>$rounds</name>
+          <default>6</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire\Util" line="223" package="Default">
+        <name>verifyPassword</name>
+        <full_name>verifyPassword</full_name>
+        <argument line="223">
+          <name>$plain</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="223">
+          <name>$hashed</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="223">
+          <name>$salt</name>
+          <default>''</default>
+          <type/>
+        </argument>
+        <argument line="223">
+          <name>$rounds</name>
+          <default>6</default>
+          <type/>
+        </argument>
+      </method>
     </class>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Util/Str.php</error>
@@ -368,6 +1106,7 @@
       <error line="62" code="50018">No DocBlock was found for property $irregular</error>
       <error line="73" code="50018">No DocBlock was found for property $uncountable</error>
       <error line="169" code="50010">No DocBlock was found for method singularize()</error>
+      <error line="223" code="50010">No DocBlock was found for method verifyPassword()</error>
     </parse_markers>
   </file>
   <file path="ChickenWire/Util/Http.php" hash="a685957b8c2fc0a8e21f3e1317887b9a" package="Default">
@@ -424,12 +1163,12 @@
       <error line="5" code="50000">No DocBlock was found for \ChickenWire\Util\Reflection</error>
     </parse_markers>
   </file>
-  <file path="ChickenWire/Controller.php" hash="b5d13076f7c2629510a778c314df86b7" package="Default">
-    <class final="false" abstract="false" namespace="ChickenWire" line="36" package="ChickenWire">
+  <file path="ChickenWire/Controller.php" hash="a99639b9103aa7ee03381cb672cb5b24" package="Default">
+    <class final="false" abstract="false" namespace="ChickenWire" line="38" package="ChickenWire">
       <extends>\ChickenWire\Core\MagicObject</extends>
       <name>Controller</name>
       <full_name>\ChickenWire\Controller</full_name>
-      <docblock line="5">
+      <docblock line="7">
         <description>The ChickenWire controller class</description>
         <long-description>&lt;p&gt;This is the basis for all Controllers in your Application. To create
 a new controller simply extend this class. Any public function you
@@ -454,273 +1193,85 @@ static $requiresAuth = array("BMK",
     "only" =&gt; array("secret")               // Authentication only required for the &lt;i&gt;secret&lt;/i&gt; action
 );
 &lt;/code&gt;&lt;/pre&gt;</long-description>
-        <tag line="5" name="see" description="\ChickenWire\Auth" refers="\ChickenWire\Auth"/>
-        <tag line="5" name="see" description="\ChickenWire\Route" refers="\ChickenWire\Route"/>
-        <tag line="5" name="package" description="ChickenWire"/>
+        <tag line="7" name="see" description="\ChickenWire\Auth" refers="\ChickenWire\Auth"/>
+        <tag line="7" name="see" description="\ChickenWire\Route" refers="\ChickenWire\Route"/>
+        <tag line="7" name="package" description="ChickenWire"/>
       </docblock>
-      <property final="false" static="false" visibility="protected" line="39" namespace="ChickenWire" package="Default">
-        <name>$request</name>
-        <default></default>
+      <property final="false" static="true" visibility="public" line="41" namespace="ChickenWire" package="Default">
+        <name>$requiresAuth</name>
+        <default>null</default>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="42" package="ChickenWire">
+      <property final="false" static="false" visibility="protected" line="43" namespace="ChickenWire" package="Default">
+        <name>$request</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="44" namespace="ChickenWire" package="Default">
+        <name>$auth</name>
+        <default/>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="47" package="ChickenWire">
         <name>__construct</name>
         <full_name>__construct</full_name>
-        <argument line="42">
+        <argument line="47">
           <name>$request</name>
-          <default></default>
+          <default/>
           <type>\ChickenWire\Request</type>
         </argument>
+        <argument line="47">
+          <name>$execute</name>
+          <default>true</default>
+          <type/>
+        </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ChickenWire" line="81" package="ChickenWire">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ChickenWire" line="98" package="ChickenWire">
+        <name>_checkAuth</name>
+        <full_name>_checkAuth</full_name>
+        <docblock line="94">
+          <description>Check if current action needs authentication, and if it is validated</description>
+          <long-description/>
+          <tag line="94" name="return" description="Whether authentication passed" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ChickenWire" line="156" package="ChickenWire">
+        <name>_invokeAuthLoginAction</name>
+        <full_name>_invokeAuthLoginAction</full_name>
+        <docblock line="152">
+          <description>Invoke the Login action for the Controller's Auth object</description>
+          <long-description/>
+          <tag line="152" name="return" description="" type="void">
+            <type by_reference="false">void</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ChickenWire" line="186" package="ChickenWire">
         <name>_autoLoadModels</name>
         <full_name>_autoLoadModels</full_name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="142" package="ChickenWire">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="247" package="ChickenWire">
         <name>__get_params</name>
         <full_name>__get_params</full_name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="145" package="ChickenWire">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="250" package="ChickenWire">
         <name>__get_route</name>
         <full_name>__get_route</full_name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ChickenWire" line="151" package="ChickenWire">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ChickenWire" line="256" package="ChickenWire">
         <name>show404</name>
         <full_name>show404</full_name>
       </method>
     </class>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Controller.php</error>
-      <error line="39" code="50018">No DocBlock was found for property $request</error>
-      <error line="42" code="50010">No DocBlock was found for method __construct()</error>
-      <error line="81" code="50010">No DocBlock was found for method _autoLoadModels()</error>
-      <error line="142" code="50010">No DocBlock was found for method __get_params()</error>
-      <error line="145" code="50010">No DocBlock was found for method __get_route()</error>
-      <error line="151" code="50010">No DocBlock was found for method show404()</error>
-    </parse_markers>
-  </file>
-  <file path="ChickenWire/Auth.php" hash="74056d0b13e4aa87fafbbe8faf7f657b" package="Default">
-    <class final="false" abstract="false" namespace="ChickenWire" line="37" package="ChickenWire">
-      <extends>\ChickenWire\Core\MagicObject</extends>
-      <name>Auth</name>
-      <full_name>\ChickenWire\Auth</full_name>
-      <docblock line="5">
-        <description>Authentication class for user authentication</description>
-        <long-description>&lt;p&gt;This class is used for user authentication. In your configuration files you can
-add the Auth objects to the framework through Auth::add(). Then in your controller(s)
-you set the static $requiresAuth variable.&lt;/p&gt;
-
-&lt;p&gt;Configuration example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Auth::add("BMK", array(
-    "model" =&gt; "\BMK\Models\User",
-    "type" =&gt; Auth::SALT,
-    "rotateSalt" =&gt; true,
-    "loginAction" =&gt; "\BMK\Controllers\SessionController::login"
-));
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Controller example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;class MyController extends \ChickenWire\Controller
-{
-    static $requiresAuth = "BMK";
-
-    [...]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For more information on configuring your controllers (specific methods, etc.), see Controller::$requiresAuth.&lt;/p&gt;</long-description>
-        <tag line="5" name="see" description="\ChickenWire\Controller::$requiresAuth" refers="\ChickenWire\Controller::$requiresAuth"/>
-        <tag line="5" name="package" description="ChickenWire"/>
-      </docblock>
-      <constant namespace="ChickenWire" line="47" package="ChickenWire">
-        <name>MD5</name>
-        <full_name>MD5</full_name>
-        <value>"md5"</value>
-        <docblock line="40">
-          <description>MD5 authentication</description>
-          <long-description>&lt;p&gt;This uses simple one-way hashing, where
-the password is stored in the database without a salt, as
-a md5 hash.&lt;/p&gt;</long-description>
-        </docblock>
-      </constant>
-      <constant namespace="ChickenWire" line="57" package="ChickenWire">
-        <name>SALT</name>
-        <full_name>SALT</full_name>
-        <value>"salt"</value>
-        <docblock line="49">
-          <description>Salted authentication</description>
-          <long-description>&lt;p&gt;Salted authentication uses a salt that is stored in the
-database next to the encrypted password. This salt is unique
-per user and can be changed on each update for added security
-The salt is concatenated with the actual password in the hash.&lt;/p&gt;</long-description>
-        </docblock>
-      </constant>
-      <property final="false" static="true" visibility="protected" line="60" namespace="ChickenWire" package="Default">
-        <name>$_auths</name>
-        <default>array()</default>
-      </property>
-      <property final="false" static="false" visibility="protected" line="108" namespace="ChickenWire" package="Default">
-        <name>$_name</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="109" namespace="ChickenWire" package="Default">
-        <name>$_model</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="110" namespace="ChickenWire" package="Default">
-        <name>$_type</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="111" namespace="ChickenWire" package="Default">
-        <name>$_usernameField</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="112" namespace="ChickenWire" package="Default">
-        <name>$_passwordField</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="113" namespace="ChickenWire" package="Default">
-        <name>$_lastloginField</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="114" namespace="ChickenWire" package="Default">
-        <name>$_loginAction</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="115" namespace="ChickenWire" package="Default">
-        <name>$_rotateSalt</name>
-        <default/>
-      </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire" line="69" package="ChickenWire">
-        <name>add</name>
-        <full_name>add</full_name>
-        <docblock line="62">
-          <description>Add a new authentication to the framework</description>
-          <long-description/>
-          <tag line="62" name="param" description="The reference key for this Auth object" type="string" variable="$name">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="62" name="param" description="Array with options" type="array" variable="$options">
-            <type by_reference="false">array</type>
-          </tag>
-          <tag line="62" name="see" description="\ChickenWire\__construct()" refers="\ChickenWire\__construct()"/>
-          <tag line="62" name="return" description="The newly created Auth." type="\ChickenWire\Auth">
-            <type by_reference="false">\ChickenWire\Auth</type>
-          </tag>
-        </docblock>
-        <argument line="69">
-          <name>$name</name>
-          <default/>
-          <type/>
-        </argument>
-        <argument line="69">
-          <name>$options</name>
-          <default/>
-          <type>array</type>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire" line="89" package="ChickenWire">
-        <name>get</name>
-        <full_name>get</full_name>
-        <docblock line="84">
-          <description>Retrieve a previously defined Auth by its name</description>
-          <long-description/>
-          <tag line="84" name="param" description="Name as used when the Auth was configured" type="string" variable="$name">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="84" name="return" description="The Auth object" type="\ChickenWire\Auth">
-            <type by_reference="false">\ChickenWire\Auth</type>
-          </tag>
-        </docblock>
-        <argument line="89">
-          <name>$name</name>
-          <default/>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="ChickenWire" line="102" package="ChickenWire">
-        <name>all</name>
-        <full_name>all</full_name>
-        <docblock line="98">
-          <description>Get the array of Auth objects defined (by reference)</description>
-          <long-description/>
-          <tag line="98" name="return" description="(Reference to) array containing all Auth objects that were added through Auth::add()." type="array">
-            <type by_reference="false">array</type>
-          </tag>
-        </docblock>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="137" package="ChickenWire">
-        <name>__construct</name>
-        <full_name>__construct</full_name>
-        <docblock line="118">
-          <description>Create a new Auth object</description>
-          <long-description>&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; You should not use this constructor directly, but use Auth::add() instead.&lt;/p&gt;</long-description>
-          <tag line="118" name="param" description="The name of this authentication" type="string" variable="$name">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="118" name="param" description="Array of options:&#10;&lt;ul&gt;&#10;&lt;li&gt;&lt;b&gt;model&lt;/b&gt; The full classname of the model to use for authentication&lt;/li&gt;&#10;&lt;li&gt;&lt;b&gt;loginAction&lt;/b&gt; The controller and method to call when authentication fails. E.g.: \BMK\Controllers\SessionController::login&lt;/li&gt;&#10;&lt;li&gt;&lt;b&gt;type&lt;/b&gt; (default: Auth::SALT) The type of encryption/authentication to use (Auth::MD5 or Auth::SALT).&lt;/li&gt;&#10;&lt;li&gt;&lt;b&gt;rotateSalt&lt;/b&gt; (default: false) Whether to generate a new random salt and re-encrypt the password, each time a user is validated.&lt;/li&gt;&#10;&lt;li&gt;&lt;b&gt;usernameField&lt;/b&gt;&#9;(default: username) The name of the field in the model that contains the username.&#10;&lt;li&gt;&lt;b&gt;passwordField&lt;/b&gt;&#9;(default: password) The name of the field in the model that contains the (encrypted) password.&#10;&lt;li&gt;&lt;b&gt;lastloginField&lt;/b&gt; (default: lastlogin_at) The name of the field in the model that contains the timestamp of the last login. If this field is not found, the last login time will not be stored.&#10;&lt;/ul&gt;" type="array" variable="$options">
-            <type by_reference="false">array</type>
-          </tag>
-        </docblock>
-        <argument line="137">
-          <name>$name</name>
-          <default/>
-          <type/>
-        </argument>
-        <argument line="137">
-          <name>$options</name>
-          <default/>
-          <type>array</type>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire" line="183" package="ChickenWire">
-        <name>login</name>
-        <full_name>login</full_name>
-        <docblock line="174">
-          <description>Validate the given username and password and store
-the session is authentication is successful.</description>
-          <long-description/>
-          <tag line="174" name="param" description="The username for the user to validate." type="string" variable="$username">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="174" name="param" description="The unencrypted password for the user to validate." type="string" variable="$password">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="174" name="param" description="(default: true) Whether to redirect the user to the configured login action when authentication fails." type="boolean" variable="$showLogin">
-            <type by_reference="false">boolean</type>
-          </tag>
-          <tag line="174" name="return" description="Whether user validation was successful." type="boolean">
-            <type by_reference="false">boolean</type>
-          </tag>
-        </docblock>
-        <argument line="183">
-          <name>$username</name>
-          <default/>
-          <type/>
-        </argument>
-        <argument line="183">
-          <name>$password</name>
-          <default/>
-          <type/>
-        </argument>
-        <argument line="183">
-          <name>$showLogin</name>
-          <default>true</default>
-          <type/>
-        </argument>
-      </method>
-    </class>
-    <parse_markers>
-      <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Auth.php</error>
-      <error line="60" code="50018">No DocBlock was found for property $_auths</error>
-      <error line="108" code="50018">No DocBlock was found for property $_name</error>
-      <error line="109" code="50018">No DocBlock was found for property $_model</error>
-      <error line="110" code="50018">No DocBlock was found for property $_type</error>
-      <error line="111" code="50018">No DocBlock was found for property $_usernameField</error>
-      <error line="112" code="50018">No DocBlock was found for property $_passwordField</error>
-      <error line="113" code="50018">No DocBlock was found for property $_lastloginField</error>
-      <error line="114" code="50018">No DocBlock was found for property $_loginAction</error>
-      <error line="115" code="50018">No DocBlock was found for property $_rotateSalt</error>
+      <error line="41" code="50018">No DocBlock was found for property $requiresAuth</error>
+      <error line="43" code="50018">No DocBlock was found for property $request</error>
+      <error line="44" code="50018">No DocBlock was found for property $auth</error>
+      <error line="47" code="50010">No DocBlock was found for method __construct()</error>
+      <error line="186" code="50010">No DocBlock was found for method _autoLoadModels()</error>
+      <error line="247" code="50010">No DocBlock was found for method __get_params()</error>
+      <error line="250" code="50010">No DocBlock was found for method __get_route()</error>
+      <error line="256" code="50010">No DocBlock was found for method show404()</error>
     </parse_markers>
   </file>
   <file path="ChickenWire/AutoLoad.php" hash="844f1331ffa03cfc6bcc4cccf57beb6f" package="Default">
@@ -752,43 +1303,43 @@ the session is authentication is successful.</description>
       <error line="39" code="50009">No DocBlock was found for function \ChickenWire\initAutoLoad()</error>
     </parse_markers>
   </file>
-  <file path="ChickenWire/Application.php" hash="9863096dbdacb2c60c2cb0836497d703" package="Default">
-    <constant namespace="global" line="193" package="Default">
+  <file path="ChickenWire/Application.php" hash="bae126bb1f39f77b767bc4477e0faf28" package="Default">
+    <constant namespace="global" line="196" package="Default">
       <name>CHICKENWIRE_PATH</name>
       <full_name>\CHICKENWIRE_PATH</full_name>
       <value>dirname(__FILE__)</value>
     </constant>
-    <constant namespace="global" line="194" package="Default">
+    <constant namespace="global" line="197" package="Default">
       <name>APP_ROOT</name>
       <full_name>\APP_ROOT</full_name>
       <value>dirname(__DIR__)</value>
     </constant>
-    <constant namespace="global" line="195" package="Default">
+    <constant namespace="global" line="198" package="Default">
       <name>APP_PATH</name>
       <full_name>\APP_PATH</full_name>
       <value>APP_ROOT . "/Application"</value>
     </constant>
-    <constant namespace="global" line="196" package="Default">
+    <constant namespace="global" line="199" package="Default">
       <name>CONFIG_PATH</name>
       <full_name>\CONFIG_PATH</full_name>
       <value>APP_PATH . "/Config"</value>
     </constant>
-    <constant namespace="global" line="197" package="Default">
+    <constant namespace="global" line="200" package="Default">
       <name>CONTROLLER_PATH</name>
       <full_name>\CONTROLLER_PATH</full_name>
       <value>APP_PATH . "/Controllers"</value>
     </constant>
-    <constant namespace="global" line="198" package="Default">
+    <constant namespace="global" line="201" package="Default">
       <name>MODEL_PATH</name>
       <full_name>\MODEL_PATH</full_name>
       <value>APP_PATH . "/Models"</value>
     </constant>
-    <constant namespace="global" line="199" package="Default">
+    <constant namespace="global" line="202" package="Default">
       <name>VIEW_PATH</name>
       <full_name>\VIEW_PATH</full_name>
       <value>APP_PATH . "/Views"</value>
     </constant>
-    <constant namespace="global" line="200" package="Default">
+    <constant namespace="global" line="203" package="Default">
       <name>MODULE_PATH</name>
       <full_name>\MODULE_PATH</full_name>
       <value>APP_ROOT . "/Modules"</value>
@@ -944,18 +1495,18 @@ for all environments at once (see Configuration).&lt;/p&gt;</long-description>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ChickenWire" line="187" package="ChickenWire">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ChickenWire" line="190" package="ChickenWire">
         <name>_configure</name>
         <full_name>_configure</full_name>
-        <docblock line="183">
+        <docblock line="186">
           <description>Load and apply configuration files</description>
           <long-description/>
-          <tag line="183" name="return" description="" type="void">
+          <tag line="186" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ChickenWire" line="240" package="ChickenWire">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ChickenWire" line="243" package="ChickenWire">
         <name>_loadModules</name>
         <full_name>_loadModules</full_name>
       </method>
@@ -966,10 +1517,10 @@ for all environments at once (see Configuration).&lt;/p&gt;</long-description>
       <error line="134" code="50018">No DocBlock was found for property $_request</error>
       <error line="135" code="50018">No DocBlock was found for property $_route</error>
       <error line="136" code="50018">No DocBlock was found for property $_controller</error>
-      <error line="240" code="50010">No DocBlock was found for method _loadModules()</error>
+      <error line="243" code="50010">No DocBlock was found for method _loadModules()</error>
     </parse_markers>
   </file>
-  <file path="ChickenWire/Module.php" hash="939c13a6db123cbaa6a5ecdfc8039781" package="Default">
+  <file path="ChickenWire/Module.php" hash="9f1cfdcaa4005835bc68e874bddf0bf3" package="Default">
     <include line="125" type="Require" package="Default">
       <name/>
     </include>
@@ -1038,7 +1589,7 @@ assume the name is the same as the directory name.&lt;/p&gt;</long-description>
         <tag line="7" name="package" description="ChickenWire"/>
       </docblock>
       <property final="false" static="true" visibility="protected" line="73" namespace="ChickenWire" package="Default">
-        <name>$_propAccessible</name>
+        <name>$_propRead</name>
         <default>array("name", "path", "namespace", "urlPrefix")</default>
       </property>
       <property final="false" static="true" visibility="protected" line="75" namespace="ChickenWire" package="Default">
@@ -1100,7 +1651,7 @@ assume the name is the same as the directory name.&lt;/p&gt;</long-description>
     </class>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Module.php</error>
-      <error line="73" code="50018">No DocBlock was found for property $_propAccessible</error>
+      <error line="73" code="50018">No DocBlock was found for property $_propRead</error>
       <error line="75" code="50018">No DocBlock was found for property $_modules</error>
       <error line="95" code="50018">No DocBlock was found for property $_name</error>
       <error line="96" code="50018">No DocBlock was found for property $_path</error>
@@ -1112,13 +1663,13 @@ assume the name is the same as the directory name.&lt;/p&gt;</long-description>
       <error line="146" code="50010">No DocBlock was found for method _loadConfig()</error>
     </parse_markers>
   </file>
-  <file path="ChickenWire/Request.php" hash="a26df60e21d5388e54853f2640c629ba" package="Default">
+  <file path="ChickenWire/Request.php" hash="91faf765fe7842c6eb3d92990274ebe8" package="Default">
     <class final="false" abstract="false" namespace="ChickenWire" line="5" package="Default">
       <extends>\ChickenWire\Core\MagicObject</extends>
       <name>Request</name>
       <full_name>\ChickenWire\Request</full_name>
       <property final="false" static="true" visibility="protected" line="8" namespace="ChickenWire" package="Default">
-        <name>$_propAccessible</name>
+        <name>$_propRead</name>
         <default>array('uri', 'method', 'route')</default>
       </property>
       <property final="false" static="false" visibility="protected" line="10" namespace="ChickenWire" package="Default">
@@ -1206,7 +1757,7 @@ assume the name is the same as the directory name.&lt;/p&gt;</long-description>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Request.php</error>
       <error line="5" code="50000">No DocBlock was found for \ChickenWire\Request</error>
-      <error line="8" code="50018">No DocBlock was found for property $_propAccessible</error>
+      <error line="8" code="50018">No DocBlock was found for property $_propRead</error>
       <error line="10" code="50018">No DocBlock was found for property $_uri</error>
       <error line="11" code="50018">No DocBlock was found for property $_method</error>
       <error line="13" code="50018">No DocBlock was found for property $_queryParams</error>
@@ -1545,8 +2096,8 @@ identical in PHP)</description>
       <error line="12" code="50010">No DocBlock was found for method __construct()</error>
     </parse_markers>
   </file>
-  <file path="ChickenWire/Core/MagicObject.php" hash="00c84c9cd09cc25f7f6c67d644701853" package="Default">
-    <class final="false" abstract="true" namespace="ChickenWire\Core" line="55" package="ChickenWire">
+  <file path="ChickenWire/Core/MagicObject.php" hash="557b3def532fd5d08edb672d09eee264" package="Default">
+    <class final="false" abstract="true" namespace="ChickenWire\Core" line="58" package="ChickenWire">
       <extends/>
       <name>MagicObject</name>
       <full_name>\ChickenWire\Core\MagicObject</full_name>
@@ -1554,8 +2105,10 @@ identical in PHP)</description>
         <description>MagicObject class facilitates easy use of getters and setters.</description>
         <long-description>&lt;p&gt;By extending MagicObject the class will have a __get and __set
 function, that allows properties to be made accessible. You
-can define a static array in your class called $_propAccessible,
-containing your local variables that should be made public.&lt;/p&gt;
+can define static arrays in your class called $_propRead,
+$_propWrite, and $propReadWrite, containing your local variables that
+should be made public. All your local private/protected variables
+should be prefixed with an underscore.&lt;/p&gt;
 
 &lt;p&gt;You can also define specific getters and setters through __get_prop
 and __set_prop.&lt;/p&gt;
@@ -1564,7 +2117,8 @@ and __set_prop.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;class Person extends \ChickenWire\Core\MagicObject
 {
-        protected static $_propAccessible = array('firstname', 'lastname');
+        protected static $_propReadWrite = array('firstname');
+        protected static $_propRead = array('lastname');
 
         protected $_firstname;
         protected $_lastname;
@@ -1596,38 +2150,46 @@ echo $john-&gt;name;       // output: Jane Derringer
 &lt;/code&gt;&lt;/pre&gt;</long-description>
         <tag line="5" name="package" description="ChickenWire"/>
       </docblock>
-      <property final="false" static="true" visibility="protected" line="58" namespace="ChickenWire\Core" package="Default">
-        <name>$_propAccessible</name>
+      <property final="false" static="true" visibility="protected" line="61" namespace="ChickenWire\Core" package="Default">
+        <name>$_propReadWrite</name>
         <default>null</default>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Core" line="63" package="ChickenWire">
+      <property final="false" static="true" visibility="protected" line="62" namespace="ChickenWire\Core" package="Default">
+        <name>$_propRead</name>
+        <default>null</default>
+      </property>
+      <property final="false" static="true" visibility="protected" line="63" namespace="ChickenWire\Core" package="Default">
+        <name>$_propWrite</name>
+        <default>null</default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Core" line="68" package="ChickenWire">
         <name>__get</name>
         <full_name>__get</full_name>
-        <docblock line="60">
+        <docblock line="65">
           <description/>
           <long-description/>
-          <tag line="60" name="ignore" description=""/>
+          <tag line="65" name="ignore" description=""/>
         </docblock>
-        <argument line="63">
+        <argument line="68">
           <name>$prop</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Core" line="87" package="ChickenWire">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ChickenWire\Core" line="93" package="ChickenWire">
         <name>__set</name>
         <full_name>__set</full_name>
-        <docblock line="84">
+        <docblock line="90">
           <description/>
           <long-description/>
-          <tag line="84" name="ignore" description=""/>
+          <tag line="90" name="ignore" description=""/>
         </docblock>
-        <argument line="87">
+        <argument line="93">
           <name>$prop</name>
           <default/>
           <type/>
         </argument>
-        <argument line="87">
+        <argument line="93">
           <name>$value</name>
           <default/>
           <type/>
@@ -1636,7 +2198,9 @@ echo $john-&gt;name;       // output: Jane Derringer
     </class>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file ChickenWire/Core/MagicObject.php</error>
-      <error line="58" code="50018">No DocBlock was found for property $_propAccessible</error>
+      <error line="61" code="50018">No DocBlock was found for property $_propReadWrite</error>
+      <error line="62" code="50018">No DocBlock was found for property $_propRead</error>
+      <error line="63" code="50018">No DocBlock was found for property $_propWrite</error>
     </parse_markers>
   </file>
   <file path="ChickenWire/Core/Configuration.php" hash="e136f3bf43cfcf30909f81aa959d0fa4" package="Default">
@@ -9730,6 +10294,7 @@ called before or after methods are invoked on your object inside of ActiveRecord
     <namespace name="Models" full_name="Application\Models"/>
   </namespace>
   <namespace name="ChickenWire" full_name="ChickenWire">
+    <namespace name="Auth" full_name="ChickenWire\Auth"/>
     <namespace name="Core" full_name="ChickenWire\Core"/>
     <namespace name="Util" full_name="ChickenWire\Util"/>
   </namespace>

@@ -38,7 +38,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">393</span></a></li>
+                <span class="label label-info">412</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
                 <span class="label label-info">1</span>
@@ -65,6 +65,7 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
+<li class="method public "><a href="#method_encryptPassword" title="encryptPassword :: Encrypt password using Blowfish, with an optional salt added"><span class="description">Encrypt password using Blowfish, with an optional salt added</span><pre>encryptPassword()</pre></a></li>
 <li class="method public "><a href="#method_pluralize" title="pluralize :: Pluralize the given string (if count is not 1)"><span class="description">Pluralize the given string (if count is not 1)</span><pre>pluralize()</pre></a></li>
 <li class="method public "><a href="#method_random" title="random :: Generate a random string"><span class="description">Generate a random string</span><pre>random()</pre></a></li>
 <li class="method public "><a href="#method_singularize" title="singularize :: "><span class="description">singularize()
@@ -72,6 +73,8 @@
 <li class="method public "><a href="#method_slugify" title="slugify :: Convert string to URL-safe slug"><span class="description">Convert string to URL-safe slug</span><pre>slugify()</pre></a></li>
 <li class="method public "><a href="#method_titleize" title="titleize :: Titleize the given string (upper-case on first character)"><span class="description">Titleize the given string (upper-case on first character)</span><pre>titleize()</pre></a></li>
 <li class="method public "><a href="#method_unaccent" title="unaccent :: Remove accents from characters in given string"><span class="description">Remove accents from characters in given string</span><pre>unaccent()</pre></a></li>
+<li class="method public "><a href="#method_verifyPassword" title="verifyPassword :: "><span class="description">verifyPassword()
+        </span><pre>verifyPassword()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -104,6 +107,28 @@
 <div class="element class"><div class="details">
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_encryptPassword"></a><div class="element clickable method public method_encryptPassword" data-toggle="collapse" data-target=".method_encryptPassword .collapse">
+<h2>Encrypt password using Blowfish, with an optional salt added</h2>
+<pre>encryptPassword(string $password, string $salt, integer $rounds) : string</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>The password to encrypt</p></div>
+<div class="subelement argument">
+<h4>$salt</h4>
+<code>string</code><p>A salt to add to the password</p></div>
+<div class="subelement argument">
+<h4>$rounds</h4>
+<code>integer</code><p>(default: 6) The number of rounds to process (Note that a high number will increase security, but also increase processor time)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The encrypted/hashed password</div>
+</div></div>
+</div>
 <a id="method_pluralize"></a><div class="element clickable method public method_pluralize" data-toggle="collapse" data-target=".method_pluralize .collapse">
 <h2>Pluralize the given string (if count is not 1)</h2>
 <pre>pluralize(string $input, integer $count) : string</pre>
@@ -205,6 +230,20 @@
 <code>string</code>The string without accents</div>
 </div></div>
 </div>
+<a id="method_verifyPassword"></a><div class="element clickable method public method_verifyPassword" data-toggle="collapse" data-target=".method_verifyPassword .collapse">
+<h2>verifyPassword()
+        </h2>
+<pre>verifyPassword($plain, $hashed, $salt, $rounds) </pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$plain</h4></div>
+<div class="subelement argument"><h4>$hashed</h4></div>
+<div class="subelement argument"><h4>$salt</h4></div>
+<div class="subelement argument"><h4>$rounds</h4></div>
+</div></div>
+</div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_irregular"> </a><div class="element clickable property private property_irregular" data-toggle="collapse" data-target=".property_irregular .collapse">
@@ -237,7 +276,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-05-27T17:32:18+02:00.<br></footer></div>
+            generated on 2013-05-29T20:03:25+02:00.<br></footer></div>
 </div>
 </body>
 </html>

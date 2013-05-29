@@ -38,7 +38,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">393</span></a></li>
+                <span class="label label-info">412</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
                 <span class="label label-info">1</span>
@@ -107,11 +107,12 @@
 <li class="method public inherited"><a href="#method_readonly" title="readonly :: Flag model as readonly."><span class="description">Flag model as readonly.</span><pre>readonly()</pre></a></li>
 <li class="method public inherited"><a href="#method_reestablish_connection" title="reestablish_connection :: Re-establishes the database connection with a new connection."><span class="description">Re-establishes the database connection with a new connection.</span><pre>reestablish_connection()</pre></a></li>
 <li class="method public inherited"><a href="#method_reload" title="reload :: Reloads the attributes and relationships of this object from the database."><span class="description">Reloads the attributes and relationships of this object from the database.</span><pre>reload()</pre></a></li>
+<li class="method public "><a href="#method_resaltPassword" title="resaltPassword :: Re-encrypt the password"><span class="description">Re-encrypt the password</span><pre>resaltPassword()</pre></a></li>
 <li class="method public inherited"><a href="#method_reset_dirty" title="reset_dirty :: Resets the dirty array."><span class="description">Resets the dirty array.</span><pre>reset_dirty()</pre></a></li>
 <li class="method public inherited"><a href="#method_save" title="save :: Save the model to the database."><span class="description">Save the model to the database.</span><pre>save()</pre></a></li>
 <li class="method public inherited"><a href="#method_set_attributes" title="set_attributes :: Mass update the model with data from an attributes hash."><span class="description">Mass update the model with data from an attributes hash.</span><pre>set_attributes()</pre></a></li>
 <li class="method public inherited"><a href="#method_set_timestamps" title="set_timestamps :: Updates a model's timestamps."><span class="description">Updates a model's timestamps.</span><pre>set_timestamps()</pre></a></li>
-<li class="method public inherited"><a href="#method_table" title="table :: Returns the {@link Table} object for this model."><span class="description">Returns the {@link Table} object for this model.</span><pre>table()</pre></a></li>
+<li class="method public "><a href="#method_table" title="table :: Returns the {@link Table} object for this model."><span class="description">Returns the {@link Table} object for this model.</span><pre>table()</pre></a></li>
 <li class="method public inherited"><a href="#method_table_name" title="table_name :: Retrieves the name of the table for this Model."><span class="description">Retrieves the name of the table for this Model.</span><pre>table_name()</pre></a></li>
 <li class="method public inherited"><a href="#method_to_array" title="to_array :: Returns an Array representation of this model."><span class="description">Returns an Array representation of this model.</span><pre>to_array()</pre></a></li>
 <li class="method public inherited"><a href="#method_to_csv" title="to_csv :: Returns an CSV representation of this model."><span class="description">Returns an CSV representation of this model.</span><pre>to_csv()</pre></a></li>
@@ -127,6 +128,9 @@
 </li>
 <li class="nav-header private">» Private
                     <ul>
+<li class="method private "><a href="#method__initializeCW" title="_initializeCW :: Initialize ChickenWire featues"><span class="description">Initialize ChickenWire featues</span><pre>_initializeCW()</pre></a></li>
+<li class="method private "><a href="#method__interpretAuthSettings" title="_interpretAuthSettings :: Read the $authModel settings, and apply default settings, etc."><span class="description">Read the $authModel settings, and apply default settings, etc.</span><pre>_interpretAuthSettings()</pre></a></li>
+<li class="method private "><a href="#method__setAuthValues" title="_setAuthValues :: Apply authentication values to the record (before save)"><span class="description">Apply authentication values to the record (before save)</span><pre>_setAuthValues()</pre></a></li>
 <li class="method private inherited"><a href="#method__validate" title="_validate :: Validates the model."><span class="description">Validates the model.</span><pre>_validate()</pre></a></li>
 <li class="method private inherited"><a href="#method_insert" title="insert :: Issue an INSERT sql statement for this model's attribute."><span class="description">Issue an INSERT sql statement for this model's attribute.</span><pre>insert()</pre></a></li>
 <li class="method private inherited"><a href="#method_invoke_callback" title="invoke_callback :: Invokes the specified callback on this model."><span class="description">Invokes the specified callback on this model.</span><pre>invoke_callback()</pre></a></li>
@@ -146,6 +150,7 @@ delegated or null if not delegated.</span><pre>is_delegated()</pre></a></li>
 <li class="property public inherited"><a href="#property_alias_attribute" title="$alias_attribute :: Allows you to create aliases for attributes."><span class="description"></span><pre>$alias_attribute</pre></a></li>
 <li class="property public inherited"><a href="#property_attr_accessible" title="$attr_accessible :: Whitelist of attributes that are checked from mass-assignment calls such as constructing a model or using update_attributes."><span class="description"></span><pre>$attr_accessible</pre></a></li>
 <li class="property public inherited"><a href="#property_attr_protected" title="$attr_protected :: Blacklist of attributes that cannot be mass-assigned."><span class="description"></span><pre>$attr_protected</pre></a></li>
+<li class="property public "><a href="#property_authModel" title="$authModel :: "><span class="description"></span><pre>$authModel</pre></a></li>
 <li class="property public inherited"><a href="#property_connection" title="$connection :: Set to the name of the connection this {@link Model} should use."><span class="description"></span><pre>$connection</pre></a></li>
 <li class="property public inherited"><a href="#property_db" title="$db :: Set to the name of the database this Model's table is in."><span class="description"></span><pre>$db</pre></a></li>
 <li class="property public inherited"><a href="#property_delegate" title="$delegate :: Delegates calls to a relationship."><span class="description"></span><pre>$delegate</pre></a></li>
@@ -161,6 +166,8 @@ delegated or null if not delegated.</span><pre>is_delegated()</pre></a></li>
 <li class="property private inherited"><a href="#property___new_record" title="$__new_record :: Flag that determines if a call to save() should issue an insert or an update sql statement"><span class="description"></span><pre>$__new_record</pre></a></li>
 <li class="property private inherited"><a href="#property___readonly" title="$__readonly :: Flag that determines of this model can have a writer method invoked such as: save/update/insert/delete"><span class="description"></span><pre>$__readonly</pre></a></li>
 <li class="property private inherited"><a href="#property___relationships" title="$__relationships :: Array of relationship objects as model_attribute_name =&gt; relationship"><span class="description"></span><pre>$__relationships</pre></a></li>
+<li class="property private "><a href="#property__authSettings" title="$_authSettings :: "><span class="description"></span><pre>$_authSettings</pre></a></li>
+<li class="property private "><a href="#property__cwInitialized" title="$_cwInitialized :: "><span class="description"></span><pre>$_cwInitialized</pre></a></li>
 <li class="property private inherited"><a href="#property_attributes" title="$attributes :: Contains model values as column_name =&gt; value"><span class="description"></span><pre>$attributes</pre></a></li>
 </ul>
 </li>
@@ -179,11 +186,85 @@ delegated or null if not delegated.</span><pre>is_delegated()</pre></a></li>
 <div class="element class">
 <p class="short_description">The ChickenWire Model class</p>
 <div class="details">
-<div class="long_description"><p>This extends the ActiveRecord Model, adding a few extra features. (Document!!!)</p></div>
-<table class="table table-bordered"><tr>
+<div class="long_description"><p>This extends the ActiveRecord Model, adding a few extra features.</p>
+
+<h3>Authentication model</h3>
+
+<p>To create a Model for authentication, using the Auth class, you can use
+the configurator $authModel. A simple example:</p>
+
+<pre><code>class User extends \ChickenWire\Model
+{
+    static $authModel = \ChickenWire\Auth\Auth::BLOWFISH;
+}
+</code></pre>
+
+<p>Or, even simpler:</p>
+
+<pre><code>static $authModel = true;        // Blowfish is the default encryption
+</code></pre>
+
+<p>You can also specify extra options, using an array instead:</p>
+
+<pre><code>class User extends \ChickenWire\Model
+{
+    static $authModel = array(
+        "type" => \ChickenWire\Auth\Auth::BLOWFISH,
+        "passwordField" => "userpassword"
+    );
+}
+</code></pre>
+
+<p>The following options are available:</p>
+
+<table border="1" cellpadding="3">
+<thead>
+    <tr>
+        <th>Option</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>passwordField</td>
+        <td>"password"</td>
+        <td>The database column name for the password.</td>
+    </tr>
+    <tr>
+        <td>salt</td>
+        <td><i>null</i></td>
+        <td>The salt to use for all passwords. When you leave this <i>null</i> a random salt will be generated.</td>
+    </tr>
+    <tr>
+        <td>saltField</td>
+        <td>"salt"</td>
+        <td>The database column name for the salt.</td>
+    </tr>
+    <tr>
+        <td>saltLength</td>
+        <td>16</td>
+        <td>The length of generated salts.</td>
+    </tr>
+    <tr>
+        <td>type</td>
+        <td></td>
+        <td>The encryption type (Auth::BLOWFISH or Auth::MD5). For more information see Auth.</td>
+    </tr>
+</tbody>
+</table>
+
+<p><b>Note:</b> See Auth for a complete picture.</p></div>
+<table class="table table-bordered">
+<tr>
+<th>see</th>
+<td><a href="ChickenWire.Auth.Auth.html#%5CChickenWire%5CAuth%5CAuth">\ChickenWire\Auth\Auth</a></td>
+</tr>
+<tr>
 <th>package</th>
 <td><a href="../packages/ChickenWire.html">ChickenWire</a></td>
-</tr></table>
+</tr>
+</table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___call"></a><div class="element clickable method public method___call" data-toggle="collapse" data-target=".method___call .collapse">
@@ -1198,6 +1279,23 @@ for the primary key.</p></div>
 <div class="subelement response"><code><a href="../classes/ActiveRecord.Model.html">\ActiveRecord\Model</a></code></div>
 </div></div>
 </div>
+<a id="method_resaltPassword"></a><div class="element clickable method public method_resaltPassword" data-toggle="collapse" data-target=".method_resaltPassword .collapse">
+<h2>Re-encrypt the password</h2>
+<pre>resaltPassword(string $password, string $salt) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>The plain text password to re-encrypt</p>
+</div>
+<div class="subelement argument">
+<h4>$salt</h4>
+<code>string</code><p>(default: '') Optional salt to encrypt with. If you leave this empty, a random salt will be generated.</p>
+</div>
+</div></div>
+</div>
 <a id="method_reset_dirty"></a><div class="element clickable method public method_reset_dirty" data-toggle="collapse" data-target=".method_reset_dirty .collapse">
 <h2>Resets the dirty array.</h2>
 <pre>reset_dirty() </pre>
@@ -1278,15 +1376,9 @@ but DOES NOT save it to the database.</p></div>
 <a id="method_table"></a><div class="element clickable method public method_table" data-toggle="collapse" data-target=".method_table .collapse">
 <h2>Returns the {@link Table} object for this model.</h2>
 <pre>table() : <a href="../classes/ActiveRecord.Table.html">\ActiveRecord\Table</a></pre>
-<div class="labels">
-<span class="label">Inherited</span><span class="label">Static</span>
-</div>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>Be sure to call in static scoping: static::table()</p></div>
-<table class="table table-bordered"><tr>
-<th>inherited_from</th>
-<td>\ActiveRecord\Model::table()</td>
-</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code><a href="../classes/ActiveRecord.Table.html">\ActiveRecord\Table</a></code></div>
 </div></div>
@@ -1583,6 +1675,30 @@ return integer Number of rows affected</td>
 <code>array</code>An array in the form array(key_name => value, ...)</div>
 </div></div>
 </div>
+<a id="method__initializeCW"></a><div class="element clickable method private method__initializeCW" data-toggle="collapse" data-target=".method__initializeCW .collapse">
+<h2>Initialize ChickenWire featues</h2>
+<pre>_initializeCW(<a href="../classes/ActiveRecord.Table.html">\ActiveRecord\Table</a> $table) : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code><a href="../classes/ActiveRecord.Table.html">\ActiveRecord\Table</a></code><p>The Table object to work with</p></div>
+</div></div>
+</div>
+<a id="method__interpretAuthSettings"></a><div class="element clickable method private method__interpretAuthSettings" data-toggle="collapse" data-target=".method__interpretAuthSettings .collapse">
+<h2>Read the $authModel settings, and apply default settings, etc.</h2>
+<pre>_interpretAuthSettings() : void</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method__setAuthValues"></a><div class="element clickable method private method__setAuthValues" data-toggle="collapse" data-target=".method__setAuthValues .collapse">
+<h2>Apply authentication values to the record (before save)</h2>
+<pre>_setAuthValues() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="method__validate"></a><div class="element clickable method private method__validate" data-toggle="collapse" data-target=".method__validate .collapse">
 <h2>Validates the model.</h2>
 <pre>_validate() : boolean</pre>
@@ -1844,6 +1960,12 @@ for defining these are exactly the same.</p>
 </tr></table>
 </div></div>
 </div>
+<a id="property_authModel"> </a><div class="element clickable property public property_authModel" data-toggle="collapse" data-target=".property_authModel .collapse">
+<h2></h2>
+<pre>$authModel </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_connection"> </a><div class="element clickable property public property_connection" data-toggle="collapse" data-target=".property_connection .collapse">
 <h2></h2>
 <pre>$connection : string</pre>
@@ -1990,6 +2112,18 @@ name of your table to explicitly tell ActiveRecord what your table is called.</p
 </tr></table>
 </div></div>
 </div>
+<a id="property__authSettings"> </a><div class="element clickable property private property__authSettings" data-toggle="collapse" data-target=".property__authSettings .collapse">
+<h2></h2>
+<pre>$_authSettings </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__cwInitialized"> </a><div class="element clickable property private property__cwInitialized" data-toggle="collapse" data-target=".property__cwInitialized .collapse">
+<h2></h2>
+<pre>$_cwInitialized </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_attributes"> </a><div class="element clickable property private property_attributes" data-toggle="collapse" data-target=".property_attributes .collapse">
 <h2></h2>
 <pre>$attributes : array</pre>
@@ -2009,7 +2143,7 @@ name of your table to explicitly tell ActiveRecord what your table is called.</p
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-05-27T17:32:18+02:00.<br></footer></div>
+            generated on 2013-05-29T20:03:25+02:00.<br></footer></div>
 </div>
 </body>
 </html>
