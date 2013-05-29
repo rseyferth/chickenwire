@@ -1,7 +1,0 @@
-<?php
-
-	namespace BMK\Controllers;
-
-	
-
-?>
