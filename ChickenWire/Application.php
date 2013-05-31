@@ -38,14 +38,29 @@
 	 * 		<td>Whether to automatically load all modules that are found in your /Modules/ directory. If you leave this on false, you'll have to load each module individually, through Module::load - this allows for more configuration options.</td>
 	 * 	</tr>
 	 * 	<tr>
+	 * 		<td>enableCsrfGuard</td>
+	 * 		<td>true</td>
+	 * 		<td>Whether to require CSRF tokens for each form. See: Util\CsrfGuard</td>
+	 * 	</tr>
+	 * 	<tr>
 	 *  	<td>database</td>
 	 *  	<td></td>
 	 *  	<td>The ActiveRecord database connection to use.</td>
+	 * 	</tr>	  	
+	 * 	<tr>
+	 *  	<td>htmlSelfClosingSlash</td>
+	 *  	<td>true</td>
+	 *  	<td>Whether to end self-closing HTML tags with a /, for example &lt;br /&gt; or &lt;br&gt;</td>
 	 * 	</tr>
 	 * 	<tr>
 	 *  	<td>httpPort</td>
 	 *  	<td>80</td>
 	 *  	<td>The port for HTTP requests (only specify when it deviates from the default port 80, otherwise the port number will be added to all generated urls)</td>
+	 * 	</tr>
+	 * 	<tr>
+	 *  	<td>treatExtensionAsMimeType</td>
+	 *  	<td>true</td>
+	 *  	<td>Whether to use the request's file extensions in content type negotiation. If you set this to false, only the HTTP_ACCEPT headers will be used for respondTo clauses. When true, the extension will be the first content type the application will try to serve.</td>
 	 * 	</tr>
 	 * 	<tr>
 	 *  	<td>sslPort</td>
@@ -102,6 +117,13 @@
 			return Application::instance()->config;
 		}
 
+		/**
+		 * Get the current Request
+		 * @return ChickenWire\Request The Request instance
+		 */
+		public static function getRequest() {
+			return Application::instance()->_request;
+		}
 
 
 
@@ -117,10 +139,17 @@
 			"httpPort" => null,			// 
 			"sslPort" => null, 			// 
 
+			"enableCsrfGuard" => true,
+			"htmlSelfClosingSlash" => true,
+
 			"applicationNamespace" => "Application",
 
+			"defaultCharset" => "UTF-8",
+
 			"timezone" => "",
-			"autoLoadModules" => false
+			"autoLoadModules" => false,
+
+			"treatExtensionAsMimeType" => true
 		);
 
 
@@ -159,7 +188,7 @@
 			$this->_request = new Request();
 			
 			// Get route
-			$this->_route = Route::match($this->_request, $httpStatus, $urlParams);
+			$this->_route = Route::request($this->_request, $httpStatus, $urlParams);
 			
 			// Success?
 			if ($httpStatus === 200) {
@@ -237,6 +266,9 @@
 				throw new \Exception("You need to specify the timezone in the Application configuration.", 1);				
 			}
 			date_default_timezone_set($this->config->timezone);
+
+			// Set self closing slash
+			\HtmlObject\Traits\Tag::$useSelfClosingSlash = $this->config->htmlSelfClosingSlash;
 
 		}
 

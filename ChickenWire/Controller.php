@@ -3,6 +3,8 @@
 	namespace ChickenWire;
 
 	use \ChickenWire\Auth\Auth;
+	use \ChickenWire\Util\Http;
+	use \ChickenWire\Util\Str;
 
 	/**
 	 * The ChickenWire controller class
@@ -43,8 +45,13 @@
 		protected $request;
 		protected $auth;
 
+		private $_rendered;
+
 
 		public function __construct(\ChickenWire\Request $request, $execute = true) {
+
+			// Default values
+			$this->_rendered = false;
 
 			// Localize
 			$this->request = $request;
@@ -79,8 +86,10 @@
 					return;
 				}
 
-				// Call action
-				$reflection->invoke($this);
+				// Call to action
+				$this->_callToAction($reflection);
+
+				
 
 			} else {
 
@@ -90,6 +99,168 @@
 
 
 		}
+
+		/**
+		 * Render
+		 *
+		 * This should be elaborated on of course:
+		 *
+		 * render :edit
+		 * render :action => :edit
+		 * render 'edit'
+		 * render 'edit.html.erb'
+		 * render :action => 'edit'
+		 * render :action => 'edit.html.erb'
+		 * render 'books/edit'
+		 * render 'books/edit.html.erb'
+		 * render :template => 'books/edit'
+		 * render :template => 'books/edit.html.erb'
+		 * render '/path/to/rails/app/views/books/edit'
+		 * render '/path/to/rails/app/views/books/edit.html.erb'
+		 * render :file => '/path/to/rails/app/views/books/edit'
+		 * render :file => '/path/to/rails/app/views/books/edit.html.erb'
+		 *
+		 * Calls to the render method generally accept four options:
+		 * 
+		 *	:content_type
+		 *	:layout
+		 *	:status
+		 *	:location
+		 * 
+		 * @param  [type] $options [description]
+		 * @return [type]          [description]
+		 */
+		protected function render($options = null)
+		{
+
+			// We've rendered
+			$this->_rendered = true;
+
+			// Figure out the options
+			$this->_interpretOptions($options);
+			
+			// Nothing?
+			if (array_key_exists("nothing", $options) && $options['nothing'] == true) {
+				return;
+			}
+
+
+			var_dump($options);
+
+		}
+
+		private function _interpretOptions(&$options)
+		{
+
+			// A null?
+			if (is_null($options)) {
+
+				// Then we use the current route's action
+				$options = $this->request->route->action;
+
+			}
+
+			// Is it a single string?
+			if (is_string($options)) {
+
+				// No slashes at al?
+				if (!preg_match('/\//', $options)) {
+
+					// That means it's the action
+					$options = array('action' => $options);
+					
+				// Starts with a slash?
+				} elseif ($options[0] == '/') {
+
+					// Then it's a file
+					$options = array('file' => $options);
+					
+				// Then there's one or more slashes in the middle
+				} else {
+
+					// Then it's a template from another resource
+					$options = array('template' => $options);
+					
+				}
+
+			} elseif (is_array($options)) {
+
+				// @todo: Probably some validation.
+
+
+			} else {
+
+				throw new \Exception("The 'render' method takes either a string or an array as an argument.", 1);
+
+			}
+
+			// Did we end up with an action?
+			if (array_key_exists("action", $options)) {
+
+				// Does this route have a model?
+				if (is_null($this->request->route->models)) {
+					throw new \Exception("This route does not have a model linked to it, so you have to define a template, instead of an action.", 1);
+				}
+				// Convert it to a full template
+				$model = $this->request->route->models[count($this->request->route->models) - 1];
+				$options['template'] = Str::pluralize($model) . "/" . $options['action'];
+				unset($options['action']);
+
+			}
+
+			// And now... maybe a template?
+			if (array_key_exists("template", $options)) {
+
+				// Add the application/module view path to it.
+				if (!is_null($this->request->route->module)) {
+
+					// Use module path
+					$options['template'] = $this->request->route->module->path . "/Views/" . trim($options['template'], '/ ');
+
+				} else {
+
+					// Use application view path
+					$options['template'] = VIEW_PATH . "/" . trim($options['template'], '/ ');
+
+				}
+
+
+			}
+
+			// Check default settings
+			$options = array_merge(array(
+				"contentType" => null,
+				"status" => 200,
+				"layout" => null
+			), $options);
+
+		}
+
+
+		private function _callToAction(\ReflectionMethod $action)
+		{
+
+			// Call action
+			$action->invoke($this);
+
+			// Have we rendered?
+			if ($this->_rendered == false) {
+
+				// Do we have a model available to determine a view by?
+				if (!is_null($this->request->route->models)) {
+
+					// Try to render my action
+					$this->render($this->request->route->action);
+
+				}
+
+			}
+
+
+
+
+		}
+
 
 		/**
 		 * Check if current action needs authentication, and if it is validated
@@ -119,6 +290,11 @@
 			// Is there an only clause?
 			if (is_array($auth) && array_key_exists("only", $auth)) {
 
+				// Is it an array?
+				if (!is_array($auth['only'])) {
+					$auth['only'] = array($auth['only']);
+				}
+
 				// Is my method in it?
 				if (!in_array($this->route->action, $auth['only'])) {
 					return true;
@@ -131,12 +307,19 @@
 
 			// Find auth object
 			$this->auth = Auth::get($authName);
-			
+
 			// Is it authenticated?
 			if ($this->auth->isAuthenticated() !== true) {
 
-				// Call login controller action
-				$this->_invokeAuthLoginAction();
+				// Store last page :)
+				$this->auth->rememberPage($this->request->uri);
+
+				// Redirect to login page
+				if (!is_null($this->auth->loginAction)) {
+					$this->_invokeAuthLoginAction();
+				} else {
+					$this->redirectTo($this->auth->loginUri);
+				}
 				return false;
 
 			} else {
@@ -148,6 +331,22 @@
 
 
 		}
+
+		/**
+		 * Send a redirect header to the given location
+		 * @param  string $uri The Uri to redirect to
+		 * @param  string $statusCode 	(default: 302) The HTTP status code to use
+		 * @return void     
+		 */
+		protected function redirectTo($uri, $statusCode = 302)
+		{
+
+			// Send header
+			Http::sendStatus($statusCode);
+			Http::redirect($uri);
+
+		}
+
 
 		/**
 		 * Invoke the Login action for the Controller's Auth object
@@ -169,6 +368,10 @@
 					throw new \Exception("The method '" . $this->auth->loginAction . "' on " . get_class($login) . " is not public.", 1);				
 
 				}
+
+				// Send not auth!
+				Http::sendStatus(401);
+				
 
 				// Call action
 				$reflection->invoke($login);

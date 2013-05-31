@@ -7,9 +7,17 @@
             "email": "ruben.seyferth@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/rseyferth/html-object"
+        }
+    ],
     "require": {
         "monolog/monolog": "1.5.*",
         "php-activerecord/php-activerecord": "1.*",
-        "eddieantonio/bcrypt": "0.3.0"
+        "eddieantonio/bcrypt": "0.3.0",
+        "anahkiasen/html-object": "dev-master",
+        "ikimea/browser": "dev-master"
     }
 }

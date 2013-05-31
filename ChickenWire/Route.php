@@ -3,6 +3,7 @@
 	namespace ChickenWire;
 
 	use \ActiveRecord\Inflector;
+	use \ChickenWire\Util\Arry;
 
 	class Route extends Core\MagicObject
 	{
@@ -11,13 +12,12 @@
 
 		protected static $_propReadWrite = array('ssl', 'pattern', 'controller', 'action', 'methods', 'ssl', 'models', 'autoLoad', 'patternVariables', 'module');
 
-		protected static $_withModule = null;
-
-		public static function add($pattern, array $options) {
+		public static function match($pattern, array $options) {
 
 			// With a module?
-			if (!is_null(self::$_withModule) && !array_key_exists("module", $options)) {
-				$options['module'] = self::$_withModule;
+			$module = Module::getConfiguringModule();
+			if ($module !== false && !array_key_exists("module", $options)) {
+				$options['module'] = $module;
 			}
 
 			// Create and add
@@ -25,19 +25,18 @@
 			array_push(self::$_routes, $route);
 		}
 
-		public static function withModule(Module $module) {
-
-			// Store module
-			self::$_withModule = $module;
-
+		
+		/**
+		 * Route HTTP errors to the given controller
+		 * @param  string $controller The name of the Controller class you want to handle HTTP errors
+		 * @param  string $pattern    (default: '/') This controller will be used for all HTTP errors occuring within a Url starting with this pattern, so the default value '/'' will catch all requests.
+		 * @return void
+		 */
+		public static function errors($controller, $pattern = '/')
+		{
+			
 		}
 
-		public static function endWith() {
-
-			// Unset the module
-			self::$_withModule = null;
-
-		}
 
 		/**
 		 * Match the given request on all configured routes and return first match
@@ -46,7 +45,7 @@
 		 * @param  Array  &$urlParams	This will be an array containing the matched URL parameters
 		 * @return Route|number          The matched, orfalse when no match was found
 		 */
-		public static function match($request, &$httpStatus, &$urlParams) {
+		public static function request($request, &$httpStatus, &$urlParams) {
 
 			// We will look for a best match
 			$status = 404;
@@ -63,7 +62,7 @@
 				if (count($matches[0]) == 1) {
 
 					// Is the method correct as well?
-					if (in_array($request->method, $route->methods)) {
+					if (Arry::Contains($request->method, $route->methods, false)) {
 
 						//@TODO Check SSL config
 
@@ -140,8 +139,9 @@
 			}
 
 			// With a module?
-			if (!is_null(self::$_withModule) && !array_key_exists("module", $options)) {
-				$options['module'] = self::$_withModule;
+			$module = Module::getConfiguringModule();
+			if ($module !== false && !array_key_exists("module", $options)) {
+				$options['module'] = $module;
 			}	
 
 			// Check the pattern
@@ -205,37 +205,37 @@
 
 			
 			// Index
-			Route::add($pattern, array_merge($options, array(
+			Route::match($pattern, array_merge($options, array(
 				"methods" => "GET",
 				"action" => "index"
 			)));
 
 			// Add and create
-			Route::add($pattern . "/add", array_merge($options, array(
+			Route::match($pattern . "/add", array_merge($options, array(
 				"methods" => "GET",
 				"action" => "add"
 			)));
-			Route::add($pattern, array_merge($options, array(
+			Route::match($pattern, array_merge($options, array(
 				"methods" => "POST",
 				"action" => "create"
 			)));
 
 			// Show, edit and update
-			Route::add($pattern . "/{#id}", array_merge($options, array(
+			Route::match($pattern . "/{#id}", array_merge($options, array(
 				"methods" => "GET",
 				"action" => "show"
 			)));
-			Route::add($pattern . "/{#id}/edit", array_merge($options, array(
+			Route::match($pattern . "/{#id}/edit", array_merge($options, array(
 				"methods" => "GET",
 				"action" => "edit"
 			)));
-			Route::add($pattern . "/{#id}", array_merge($options, array(
+			Route::match($pattern . "/{#id}", array_merge($options, array(
 				"methods" => "PUT",
 				"action" => "update"
 			)));
 
 			// Delete!
-			Route::add($pattern . "/{#id}", array_merge($options, array(
+			Route::match($pattern . "/{#id}", array_merge($options, array(
 				"methods" => "DELETE",
 				"action" => "destroy"
 			)));
@@ -329,13 +329,18 @@
 
 		public function __construct($pattern, array $options) {
 
-			// No controller defined?
-			if (!array_key_exists('controller', $options)) {
-				throw new Exception("You cannot have a route without a 'controller' parameter.", 1);
-				die;				
+			// To?
+			if (array_key_exists('to', $options)) {
+				$to = explode("#", $options['to']);
+				$options['controller'] = $to[0];
+				$options['action'] = $to[1];
 			}
 
-
+			// No controller defined?
+			if (!array_key_exists('controller', $options)) {
+				throw new \Exception("You cannot have a route without a 'controller' or a 'to' parameter.", 1);
+				die;				
+			}
 
 			// Localize options
 			$this->_pattern = rtrim($pattern, '/ ');
@@ -351,8 +356,10 @@
 				$this->_module = Module::get($this->_module);
 			}
 
-			// Parse methods
-			if (!array_key_exists('methods', $options)) {
+			// Parse methods/method
+			if (array_key_exists('method', $options)) {
+				$this->_methods = array($options['method']);
+			} elseif (!array_key_exists('methods', $options)) {
 				$this->_methods = array('GET');
 			} elseif (is_array($options['methods'])) {
 				$this->_methods = $options['methods'];

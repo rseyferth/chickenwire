@@ -11,7 +11,7 @@
 		public function index()
 		{
 
-			var_dump($this->client->projects);
+			
 
 		}
 

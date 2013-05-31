@@ -12,5 +12,17 @@
 	// Set timezone
 	$config->timezone = "Europe/Amsterdam";
 
+	$config->htmlSelfClosingSlash = true;
+
+
+	// Disable Csrf guard for development
+	$config->enableCsrfGuard = array(
+		'development' => false,
+		'production' => true
+	);
+
+
+	// Debug packages for autoloading
+	ChickenWire\autoLoadNamespace('HtmlObject', '/home/ruben/Websites/html-object/src/HtmlObject');
 
 ?>

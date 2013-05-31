@@ -2,6 +2,8 @@
 
 	namespace BMK\Models;
 
+	use \ChickenWire\Auth\Auth;
+
 	class BMKUser extends \ChickenWire\Model
 	{
 

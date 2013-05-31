@@ -2,17 +2,17 @@
 
 	use ChickenWire\Route;
 
-	Route::add("/", 
+	Route::match("/", 
 		array(
-			"controller" => "ApplicationController",
-			"action" => "index",
+			"to" => "ApplicationController#index",
 			"methods" => "GET",
 			"ssl" => false,
 		));
 
 
 
-	Route::resources(array("Client", "Project"));
+
+	Route::resources("Project");
 
 
 ?>

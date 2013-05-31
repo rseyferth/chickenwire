@@ -5,19 +5,66 @@
 	use \BMK\Models\BMKUser;
 	use \ChickenWire\Auth\Auth;
 
+	use \ChickenWire\Form\Form;
+
 	class SessionController extends \ChickenWire\Controller
 	{
 
-		public function login()
+		static $requiresAuth = array("BMK",
+			"only" => "delete"
+		);
+
+		public function add()
 		{
 
-			/*$ruben = BMKUser::find(1);
-			$ruben->resaltPassword("1395.nl");
-			$ruben->Save();*/
+			// Create the form... (maybe we should create a view? :) 
+			$form = Auth::get("BMK")->createLoginForm();
 
+			$form->textField("username");
+			$form->passwordField("password");
+
+			$form->submitButton(array(
+				"value" => "Login"
+			));
+
+			echo $form->render();
+
+			$this->render(array("nothing" => true));
+
+		}
+
+		public function create()
+		{
+
+			// Validate
 			$auth = Auth::get("BMK");
-			$loginResult = $auth->login("ruben.seyferth", "1395.nl");
-			echo ('INGELOGD.');
+			$result = $auth->login(
+				$this->params->getString("username"),
+				$this->params->getString("password")
+			);
+
+			// Success?
+			if ($result->success) {
+
+				// Redirect to last page.
+				$this->redirectTo($auth->lastPage);
+
+			} else {
+				
+				var_dump($result);
+				$this->add();
+
+			}
+			
+
+		}
+
+		public function delete()
+		{
+
+			// Destroy my session.
+			$this->auth->logout();
+			echo ('Logged out.');
 
 		}
 

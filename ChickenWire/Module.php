@@ -70,6 +70,16 @@
 	 */
 	class Module extends Core\MagicObject {
 
+		/**
+		 * Get the Module that is currently loading its configuration files.
+		 * @return \ChickenWire\Model|false The Module that is currently loading configuration files, or false when no Module is loading config.
+		 */
+		public static function getConfiguringModule()
+		{
+			return self::$_configuringModule;
+		}
+		protected static $_configuringModule = false;
+
 		protected static $_propRead = array("name", "path", "namespace", "urlPrefix");
 
 		protected static $_modules = array();
@@ -136,7 +146,7 @@
 			
 			// Store settings
 			$this->_namespace = $settings['namespace'];
-			$this->_urlPrefix = $settings['urlPrefix'];
+			$this->_urlPrefix = rtrim($settings['urlPrefix'], '/ ');
 
 			// Load configuration
 			$this->_loadConfig();
@@ -150,7 +160,7 @@
 			if (!file_exists($configDir) || !is_dir($configDir)) return;
 
 			// Start route-with
-			Route::withModule($this);
+			self::$_configuringModule = $this;
 
 			// Loop the files
 			$dh = opendir($configDir);
@@ -169,7 +179,7 @@
 			}
  
 			// Done!
-			Route::endWith();
+			self::$_configuringModule = false;
 
 		
 		}

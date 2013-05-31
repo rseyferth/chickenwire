@@ -211,7 +211,7 @@
 		 * @param  integer $rounds   (default: 6) The number of rounds to process (Note that a high number will increase security, but also increase processor time)
 		 * @return string 	The encrypted/hashed password
 		 */
-		public static function encryptPassword($password, $salt = "", $rounds = 6)
+		public static function blowFish($password, $salt = "", $rounds = 6)
 		{
 
 			// Encrypt!

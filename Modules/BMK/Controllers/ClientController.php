@@ -8,8 +8,13 @@
 		static $requiresAuth = "BMK";
 
 		public function index() {
+				
 
-			echo ('Welkom.');
+		}
+
+		public function show()
+		{
+
 
 		}
 

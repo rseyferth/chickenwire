@@ -6,7 +6,9 @@
 
 		"model" => "\BMK\Models\BMKUser",
 		"type" => Auth::BLOWFISH,
-		"loginAction" => "\BMK\Controllers\SessionController::login",
+		"useSalt" => true,
+		"loginAction" => "\BMK\Controllers\SessionController::add",
+		"loginUri" => "/login",
 		"rotateSalt" => true
 
 	));

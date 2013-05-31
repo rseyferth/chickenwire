@@ -2,9 +2,21 @@
 
 	namespace ChickenWire\Util;
 
+	/**
+	 * HTTP Helper class
+	 *
+	 * This class has some shortcuts and enums to help with handling
+	 * HTTP requests.
+	 *
+	 * @package ChickenWire
+	 */
 	class Http 
 	{
 
+		/**
+		 * A list of HTTP status codes and their default text messages.
+		 * @var array
+		 */
 		public static $statusCodes = array(
 			200 => "OK",
 			201 => "Created",
@@ -41,6 +53,12 @@
 			504 => "Gateway Timeout"
 		);
 
+		/**
+		 * Send a HTTP status header
+		 * @param  int $code        The HTTP status code
+		 * @param  string $httpVersion (default: null) The HTTP version to use in the header. If you leave this null, the version from the request will be used.
+		 * @return void
+		 */
 		public static function sendStatus($code, $httpVersion = null)
 		{
 
@@ -52,6 +70,18 @@
 
 			// Send the header
 			header($httpVersion . ' ' . $code . ' ' . $codeText);
+
+		}
+
+		/**
+		 * Redirect the client to given Uri
+		 * @param  string $uri         The Uri to redirect to
+		 * @return void
+		 */
+		public static function redirect($uri) {
+
+			// Send location
+			header('Location: ' . $uri);
 
 		}
 

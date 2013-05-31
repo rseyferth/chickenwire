@@ -3,6 +3,8 @@
 	namespace ChickenWire\Auth;
 
 	use \ChickenWire\Util\Str;
+	use \ChickenWire\Util\Url;
+	use \ChickenWire\Module;
 
 	/**
 	 * Authentication class for user authentication
@@ -34,7 +36,7 @@
 	 * 		$result = $auth->login($this->params->username, $this->params->password);
 	 * 		
 	 * 		if ($result->success) {
-	 * 			$this->redirect('/admin/', array(
+	 * 			$this->redirectTo('/admin/', array(
 	 * 				'flash' => 'Welcome ' . $result->user->name
 	 * 			));
 	 * 		} else {
@@ -56,8 +58,9 @@
 	 * Auth::add("<b>Admin</b>", array(
 	 * 	"model" => "\Application\Models\User",
 	 * 	"type" => <b>Auth::BLOWFISH</b>,
+	 * 	"useSalt" => true,
 	 * 	"rotateSalt" => true,
-	 * 	"loginAction" => "\Application\Controllers\SessionController::add"
+	 * 	"loginUri" => "/admin/login"
 	 * ));	
 	 * </code>
 	 *
@@ -74,47 +77,25 @@
 	 * </code>
 	 * For more information on configuring your controllers (specific methods, etc.), see Controller::$requiresAuth.
 	 *
-	 * <h4>Create model for Blowfish</h4>
-	 * If you choose Auth::BLOWFISH authentication, your Model's table needs to have the following columns: 
+	 * <h4>Create model for Auth</h4>
+	 * To enable your Model to be used as an Auth model, your table needs to have the following columns: 
 	 * 
 	 * <ul>
 	 * <li><b>username</b> (varchar)</li>
 	 * <li><b>password</b> (varchar)</li>
-	 * <li><b>salt</b> (varchar)</li>
+	 * <li><b>salt</b> (varchar) <i>Unless you disable salt</i></li>
 	 * <li><b>lastlogin_at</b> (timestamp)</li>
 	 * </ul>
 	 * 
-	 * Then simply set the configurator to <i>true</i>:
+	 * Then simply set the configurator to true. The Model will then look in your
+	 * configured Auth's to find the linked Auth.
 	 * <code>
 	 * class User extends \ChickenWire\Model
 	 * {
-	 * 	static $authModel = <b>Auth::BLOWFISH</b>;
+	 * 	static $authModel = <b>true</b>;
 	 * }
 	 * </code>
-	 * Or, even simpler:
-	 * <code>
-	 * static $authModel = true;		// Blowfish is the default encryption
-	 * </code>
-	 * 
-	 * <h4>Create model for MD5</h4>
-	 * If you choose Auth::MD5 instead, you'll need the following columns:
-	 * 
-	 * <ul>
-	 * <li><b>username</b> (varchar)</li>
-	 * <li><b>password</b> (varchar)</li>
-	 * <li><b>lastlogin_at</b> (timestamp)</li>
-	 * </ul>
 	 *
-	 * Then configure your model as follows:
-	 * <code>
-	 * class User extends \ChickenWire\Model
-	 * {
-	 * 	static $authModel = Auth::MD5;
-	 * }
-	 * </code>
-	 * 
-	 * <b>Note: </b> This is a simple authentication, without salt, and generally deemed insecure.
-	 * 
 	 * 
 	 * @see Controller::$requiresAuth
 	 * @package ChickenWire
@@ -128,26 +109,30 @@
 		 * MD5 authentication 
 		 * 
 		 * This uses simple one-way hashing, where
-		 * the password is stored in the database without a salt, as 
-		 * a md5 hash.
+		 * the password is stored in the database as 
+		 * an md5 hash.
 		 */
 		const MD5 = "MD5";
 
 		/**
-		 * Blowfish authentication with salt
+		 * Blowfish authentication
 		 * 
-		 * Salted authentication uses a salt that is stored in the
-		 * database next to the encrypted password. This salt is unique
-		 * per user and can be changed on each update for added security
-		 * The salt is concatenated with the actual password in the hash.
-		 * The password will be encrypted using Blowfish.
+		 * The password will be encrypted using Blowfish,
+		 * an elaborate encryption that is (almost) impossible
+		 * to crack. 
 		 */
 		const BLOWFISH = "BLOWFISH";
 
 
 		protected static $_auths = array();
 
-		protected static $_propRead = array("loginController", "loginAction", "name", "result", "user");
+		protected static $_propRead = array(
+			"loginUri", "loginAction", "loginController", 
+			"name", "result", "user", "model",
+			"type", 
+			"usernameField", "passwordField", "saltField", 
+			"useSalt", "saltLength", 
+			"lastPage");
 
 		protected static $_sessionPrefix = "ChickenWireAuthentication";
 
@@ -205,15 +190,22 @@
 		protected $_passwordField;
 		protected $_saltField;
 		protected $_lastloginField;
-		protected $_loginController;
+
+		protected $_loginUri;
 		protected $_loginAction;
+		protected $_loginController;
+
+		protected $_useSalt;
 		protected $_rotateSalt;
+		protected $_saltLength;
 
 		protected $_reflModel;
 
 		protected $_result;
 		protected $_authenticated;
 		protected $_user;
+
+		protected $_lastPage;
 
 		/**
 		 * Create a new Auth object
@@ -225,8 +217,11 @@
 		 *
 		 * <ul>
 		 * <li><b>model</b> The full classname of the model to use for authentication</li>
-		 * <li><b>loginAction</b> The controller and method to call when authentication fails. E.g.: \BMK\Controllers\SessionController::login</li>
-		 * <li><b>type</b> (default: Auth::SALT) The type of encryption/authentication to use (Auth::MD5 or Auth::SALT).</li>
+		 * <li><b>loginAction</b> The controller and method to call when authentication fails. E.g.: \BMK\Controllers\SessionController::login. This action will be called with a 401 header.</li>
+		 * <li><b>loginUri</b> The (absolute or relative) uri to the login page. This will be used as the action for the login form (using POST), and unless you enter a loginAction it will also redirect to this url (using GET) when there is no authentication.</li>
+		 * <li><b>type</b> (default: Auth::SALT) The type of encryption to use (Auth::MD5 or Auth::BLOWFISH).</li>
+		 * <li><b>useSalt</b> default: true) Whether to add a salt to the password</li>
+		 * <li><b>saltLength</b> default: 16) The length of the salt (for when a random salt needs to be generated)</li>
 		 * <li><b>rotateSalt</b> (default: false) Whether to generate a new random salt and re-encrypt the password, each time a user is validated.</li>
 		 * <li><b>usernameField</b>	(default: username) The name of the field in the model that contains the username.
 		 * <li><b>passwordField</b>	(default: password) The name of the field in the model that contains the (encrypted) password.
@@ -241,10 +236,13 @@
 			$options = array_merge(array(
 				"type" => self::BLOWFISH,
 				"model" => null,
+				"loginUri" => null,
 				"loginAction" => null,
 				"usernameField" => "username",
 				"passwordField" => "password",
 				"saltField" => "salt",
+				"useSalt" => true,
+				"saltLength" => 16,
 				"rotateSalt" => false,
 				"lastloginField" => "lastlogin_at"
 			), $options);
@@ -255,21 +253,37 @@
 			}
 
 			// No login action?
-			if (is_null($options['loginAction'])) {
-				throw new \Exception("You cannot create an Auth without defining an action for the login form.", 1);				
+			if (is_null($options['loginUri'])) {
+				throw new \Exception("You cannot create an Auth without defining a loginUri.", 1);				
 			}
 
-			// Login action propertly setup?
-			$regEx = '/^\\\([^:]+)::([a-zA-Z]+)$/';
-			if (!preg_match($regEx, $options['loginAction'])) {
-				throw new \Exception("The loginAction was not properly formatted. Please use this format: \\Namespace\\ControllerName::methodName.", 1);				
-			}
-			preg_match_all($regEx, $options['loginAction'], $matches);
+			// Action given?
+			if (!is_null($options['loginAction'])) {
 			
-			// Store action
-			$this->_loginController = '\\' . $matches[1][0];
-			$this->_loginAction = $matches[2][0];
+				// Login action propertly setup?
+				$regEx = '/^\\\([^:]+)::([a-zA-Z]+)$/';
+				if (!preg_match($regEx, $options['loginAction'])) {
+					throw new \Exception("The loginAction was not properly formatted. Please use this format: \\Namespace\\ControllerName::methodName.", 1);				
+				}
+				preg_match_all($regEx, $options['loginAction'], $matches);
 
+				// Store action
+				$this->_loginController = '\\' . $matches[1][0];
+				$this->_loginAction = $matches[2][0];
+
+			} 
+
+			// Store uri
+			$this->_loginUri = $options['loginUri'];
+
+			// Check module
+			$module = Module::getConfiguringModule();
+			if ($module !== false && !Url::isFullUrl($this->_loginUri)) {
+				
+				// Prefix url
+				$this->_loginUri = $module->urlPrefix . "/" . ltrim($this->_loginUri, '/ ');
+			}
+			
 			// Store locally
 			$this->_name = $name;
 			$this->_model = $options['model'];
@@ -278,11 +292,22 @@
 			$this->_usernameField = $options['usernameField'];
 			$this->_passwordField = $options['passwordField'];
 			$this->_saltField = $options['saltField'];
+			$this->_useSalt = $options['useSalt'];
+			$this->_saltLength = $options['saltLength'];
 			$this->_lastloginField = $options['lastloginField'];
 
 			// No login yet!
 			$this->_authenticated = false;
 			$this->_result = null;
+
+			// Check last page?
+			if (array_key_exists(self::$_sessionPrefix . $this->name . 'LastPage', $_SESSION)) {
+				$this->lastPage = $_SESSION[self::$_sessionPrefix . $this->name . 'LastPage'];
+			} else {
+				$this->lastPage = null;
+			}
+
+			
 
 		}
 
@@ -314,6 +339,13 @@
 				// Store local vars
 				$this->_authenticated = true;
 				$this->_user = $result->user;
+
+				// Save last login
+				$llField = $this->_lastloginField;
+				$this->user->$llField = new \ActiveRecord\DateTime();
+				$this->user->save();
+
+			
 
 			}
 
@@ -371,6 +403,11 @@
 			}
 
 
+			// Pre-salt password
+			if ($this->_useSalt) {
+				$password = $user->read_attribute($this->_saltField) . $password;
+			}
+
 
 			// What type of validation to do?
 			switch ($this->_type) {
@@ -379,7 +416,7 @@
 					break;
 				
 				case self::BLOWFISH:
-					$password = crypt($user->read_attribute($this->_saltField) . $password, $user->read_attribute($this->_passwordField));
+					$password = crypt($password, $user->read_attribute($this->_passwordField));
 					break;
 
 				default:
@@ -399,7 +436,7 @@
 			} else {
 
 				// Rotate the salt?
-				if ($this->_rotateSalt && $this->_type == self::BLOWFISH) {
+				if ($this->_rotateSalt) {
 
 					// Now's the moment to re-encrypt the password, so we can store the newly encrypted password in the session
 					$user->resaltPassword($originalPassword);
@@ -416,6 +453,28 @@
 		}
 
 		/**
+		 * Create a Form object with preset options for this Auth
+		 * @param  array  $options (default: array()) Optional array of options to pass on to the Form constructor
+		 * @return \ChickenWire\Form\Form          The created Form instance
+		 */
+		public function createLoginForm($options = array())
+		{
+
+			// Default options
+			$options = array_merge(array(
+				"action" => $this->loginUri,
+				"method" => "post"
+			), $options);
+
+			// Create it!
+			$form = new \ChickenWire\Form\Form($options);
+
+			// Done.
+			return $form;
+
+		}
+
+		/**
 		 * Check if the current session is authenticated for this Auth instance
 		 * @return boolean True if authenticated, false when not authenticated.
 		 */
@@ -424,6 +483,7 @@
 
 			// Already authenticated?
 			if ($this->_authenticated) return true;
+
 
 			// Check session
 			if (array_key_exists(self::$_sessionPrefix . $this->_name, $_SESSION)) {
@@ -457,6 +517,15 @@
 			// Not authenticated.
 			return false;
 
+		}
+
+		/**
+		 * Store current page in the session, so we can return there after login has succeeded.
+		 * @return void
+		 */
+		public function rememberPage($uri)
+		{
+			$_SESSION[self::$_sessionPrefix . $this->name . 'LastPage'] = $uri;
 		}
 
 
