@@ -2,5 +2,5 @@
 	
 	// Module definition
 	$module->namespace = "BMK";
-
+	
 ?>

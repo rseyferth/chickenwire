@@ -4,6 +4,7 @@
 
 	use \ActiveRecord\Inflector;
 	use \ChickenWire\Util\Arry;
+	use \ChickenWire\Util\Str;
 
 	class Route extends Core\MagicObject
 	{
@@ -135,7 +136,7 @@
 
 			// Default controller?
 			if (!array_key_exists('controller', $options)) {
-				$options['controller'] = $modelClass[count($modelClass) - 1] . 'Controller';
+				$options['controller'] = Str::removeNamespace($modelClass[count($modelClass) - 1]) . 'Controller';
 			}
 
 			// With a module?
@@ -144,12 +145,37 @@
 				$options['module'] = $module;
 			}	
 
+			// Check model class prefixes
+			$models = array();
+			foreach ($options['models'] as $model) {
+
+				// Namespaced?
+				if (!strstr($model, "\\Models\\")) {
+
+					// In module?
+					if ($module !== false) {
+						$model = $module->namespace . "\\Models\\" . $model;
+					} else {
+						$model = MODEL_NS . "\\" . $model;
+					}
+
+				}
+
+				// Add
+				$models[] = $model;
+
+			}
+			$options['models'] = $models;
+
 			// Check the pattern
-				if (!array_key_exists('pattern', $options)) {
+			if (!array_key_exists('pattern', $options)) {
 
 				// Generate pattern automatically
 				$pattern = '';
-				foreach ($modelClass as $index => $model) {
+				foreach ($options['models'] as $index => $model) {
+
+					// Denamespace
+					$model = Str::removeNamespace($model);
 
 					// Add pattern for this model
 					$pattern .= '/' . Application::$inflector->tableize($model) . '/';
@@ -179,7 +205,10 @@
 
 				// Loop through models
 				$realPattern = '';
-				foreach ($modelClass as $index => $model) {
+				foreach ($options['model'] as $index => $model) {
+
+					// Denamespace
+					$model = Str::removeNamespace($model);
 
 					// Add pattern for this model
 					$realPattern .= $pattern[$index];

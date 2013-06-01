@@ -2,7 +2,7 @@
 
 	use \ChickenWire\Route;
 	
-	Route::resources("Client");
+	Route::resources("Application\Models\Client");
 
 
 	Route::match("/login", 

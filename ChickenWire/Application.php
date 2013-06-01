@@ -3,6 +3,7 @@
 	namespace ChickenWire;
 
 	use ChickenWire\Util\Http;
+	use ChickenWire\Util\Mime;
 	use ActiveRecord\Inflector;
 
 
@@ -28,6 +29,11 @@
 	 * </thead>
 	 * <tbody>
 	 * 	<tr>
+	 * 		<td>allowExtensionForDefaultMime</td>
+	 * 		<td>false</td>
+	 * 		<td>Whether to allow the extension at the end of the Uri for the defaultOutputMime. For example, if this is set to <i>true</i> requests ending in <i>.html</i> will also be accepted (providing the defaultOutputMime is Mime::HTML).</td>
+	 * 	</tr>
+	 * 	<tr>
 	 * 		<td>applicationNamespace</td>
 	 * 		<td>"Application"</td>
 	 * 		<td>The PHP namespace for your Application.</td>
@@ -48,14 +54,19 @@
 	 *  	<td>The ActiveRecord database connection to use.</td>
 	 * 	</tr>	  	
 	 * 	<tr>
-	 *  	<td>htmlSelfClosingSlash</td>
-	 *  	<td>true</td>
-	 *  	<td>Whether to end self-closing HTML tags with a /, for example &lt;br /&gt; or &lt;br&gt;</td>
+	 *  	<td>defaultOutputMime</td>
+	 *  	<td>Mime::HTML</td>
+	 *  	<td>The default ouptut Mime type that all Controllers will output. A Controller can override this setting by defining a $respondsTo configurator.</td>
 	 * 	</tr>
 	 * 	<tr>
 	 *  	<td>httpPort</td>
 	 *  	<td>80</td>
 	 *  	<td>The port for HTTP requests (only specify when it deviates from the default port 80, otherwise the port number will be added to all generated urls)</td>
+	 * 	</tr>
+	 * 	<tr>
+	 *  	<td>htmlSelfClosingSlash</td>
+	 *  	<td>true</td>
+	 *  	<td>Whether to end self-closing HTML tags with a /, for example &lt;br /&gt; or &lt;br&gt;</td>
 	 * 	</tr>
 	 * 	<tr>
 	 *  	<td>treatExtensionAsMimeType</td>
@@ -85,6 +96,7 @@
 	 * 
 	 * @see  \ChickenWire\Core\Configuration
 	 * @see  \ChickenWire\Module
+	 * @see  \ChickenWire\Util\Mime
 	 * 
 	 * @package ChickenWire
 	 */
@@ -144,11 +156,13 @@
 
 			"applicationNamespace" => "Application",
 
+			"defaultOutputMime" => Mime::HTML,
 			"defaultCharset" => "UTF-8",
 
 			"timezone" => "",
 			"autoLoadModules" => false,
 
+			"allowExtensionForDefaultMime" => false,
 			"treatExtensionAsMimeType" => true
 		);
 
@@ -230,6 +244,8 @@
 			define("MODEL_PATH", APP_PATH . "/Models");
 			define("VIEW_PATH", APP_PATH . "/Views");
 			define("MODULE_PATH", APP_ROOT . "/Modules");
+
+			define("MODEL_NS", $this->config->applicationNamespace . "\\Models");
 
 			// Include all php files in the config directory
 			$dh = opendir(CONFIG_PATH);

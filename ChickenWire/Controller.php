@@ -4,6 +4,7 @@
 
 	use \ChickenWire\Auth\Auth;
 	use \ChickenWire\Util\Http;
+	use \ChickenWire\Util\Mime;
 	use \ChickenWire\Util\Str;
 
 	/**
@@ -40,6 +41,8 @@
 	class Controller extends Core\MagicObject
 	{
 
+		static $respondsTo;
+
 		static $requiresAuth = null;
 
 		protected $request;
@@ -47,11 +50,31 @@
 
 		private $_rendered;
 
+		/**
+		 * The content type of the response the Controller will send.
+		 * This will be null until content negotiation is complete.
+		 * 
+		 * @var Mime
+		 */
+		protected $contentType;
+
+		protected $actionRespondsTo;
+
+
 
 		public function __construct(\ChickenWire\Request $request, $execute = true) {
 
 			// Default values
 			$this->_rendered = false;
+			$this->contentType = null;
+
+			// No responds to set?
+			if (!isset(static::$respondsTo)) {
+
+				// Use default mime type
+				self::$respondsTo = Application::getConfiguration()->defaultOutputMime;
+
+			}
 
 			// Localize
 			$this->request = $request;
@@ -86,6 +109,11 @@
 					return;
 				}
 
+				// Check responds to
+				if ($this->_checkIfActionReponds() == false) {
+					return;
+				}
+
 				// Call to action
 				$this->_callToAction($reflection);
 
@@ -96,6 +124,91 @@
 				throw new \Exception("There is no method '" . $action . "' on " . get_class($this), 1);				
 
 			}
+
+
+		}
+
+		private function _checkIfActionReponds()
+		{
+
+			// Parse respondsTo
+			$respondsTo = array();
+			if (is_string(static::$respondsTo)) {
+
+				// Just one type
+				$respondsTo[] = static::$respondsTo;
+
+			} elseif (is_array(static::$respondsTo)) {
+
+				// Multiple types
+				foreach (static::$respondsTo as $key => $value) {
+
+					// Was it configured?
+					if (is_numeric($key)) {
+
+						// Nope, just the type
+						$respondsTo[] = $value;
+
+					} else { 
+
+						// The key was the type, now look at the specs
+						if (is_array($value)) {
+
+							// Is current action in the 'except' clause?
+							if (array_key_exists('except', $value)) {
+
+								// String or array?
+								if (is_string($value['except']) && $value['except'] == $this->route->action) {
+									continue;
+								} elseif (is_array($value['except']) && in_array($this->route->action, $value['except'])) {
+									continue;
+								}
+
+							}
+
+							// Is current action in the 'only' clause?
+							if (array_key_exists('only', $value)) {
+
+								// String or array?
+								if (is_string($value['only']) && $value['only'] !== $this->route->action) {
+									continue;
+								} elseif (is_array($value['only']) && !in_array($this->route->action, $value['only'])) {
+									continue;
+								}
+
+							}
+
+							// All is good... add it.
+							$respondsTo[] = $key;
+
+						}
+
+					}
+
+
+				}
+
+			}
+
+			// Store respondsTo for later
+			$this->actionRespondsTo = $respondsTo;
+
+
+			// Now look at accepted types!
+			foreach ($this->request->preferredContent as $accept) {
+				
+				// Match?
+				if (in_array($accept->type, $respondsTo)) {
+
+					// We have a match!
+					return true;
+
+				}
+			}
+
+			// We don't provide that type around here...
+			Http::sendStatus(406);
+			die("Content-type not allowed");
 
 
 		}
@@ -144,10 +257,185 @@
 				return;
 			}
 
-
-			var_dump($options);
+			// Render template?
+			if (array_key_exists("template", $options)) {
+				$this->_renderTemplate($options);
+				return;
+			}
 
 		}
+
+		private function _renderTemplate($options)
+		{
+
+			// We start out with nothing
+			$filename = null;
+			$contentType = null;
+
+			/**
+			 * This is for a template that already have a file extension.
+			 *
+			 * >> See if the request accepts that file type
+			 */
+			if (preg_match('/\.([a-z]{2,5})(\.php)?$/', $options['template'], $extension)) {
+
+				// Get mime type
+				$mime = Mime::byExtension($extension[1]);
+				if ($mime === false) {
+					throw new \Exception("The extension of the view you are trying to render is unknown to ChickenWire: " . $extension[1], 1);					
+				}
+
+				// Loop through accepted types to see if this is acceptable.
+				foreach ($this->request->preferredContent as $accept) {
+
+					// Same?
+					if ($accept->type == $mime->type) {
+
+						// Use it!
+						$contentType = $mime;
+						break;
+
+					}
+
+				}
+				
+				// None found?
+				if (is_null($contentType)) {
+
+					// That means we're trying to render a template that is not accepted by the request...
+					Http::sendStatus(406);
+					die("Can't find right type of content...");
+					
+				}
+
+				// Does it already have a .php?
+				if (count($extension) < 3) {
+
+					// Add it then...
+					$options['template'] .= ".php";
+
+				}
+
+				// Does the file exists..?
+				if (!file_exists($options['template'])) {
+					throw new \Exception("View not found: " . $options['template'], 1);					
+				}
+
+			} 
+
+			/**
+			 * This is for a template without a file extension
+			 *
+			 * >> Guess file extension based on the request's preferred content
+			 */
+			else {
+
+				// Go guess the filename!
+				$filename = $this->_guessExtension($options['template']);
+
+				// Nothing found?
+				if ($filename === false) {
+
+					// Was HTML or All a possibility?
+					throw new \Exception("Unable to find a view for current request, using " . $options['template'], 1);
+					return false;
+
+				}
+
+				// Filename found
+				$options['template'] = $filename;
+
+
+			}
+
+			// Send the content type
+			$this->contentType = Mime::byExtension(Str::getContentExtension($options['template']));
+			Http::sendMimeType($this->contentType);
+
+
+			// Let's render it :)
+			require $options['template'];
+
+		}
+
+		/**
+		 * Guess a file extension for the given extensionless filename, based
+		 * on the request headers, or chosen content type.
+		 * 
+		 * @param  string $filename The filename without extension to complete. This already needs to be complete path.
+		 * @param  string $suffix   (default '.php') Suffix to put at then end of every filename to try.
+		 * @return string|false     The completed filename, when a suitable file was found, or false if not.
+		 */
+		private function _guessExtension($filename, $suffix = '.php')
+		{
+
+
+			// Content type chosen?
+			$possibleExtensions = array();
+			$allAccepted = false;
+			if (!is_null($this->contentType)) {
+
+				// Get extensions
+				$possibleExtensions = $this->contentType->getExtensions();
+
+			} else {
+
+				// Collect extensions for all types
+				foreach ($this->request->preferredContent as $type) {
+					$possibleExtensions = array_merge($possibleExtensions, $type->getExtensions());
+					if ($type->type == Mime::ALL) {
+						$allAccepted = true;
+					}
+				}
+
+			}
+
+			// See if any of 'em exist
+			foreach ($possibleExtensions as $ext) {
+				
+				// Something there?
+				$tryFilename = $filename . ".$ext$suffix";
+				if (file_exists($tryFilename)) {
+					return $tryFilename;
+				}
+
+			}
+
+			// Nothing found... Was */* one of accepted headers?
+			if ($allAccepted) {
+
+				// Check dir
+				$dir = dirname($filename);
+				if (!file_exists($dir) || !is_dir($dir)) {
+					return false;
+				}
+
+				// File part
+				$searchFor = substr($filename, strlen($dir) + 1);
+
+				// Look in the directory				
+				$dh = opendir($dir);
+				while (false !== ($file = readdir($dh))) {
+
+					// Starts with our template and ends with .php?
+					if (is_file($dir . '/' . $file) && preg_match('/^' . preg_quote($searchFor) . '(.*)\.php$/', $file)) {
+
+						// Well, we found a file with an extension, so let's serve it
+						return $dir . '/' . $file;
+
+					}
+					
+				}
+				
+
+			}
+
+			// Nothing :(
+			return false;
+
+		}
+
+
 
 		private function _interpretOptions(&$options)
 		{
@@ -201,8 +489,12 @@
 				if (is_null($this->request->route->models)) {
 					throw new \Exception("This route does not have a model linked to it, so you have to define a template, instead of an action.", 1);
 				}
-				// Convert it to a full template
+				
+				// Remove namespace
 				$model = $this->request->route->models[count($this->request->route->models) - 1];
+				$model = Str::removeNamespace($model);
+
+				// Convert it to a full template				
 				$options['template'] = Str::pluralize($model) . "/" . $options['action'];
 				unset($options['action']);
 
@@ -255,8 +547,6 @@
 				}
 
 			}
-
-
 
 
 		}
@@ -447,11 +737,18 @@
 
 		}
 
-		public function __get_params() {
+		protected function __get_params() {
 			return $this->request->params;
 		}
-		public function __get_route() {
+		protected function __get_route() {
 			return $this->request->route;
+		}
+
+		protected function __get_html() {
+			return \ChickenWire\Util\Html::instance();
+		}
+		protected function __get_url() {
+			return \ChickenWire\Util\Url::instance();
 		}
 
 

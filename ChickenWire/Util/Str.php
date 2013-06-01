@@ -230,6 +230,34 @@
 		}
 
 
+		/**
+		 * Get the content extension for given filename
+		 * @param  string $filename The filename to check
+		 * @param  string $suffix   (default: '.php') Possible suffix, that is not to be treated as an extension
+		 * @return string|false           The extension, or false when no extension was found.
+		 */
+		public static function getContentExtension($filename, $suffix = '.php') 
+		{
+
+			// Extension?
+			if (preg_match('/\.([a-z]{2,5})(' . preg_quote($suffix) . ')?$/', $filename, $extension)) {
+				return $extension[1];	
+			} else {
+				return false;
+			}
+
+
+		}
+
+
+
+		public static function removeNamespace($className) 
+		{
+			$index = strrpos($className, "\\");
+			if ($index == false) return $className;
+			return substr($className, $index + 1);
+
+		}
 
 	}
 

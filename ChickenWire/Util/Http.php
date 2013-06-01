@@ -74,6 +74,24 @@
 		}
 
 		/**
+		 * Send a Content-type header
+		 * @param  Mime|string $mime  A Mime instance, or just a string containing a content-type.
+		 * @return void
+		 */
+		public static function sendMimeType($mime)
+		{
+
+			// A string or a Mime
+			if (!is_string($mime)) {
+				$mime = $mime->getContentType();
+			}
+
+			// Send it :)
+			header('Content-type: ' . $mime . "\r\n");
+
+		}
+
+		/**
 		 * Redirect the client to given Uri
 		 * @param  string $uri         The Uri to redirect to
 		 * @return void
