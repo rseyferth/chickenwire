@@ -13,10 +13,6 @@
 	class Form extends \ChickenWire\Core\MagicObject
 	{
 
-
-
-
-
 		public static $fieldNamespaces = array('\\ChickenWire\\Form');
 
 
@@ -39,6 +35,7 @@
 				"action" => null,
 				"method" => "get",
 				"auth" => null,
+				"record" => null,
 				"labels" => "before"
 			), $options);
 
@@ -160,6 +157,21 @@
 				$className = $ns . '\\' . $name;
 				if (class_exists($className)) {
 					
+					// Pass on the record
+					$options = array_merge(array(
+							"partOfModel" => true
+						), $options);
+					if (!is_null($this->_settings['record']) && $options['partOfModel'] === true && array_key_exists("name", $options)) {
+
+						// Apply name.
+						$fieldName = $options['name'];
+						$options['name'] = $this->_settings['record']->getClass()  . '[' . $options['name'] . ']';
+
+						// Set value
+						$options['value'] = $this->_settings['record']->$fieldName;
+						
+					}
+
 					// Instantiate
 					$field = new $className($options);
 					$this->add($field);
@@ -173,7 +185,10 @@
 
 		}
 
-
+		public function __toString()
+		{
+			return $this->render();
+		}
 
 
 

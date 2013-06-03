@@ -14,26 +14,30 @@
 	 * a new controller simply extend this class. Any public function you
 	 * define in your controller can then be used to route to.
 	 *
-	 * <h3>Configurators</h3>
-	 * You can add one or more of the following configurators to your controller
-	 * to add features.
-	 *
-	 * <h4>requiresAuth</h4>
+	 * ==Authentication==
 	 * If your actions require a user to be logged in, you can define an Auth object
 	 * in your configuration, and specify its name in your controllers. See Auth for
 	 * more information.
 	 * 
 	 * <code>
-	 * static $requiresAuth = "BMK";			// Authentication required for all actions
-	 * static $requiresAuth = array("BMK", 
-	 * 	"except" => array("index", "show")		// No authentication required for <i>index</i> and <i>show</i> actions
+	 * // Authentication required for all actions
+	 * static $requiresAuth = "BMK";			
+	 *
+	 * // No authentication required for *index* and *show* actions
+	 * static $requiresAuth = array("BMK",
+	 * 	"except" => array("index", "show")		
 	 * );
-	 * static $requiresAuth = array("BMK", 
-	 * 	"only" => array("secret")				// Authentication only required for the <i>secret</i> action
+	 *
+	 * // Authentication only required for the *secret* action
+	 * static $requiresAuth = array("BMK",
+	 * 	"only" => array("secret")				
 	 * );
 	 * </code>
 	 *
-	 * @see \ChickenWire\Auth
+	 * ==Content negotiation==
+	 * [...]
+	 *
+	 * @see \ChickenWire\Auth\Auth
 	 * @see \ChickenWire\Route
 	 * 
 	 * @package ChickenWire
@@ -41,12 +45,36 @@
 	class Controller extends Core\MagicObject
 	{
 
+		/**
+		 * Configurator for content negotiation
+		 * @var string|array
+		 */
 		static $respondsTo;
 
-		static $requiresAuth = null;
+		/**
+		 * Configurator for authentication
+		 * @var string|array
+		 */
+		static $requiresAuth;
 
+
+
+		private static $_instance;
+
+
+		/**
+		 * The current Request
+		 * @var \ChickenWire\Request
+		 */
 		protected $request;
+
+		/**
+		 * Authentication object that was used to validate the current user. This is only set when
+		 * authentication was need for the current action.,
+		 * @var \ChickenWire\Util\Auth
+		 */
 		protected $auth;
+
 
 		private $_rendered;
 
@@ -54,15 +82,26 @@
 		 * The content type of the response the Controller will send.
 		 * This will be null until content negotiation is complete.
 		 * 
-		 * @var Mime
+		 * @var \ChickenWire\Util\Mime
 		 */
 		protected $contentType;
 
-		protected $actionRespondsTo;
+
+		private $_actionRespondsTo;
 
 
-
+		/**
+		 * Create a new Controller instance.
+		 *
+		 * Controllers are automatically created by the Application.
+		 * 
+		 * @param \ChickenWire\Request 	The Request to handle
+		 * @param bool                 	Whether to automatically execute the appropriate action.
+		 */
 		public function __construct(\ChickenWire\Request $request, $execute = true) {
+
+			// Store instance
+			self::$_instance = $this;
 
 			// Default values
 			$this->_rendered = false;
@@ -191,7 +230,7 @@
 			}
 
 			// Store respondsTo for later
-			$this->actionRespondsTo = $respondsTo;
+			$this->_actionRespondsTo = $respondsTo;
 
 
 			// Now look at accepted types!
@@ -214,7 +253,7 @@
 		}
 
 		/**
-		 * Render
+		 * Render output
 		 *
 		 * This should be elaborated on of course:
 		 *
@@ -240,8 +279,8 @@
 		 *	:status
 		 *	:location
 		 * 
-		 * @param  [type] $options [description]
-		 * @return [type]          [description]
+		 * @param  array 	Render options
+		 * @return void
 		 */
 		protected function render($options = null)
 		{
@@ -263,7 +302,19 @@
 				return;
 			}
 
+			// Render file?
+			if (array_key_exists("file", $options)) {
+				$this->_renderFile($options);
+				return;
+			}
+
+			// Json?
+			if (array_key_exists("json", $options)) {
+				$this->_renderSerialized("json", $options);
+			}
+
 		}
+
 
 		private function _renderTemplate($options)
 		{
@@ -336,10 +387,9 @@
 				// Nothing found?
 				if ($filename === false) {
 
-					// Was HTML or All a possibility?
+					// Couldn't find anything
 					throw new \Exception("Unable to find a view for current request, using " . $options['template'], 1);
-					return false;
-
+				
 				}
 
 				// Filename found
@@ -355,6 +405,59 @@
 
 			// Let's render it :)
 			require $options['template'];
+
+		}
+
+		private function _renderFile($options)
+		{
+
+			// Does the file already have an extension?
+			if (!preg_match('/\.([a-z]{2,5})$/', $options['file'], $extension)) {
+
+				// Guess it. (without .php suffix of course)
+				$file = $this->_guessExtension($options['file'], '');
+
+				// No?
+				if ($file === false) {
+
+					throw new \Exception("Unable to find a file for current request, using " . $options['file'], 1);
+
+				}
+
+				// Yes.
+				$options['file'] = $file;
+
+			} 
+
+			// Send the content type
+			$this->contentType = Mime::byExtension(Str::getContentExtension($options['file']));
+			Http::sendMimeType($this->contentType);
+
+			// Include the file.
+			$content = file_get_contents($options['file']);
+			echo $content;
+
+		}
+
+		private function _renderSerialized($type, $options)
+		{
+
+			// Get data
+			$data = $options[$type];
+
+			// Can we find a mime type for it?
+			$this->contentType = Mime::byExtension($type);
+			
+			// Try to serialize
+			$method = "to_" . strtolower($type);
+			$response = $data->$method();
+
+			// Header.
+			Http::sendMimeType($this->contentType);
+
+			// Ouptu
+			echo $response;
+			
 
 		}
 
@@ -417,8 +520,13 @@
 				$dh = opendir($dir);
 				while (false !== ($file = readdir($dh))) {
 
+					// Known content type?
+					if (Str::getContentExtension($file))
+
 					// Starts with our template and ends with .php?
-					if (is_file($dir . '/' . $file) && preg_match('/^' . preg_quote($searchFor) . '(.*)\.php$/', $file)) {
+					if (is_file($dir . '/' . $file) 
+							&& preg_match('/^' . preg_quote($searchFor) . '\.([a-z]+)' . preg_quote($suffix) . '$/', $file)
+							&& Mime::byExtension(Str::getContentExtension($file)) !== false) {
 
 						// Well, we found a file with an extension, so let's serve it
 						return $dir . '/' . $file;
@@ -482,6 +590,9 @@
 
 			}
 
+			// Determine my view path
+			$viewPath = !is_null($this->request->route->module) ? $this->request->route->module->path . "/Views/" : VIEW_PATH . "/";
+
 			// Did we end up with an action?
 			if (array_key_exists("action", $options)) {
 
@@ -503,19 +614,46 @@
 			// And now... maybe a template?
 			if (array_key_exists("template", $options)) {
 
-				// Add the application/module view path to it.
-				if (!is_null($this->request->route->module)) {
+				// Use module path
+				$options['template'] = $viewPath . trim($options['template'], '/ ');
 
-					// Use module path
-					$options['template'] = $this->request->route->module->path . "/Views/" . trim($options['template'], '/ ');
+			}
 
-				} else {
+			// Do we have a file render?
+			if (array_key_exists("file", $options)) {
 
-					// Use application view path
-					$options['template'] = VIEW_PATH . "/" . trim($options['template'], '/ ');
+				// Is it already a full path?
+				if (preg_match('/^\//', $options['file'])) {
 
+					// Fine...
+
+
+				} 
+
+				// Any path defined?
+				elseif (preg_match('/\//', $options['file'])) {
+
+					// Add the application/module view path to it.
+					$options['file'] = $viewPath . trim($options['file'], '/ ');
+
+				} 
+
+				// No '/' at all... Let's use the view path then...
+				else {
+
+					// Does this route have a model?
+					if (is_null($this->request->route->models)) {
+						throw new \Exception("This route does not have a model linked to it, so you have to define a path for your file. The path cannot be guessed.", 1);
+					}
+					
+					// Remove namespace
+					$model = $this->request->route->models[count($this->request->route->models) - 1];
+					$model = Str::removeNamespace($model);
+
+					// Convert it to a full template				
+					$options['file'] = $viewPath . Str::pluralize($model) . "/" . $options['file'];
+					
 				}
-
 
 			}
 
@@ -560,7 +698,7 @@
 		{
 
 			// Not needed?
-			if (is_null(static::$requiresAuth) || empty(static::$requiresAuth)) {
+			if (!isset(static::$requiresAuth) || is_null(static::$requiresAuth) || empty(static::$requiresAuth)) {
 				return true;
 			}
 
@@ -624,8 +762,8 @@
 
 		/**
 		 * Send a redirect header to the given location
-		 * @param  string $uri The Uri to redirect to
-		 * @param  string $statusCode 	(default: 302) The HTTP status code to use
+		 * @param  string  The Uri to redirect to
+		 * @param  string  The HTTP status code to use
 		 * @return void     
 		 */
 		protected function redirectTo($uri, $statusCode = 302)
@@ -682,8 +820,8 @@
 			foreach ($this->route->models as $index => $model) {
 
 				// Namespace it
-				$fullModel = "\\" . Application::getConfiguration()->applicationNamespace . "\\Models\\" . $model;
-				
+				$fullModel = $model;
+
 				// Look for the fitting id
 				if ($index == sizeof($this->route->models) - 1) {
 
@@ -714,7 +852,7 @@
 					try {
 
 						// Find the record
-						$varName = Application::$inflector->variablize($model);
+						$varName = Application::$inflector->variablize(Str::removeNamespace($model));
 						$this->$varName = $findMethod->invokeArgs(null, array($modelId));	
 
 					} catch (\ActiveRecord\RecordNotFound $e) {
@@ -737,22 +875,44 @@
 
 		}
 
+		/**
+		 * Getter for the Request parameters
+		 * @return \ChickenWire\Core\Store
+		 */
 		protected function __get_params() {
 			return $this->request->params;
 		}
+
+		/**
+		 * Getter for the Request Route 
+		 * 
+		 * @return \ChickenWire\Route
+		 */
 		protected function __get_route() {
 			return $this->request->route;
 		}
 
+		/**
+		 * Getter for the Html helper instance
+		 * @return \ChickenWire\Util\Html
+		 */
 		protected function __get_html() {
 			return \ChickenWire\Util\Html::instance();
 		}
+
+		/**
+		 * Getter for the Url helper instance
+		 * @return \ChickenWire\Util\Url
+		 */
 		protected function __get_url() {
 			return \ChickenWire\Util\Url::instance();
 		}
 
 
-
+		/**
+		 * Send a 404 error to the client
+		 * @return void
+		 */
 		protected function show404() 
 		{
 

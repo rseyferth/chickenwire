@@ -9,7 +9,15 @@
 	class Route extends Core\MagicObject
 	{
 
+		public static $modelMap = array();
+
 		protected static $_routes = array();
+		protected static $_currentRoute = null;
+
+		public static function current()
+		{
+			return self::$_currentRoute;
+		}
 
 		protected static $_propReadWrite = array('ssl', 'pattern', 'controller', 'action', 'methods', 'ssl', 'models', 'autoLoad', 'patternVariables', 'module');
 
@@ -123,6 +131,7 @@
 
 			// Store it!
 			$httpStatus = $status;
+			self::$_currentRoute = $foundRoute;
 			return $foundRoute;
 
 		}
@@ -184,7 +193,7 @@
 					if ($index < sizeof($modelClass) - 1) {
 
 						// Add the model-id-variable
-						$pattern .= '{#' . Application::$inflector->variablize($model) . "_id}";
+						$pattern .= '{#' . $model . ".id}";
 
 					}
 
@@ -402,6 +411,36 @@
 			}
 			
 
+			// Model given?
+			if (!is_null($this->_models)) {
+
+				// Store this route in the map
+				$mapKey = '';
+				foreach ($this->_models as $model) {
+					
+					// Remove namespace
+					$model = Str::removeNamespace($model);
+					$mapKey .= $model;
+
+				}
+
+				// In a module?
+				if (!is_null($this->_module)) {
+					$mapKey = $this->_module->namespace . '/' . $mapKey;
+				} else {
+					$mapKey = 'App/' . $mapKey;
+				}
+
+				// Already a route known?
+				if (!array_key_exists($mapKey, self::$modelMap)) {
+					self::$modelMap[$mapKey] = array();
+				}
+
+				// Add!
+				self::$modelMap[$mapKey][] = $this;
+
+			}
+
 			// Look for params in the pattern
 			preg_match_all("/({([^}]*)})/", $this->_pattern, $matches);
 			$this->_patternVariables = $matches[2];		
@@ -453,6 +492,77 @@
 			return $str;
 
 		}
+
+
+		/**
+		 * Replace fields in the Route with values from the Model instances
+		 * @param  \ChickenWire\Model $models Array of Model instances to use for values. The last in the array is assumed to be the primary Model to use for values.
+		 * @return string        The uri with the fields replaced
+		 */
+		public function replaceFields($models)
+		{
+
+
+			// Loop through my fields
+			$url = $this->_pattern;
+			foreach ($this->_patternVariables as $var) {
+
+				// Look up
+				$varName = $var[0] == '#' ? substr($var, 1) : $var;
+				
+				// Was there a dot (.) in it, signifying a different model?
+				if (strstr($varName, '.')) {
+
+					// Split it!
+					list($modelName, $varName) = explode(".", $varName);
+					
+					// Loop through model instances to see if we have a match for the model name
+					$model = null;
+					foreach ($models as $m) {
+
+						if (Str::removeNamespace(get_class($m)) == $modelName) {
+
+							// Use this model instead
+							$model = $m;
+							break;
+
+						}
+						
+					}
+					
+					// !Found?
+					if (is_null($model)) {
+
+						// Too bad...
+						throw new \Exception("You need to pass an Model instance of $modelName to generate a url for " . $this->_pattern, 1);
+						
+					}
+
+
+				} else {
+
+					// Use last model
+					$model = $models[count($models) - 1];
+
+				}
+
+
+				// Is there a slug var available?
+				$sluggedVarName = $varName . "Slug";
+				if ($model->attribute_exists($sluggedVarName)) {
+					$value = $model->$sluggedVarName;
+				} else {
+					$value = $model->$varName;
+				}
+
+				// Replace!
+				$url = str_replace('{' . $var . '}', strval($value), $url);
+
+			}
+			return $url;
+
+		}
+
 
 
 

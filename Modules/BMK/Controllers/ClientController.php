@@ -9,8 +9,7 @@
 	{
 
 		static $respondsTo = array(
-			Mime::HTML,
-			Mime::JSON => array("only" => array("index"))
+			Mime::HTML,	Mime::JSON
 		);
 
 		static $requiresAuth = "BMK";
@@ -21,14 +20,38 @@
 			$this->clients = Client::all();
 
 			//$this->render();	
-			$this->render();//"index.html");
+			$this->render();
 
 		}
 
 		public function show()
 		{
 
+			
+		}
 
+		public function add()
+		{
+			$this->client = new Client();
+		}
+
+		public function create()
+		{
+
+			$form = ($this->request->requestParams->getArray("Client"));
+			$client = new Client($form);
+			$client->save();
+
+			$this->render(array("json" => $client));
+
+
+			$this->render(array("nothing" => true));
+
+		}
+
+		public function edit()
+		{
+			$this->render("add");
 		}
 
 

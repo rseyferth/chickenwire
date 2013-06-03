@@ -3,6 +3,12 @@
 	namespace ChickenWire;
 
 	$namespaceMap = array();
+	/**
+	 * @ignore
+	 * @param  [type] $namespace [description]
+	 * @param  [type] $path      [description]
+	 * @return [type]            [description]
+	 */
 	function autoLoadNamespace($namespace, $path) {
 
 		// Set it!
@@ -13,7 +19,9 @@
 
 
 
-
+	/**
+	 * @ignore
+	 */
 	function autoLoad($class) {
 
 		// In the custom namespace mapping?
@@ -64,7 +72,9 @@
 		
 	}
 
-
+	/**
+	 * @ignore
+	 */
 	function initAutoLoad() {
 
 

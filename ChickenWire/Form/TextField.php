@@ -16,7 +16,8 @@
 		{
 
 			// Create the tag
-			$input = new Input($this->type, $this->name, $this->value, $this->html);
+			$this->html['value'] = $this->value;
+			$input = new Input($this->type, $this->name, null, $this->html);
 
 			// Render
 			return $input;

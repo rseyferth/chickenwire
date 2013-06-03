@@ -11,7 +11,7 @@
 	 * This extends the ActiveRecord Model, adding a few extra features. 
 	 *
 	 *
-	 * <h3>Authentication model</h3>
+	 * ##Authentication model##
 	 * To create a Model for authentication, using the Auth class, you can use
 	 * the configurator $authModel:
 	 *
@@ -29,15 +29,28 @@
 	class Model extends \ActiveRecord\Model 
 	{
 
+		/**
+		 * Configurator for authentication
+		 * @var string
+		 */
 		static $authModel; 
+
 
 		private static $_cwInitialized = false;
 		
+
+		/**
+		 * The Auth instance (if this Model was used for authentication)
+		 * @var \ChickenWire\Util\Auth
+		 */
 		protected static $auth;
 
 
 
-		// Override the table function, to initialize ChickenWire features
+		/**
+		 * Retrieve the Table instance for this Model
+		 * @return \ActiveRecord\Table
+		 */
 		static function table()
 		{
 
@@ -57,7 +70,7 @@
 
 		/**
 		 * Initialize ChickenWire featues
-		 * @param  \ActiveRecord\Table 	$table  The Table object to work with 
+		 * @param  \ActiveRecord\Table   The Table object to work with 
 		 * @return void
 		 */
 		private static function _initializeCW($table)
@@ -154,8 +167,8 @@
 
 		/**
 		 * Re-encrypt the password
-		 * @param  string $password The plain text password to re-encrypt
-		 * @param  string $salt     (default: '') Optional salt to encrypt with. If you leave this empty, a random salt will be generated.
+		 * @param  string 	The plain text password to re-encrypt
+		 * @param  string 	Optional salt to encrypt with. If you leave this empty, a random salt will be generated.
 		 * @return void
 		 */
 		public function resaltPassword($password, $salt = '')
@@ -172,6 +185,37 @@
 				$auth->saltField => $salt,
 				$auth->passwordField => $password
 			));
+
+		}
+
+
+
+		/**
+		 * Check if given attribute exists
+		 * @param  string  Attribute name
+		 * @return boolean           True or false
+		 */
+		public function attribute_exists($attrName)
+		{
+
+			// In default attributes
+			if (array_key_exists($attrName, $this->attributes())) return true;
+
+			// A getter available?
+			if (method_exists($this, "get_$attrName")) return true;			
+
+			return false;
+
+
+		}
+
+
+		public function getClass($namespaced = false)
+		{
+
+			$class = get_class($this);
+			if (!$namespaced) $class = Str::removeNamespace($class);
+			return $class;
 
 		}
 

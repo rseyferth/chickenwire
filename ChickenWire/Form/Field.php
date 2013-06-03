@@ -44,7 +44,7 @@
 			}
 
 			// Merge with default options
-			$options = array_merge_recursive(Arry::mergeStatic(get_called_class(), "defaultOptions"), $options);
+			$options = \ChickenWire\Util\Arry::mergeRecursiveDistinct(Arry::mergeStatic(get_called_class(), "defaultOptions"), $options);
 
 			// Loop and set options
 			foreach ($options as $option => $value) {

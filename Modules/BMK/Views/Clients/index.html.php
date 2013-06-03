@@ -1,13 +1,13 @@
-<p>Hallo wij zijn de index.</p>
+<h1>Index</h1>
 
-<ul>
 <?php
 
-	foreach($this->clients as $client) {
+	echo $this->html->ulFor($this->clients, function($client) {
 
-		echo ('<li>' . $this->html->linkTo($client, $client->name) . '</li>');
-
-	}
+		return $this->html->link($this->url->edit($client), $client->name);
+		
+	});
 
 ?>
-</ul>
+
+<?php echo $this->html->link($this->url->addClient, "Nieuwe klant."); ?><br />

@@ -2,7 +2,11 @@
 
 	use \ChickenWire\Route;
 	
+	Route::resources(array("Application\Models\Client", "Application\Models\Project"));
+
 	Route::resources("Application\Models\Client");
+	
+	Route::resources("User");
 
 
 	Route::match("/login", 

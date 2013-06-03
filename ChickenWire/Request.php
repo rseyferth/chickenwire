@@ -4,6 +4,9 @@
 
 	use \ChickenWire\Util\Mime;
 
+	/**
+	 * Request class
+	 */
 	class Request extends Core\MagicObject
 	{
 
@@ -33,14 +36,8 @@
 		public $params;
 
 
-		
-
 		public function __construct() 
 		{
-
-			//@TODO: CONTENT TYPE NEGOTIATION
-			/*var_dump(Mime::$contentTypeMap);
-			var_dump($_SERVER['HTTP_ACCEPT']);*/
 
 			// Get app config
 			$config = Application::getConfiguration();
@@ -105,7 +102,7 @@
 		 * 
 		 * @return void
 		 */
-		protected function _parsePreferredContent(Core\Configuration $config)
+		private function _parsePreferredContent(Core\Configuration $config)
 		{
 
 			// Start empty

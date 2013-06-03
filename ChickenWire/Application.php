@@ -18,78 +18,85 @@
 	 * Any PHP file in those directories will be loaded upon booting of the 
 	 * application.
 	 *
-	 * Possible application settings are:
-	 * <table border="1" cellpadding="3">
-	 * <thead>
-	 * 	<tr>
-	 * 		<th>Property</th>
-	 * 		<th>Default value</th>
-	 * 		<th>Description</th>
-	 * 	</tr>
-	 * </thead>
-	 * <tbody>
-	 * 	<tr>
-	 * 		<td>allowExtensionForDefaultMime</td>
-	 * 		<td>false</td>
-	 * 		<td>Whether to allow the extension at the end of the Uri for the defaultOutputMime. For example, if this is set to <i>true</i> requests ending in <i>.html</i> will also be accepted (providing the defaultOutputMime is Mime::HTML).</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>applicationNamespace</td>
-	 * 		<td>"Application"</td>
-	 * 		<td>The PHP namespace for your Application.</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>autoLoadModules</td>
-	 * 		<td>false</td>
-	 * 		<td>Whether to automatically load all modules that are found in your /Modules/ directory. If you leave this on false, you'll have to load each module individually, through Module::load - this allows for more configuration options.</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>enableCsrfGuard</td>
-	 * 		<td>true</td>
-	 * 		<td>Whether to require CSRF tokens for each form. See: Util\CsrfGuard</td>
-	 * 	</tr>
-	 * 	<tr>
-	 *  	<td>database</td>
-	 *  	<td></td>
-	 *  	<td>The ActiveRecord database connection to use.</td>
-	 * 	</tr>	  	
-	 * 	<tr>
-	 *  	<td>defaultOutputMime</td>
-	 *  	<td>Mime::HTML</td>
-	 *  	<td>The default ouptut Mime type that all Controllers will output. A Controller can override this setting by defining a $respondsTo configurator.</td>
-	 * 	</tr>
-	 * 	<tr>
-	 *  	<td>httpPort</td>
-	 *  	<td>80</td>
-	 *  	<td>The port for HTTP requests (only specify when it deviates from the default port 80, otherwise the port number will be added to all generated urls)</td>
-	 * 	</tr>
-	 * 	<tr>
-	 *  	<td>htmlSelfClosingSlash</td>
-	 *  	<td>true</td>
-	 *  	<td>Whether to end self-closing HTML tags with a /, for example &lt;br /&gt; or &lt;br&gt;</td>
-	 * 	</tr>
-	 * 	<tr>
-	 *  	<td>treatExtensionAsMimeType</td>
-	 *  	<td>true</td>
-	 *  	<td>Whether to use the request's file extensions in content type negotiation. If you set this to false, only the HTTP_ACCEPT headers will be used for respondTo clauses. When true, the extension will be the first content type the application will try to serve.</td>
-	 * 	</tr>
-	 * 	<tr>
-	 *  	<td>sslPort</td>
-	 *  	<td>443</td>
-	 *  	<td>The port for HTTPS requests (only specify when it deviates from the default port 443, otherwise the port number will be added to all generated urls)</td>
-	 * 	</tr>
-	 * 	<tr>
-	 *  	<td>timezone</td>
-	 *  	<td></td>
-	 *  	<td>The timezone used for date/time functions. This needs to be a valid PHP timezone ({@link http://php.net/manual/en/timezones.php}), for example Europe/Amsterdam.</td>
-	 * 	</tr>
-	 * 	<tr>
-	 *  	<td>webPath</td>
-	 *  	<td>/</td>
-	 *  	<td>Root of the application as seen from the webserver (e.g. /my-application/ for http://www.my-domain.com/my-application/).</td>
-	 * 	</tr>
-	 * </tbody>
-	 * </table>
+	 * ## Configuration ##
+	 * Possible application settings, and their default values, are: 
+	 *
+	 * **allowExtensionForDefaultMime**
+	 * <code>
+	 * $config->allowExtensionForDefaultMime = false;
+	 * </code>
+	 * Whether to allow the extension at the end of the Uri for the defaultOutputMime. For example, if this is set to <i>true</i> requests ending in <i>.html</i> will also be accepted (providing the defaultOutputMime is Mime::HTML).
+	 *
+	 * **applicationNamespace**
+	 * <code>
+	 * $config->applicationNamespace = "Application";
+	 * </code>
+	 * The PHP namespace for your Application.
+	 *
+	 * **autoLoadModules**
+	 * <code>
+	 * $config->autoLoadModules = false;
+	 * </code>
+	 * Whether to automatically load all modules that are found in your /Modules/ directory. If you leave this on false, you'll have to load each module individually, through Module::load - this allows for more configuration options.
+	 *
+	 * **database**
+	 * <code>
+	 * // Example code
+	 * $config->database = array(
+	 *    'development' => 'mysql://root:password@localhost/my_database;charset=utf8',	
+	 *    'production' => '[dbtype]://[user]:[pass]@[host]/[dbname];charset=[charset]'
+	 * );
+	 * </code>
+	 * The ActiveRecord database connection to use.
+	 *
+	 * **defaultOutputMime**
+	 * <code>
+	 * $config->defaultOutputMime = \ChickenWire\Util\Mime::HTML;
+	 * </code>
+	 * The default ouptut Mime type that all Controllers will output. Controllers can override this setting by defining a $respondsTo configurator.
+	 * 
+	 * **enableCsrfGuard**
+	 * <code>
+	 * $config->enableCsrfGuard = true;
+	 * </code>
+	 * Whether to require CSRF tokens for each form. Read more on {@link https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF) Cross-Site Request Forgery}
+	 *
+	 * **htmlSelfClosingSlash**
+	 * <code>
+	 * $config->htmlSelfClosingSlash = true;
+	 * </code>
+	 * Whether to end self-closing HTML tags with a /, for example &lt;br /&gt; or &lt;br&gt;
+	 *
+	 * **httpPort**
+	 * <code>
+	 * $config->httpPort = 80;
+	 * </code>
+	 * The port for HTTP requests (only specify when it deviates from the default port 80, otherwise the port number will be added to all generated urls).
+	 *
+	 * **sslPort**
+	 * <code>
+	 * $config->sslPort = 443;
+	 * </code>
+	 * The port for HTTPS requests (only specify when it deviates from the default port 443, otherwise the port number will be added to all generated urls).
+	 *
+	 * **treatExtensionAsMimeType**
+	 * <code>
+	 * $config->treatExtensionAsMimeType = true;
+	 * </code>
+	 * Whether to use the request's file extensions in content type negotiation. If you set this to false, only the HTTP_ACCEPT headers will be used for respondTo clauses. When true, the extension will be the first content type the application will try to serve.
+	 *
+	 * **timezone**
+	 * <code>
+	 * // Example code
+	 * $config->timezone = 'Europe/Amsterdam';
+	 * </code>
+	 * The timezone used for date/time functions. This needs to be a valid {@link http://php.net/manual/en/timezones.php PHP timezone}, for example "Europe/Amsterdam".</td>
+	 * 
+	 * **webPath**
+	 * <code>
+	 * $config->webPath = '/';
+	 * </code>
+	 * Root of the application as seen from the webserver (e.g. "/my-application/" for http://www.my-domain.com/my-application/).
 	 *
 	 * Each of these settings can be defined specifically for each environment, or
 	 * for all environments at once (see Configuration). 
@@ -97,6 +104,7 @@
 	 * @see  \ChickenWire\Core\Configuration
 	 * @see  \ChickenWire\Module
 	 * @see  \ChickenWire\Util\Mime
+	 * @see  \ChickenWire\Util\CsrfGuard	 
 	 * 
 	 * @package ChickenWire
 	 */
@@ -139,17 +147,16 @@
 
 
 
-		protected static $_instance;
-
 		/**
 		 * The default settings for the Application. These can be overridden in your config files.
 		 * 
 		 * @var array
+		 * @ignore
 		 */
 		public static $defaultSettings = array(
-			"webPath" => null,			// 
-			"httpPort" => null,			// 
-			"sslPort" => null, 			// 
+			"webPath" => null,
+			"httpPort" => null,
+			"sslPort" => null,
 
 			"enableCsrfGuard" => true,
 			"htmlSelfClosingSlash" => true,
@@ -174,13 +181,26 @@
 		 */
 		public $config;
 
+		/**
+		 * @ignore
+		 * @var [type]
+		 */
 		protected $_request;
+		/**
+		 * @ignore
+		 * @var [type]
+		 */
 		protected $_route;
+		/**
+		 * @ignore
+		 * @var [type]
+		 */
 		protected $_controller;
 
 		/**
 		 * Boot up the application (internal function)
 		 * @return void
+		 * @ignore
 		 */
 		protected function _boot() {
 
@@ -229,6 +249,7 @@
 		/**
 		 * Load and apply configuration files
 		 * @return void
+		 * @ignore
 		 */
 		protected function _configure() {
 
@@ -288,6 +309,11 @@
 
 		}
 
+		/**
+		 * Load all modules in the Modules directory
+		 * @return void
+		 * @ignore
+		 */
 		protected function _loadModules() 
 		{
 

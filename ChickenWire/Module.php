@@ -22,43 +22,33 @@
 	 * configure the module inline, through the load() method, like:
 	 *
 	 * <code>
-	 * Module::load("SomeModule");		// No extra configuration
+	 * // No extra configuration
+	 * Module::load("SomeModule");		
+	 * 
+	 * // Overriding default settings
 	 * Module::load("SomeModule", array(
-	 * 	"namespace" => "SomeModulesNamespace"		// Overriding default settings
+	 * 	"namespace" => "SomeModulesNamespace"		
 	 * ));
 	 * </code>
 	 *
-	 * When neither of the configuration options is used, the values will be guessed as follows:
+	 * When neither of the configuration options is used, the values will be guessed as follows (pseudo-code):
 	 *
-	 * <table border="1" cellpadding="3">
-	 * <thead>
-	 * 	<tr>
-	 * 		<th>Setting</th>
-	 * 		<th>Guess</th>
-	 * 		<th>Example for SomeModule</th>
-	 * 		<th>Description</th>
-	 * 	</tr>
-	 * </thead>
-	 * <tbody>
-	 * 	<tr>
-	 * 		<td>namespace</td>
-	 * 		<td>The name of the Module</td>
-	 * 		<td>SomeModule</td>
-	 * 		<td>The PHP namespace for your module.</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>path</td>
-	 * 		<td>MODULE_PATH + name of the module</td>
-	 * 		<td>/srv/www/htdocs/Modules/SomeModule</td>
-	 * 		<td>The full root path of the module.</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>urlPrefix</td>
-	 * 		<td>/ + slugified name of the module</td>
-	 * 		<td>/somemodule</td>
-	 * 		<td>The prefix for all routes defined in this module. You can also enter an empty string, so the routes will be the same as the application.</td>
-	 * 	</tr>
-	 * </table>
+	 * <code>
+	 * Module::load("SomeModule");
+	 * 
+	 * // The PHP namespace for the module
+	 * // e.g. SomeModule
+	 * $module->namespace = $module->name;
+	 *
+	 * // The full root path of the module.
+	 * // e.g. /srv/www/htdocs/Modules/SomeModule
+	 * $module->path = MODULE_PATH . $module->name;
+	 *
+	 * // The prefix for all routes defined in this module. You can also enter an empty string, 
+	 * // so the routes will be the same as the application.
+	 * // e.g. /somemodule
+	 * $module->urlPrefix = '/' . Str::slugify($module->name);
+	 * </code>
 	 *
 	 * When you use autoLoadModules (see Application), all subdirectories in the Modules/ directory
 	 * will be automatically loaded, with no extra configuration (except the Module.php config file). It will
@@ -78,17 +68,40 @@
 		{
 			return self::$_configuringModule;
 		}
+
+		/**
+		 * The Module that is currently loading configuration files, or false when no Module is loading config.
+		 * @var \ChickenWire\Model|false 
+		 */
 		protected static $_configuringModule = false;
 
+		/**
+		 * The properties that are available for reading through MagicObject
+		 * @var array
+		 */
 		protected static $_propRead = array("name", "path", "namespace", "urlPrefix");
 
+		/**
+		 * All loaded Modules
+		 * @var array
+		 */
 		protected static $_modules = array();
 
+		/**
+		 * Get all loaded Modules
+		 * @return array All loaded Modules
+		 */
 		public static function &all() {
 			return self::$_modules;
 		}
 
 
+		/**
+		 * Load a Module
+		 * @param  string  	The name of the Module
+		 * @param  array  	Array of options to apply to the Module (see above).
+		 * @return \ChickenWire\Module 		The created Module instance
+		 */
 		public static function load($name, $options = array()) {
 
 			// Module already loaded?
@@ -98,7 +111,8 @@
 
 			// Create and add
 			$module = new Module($name, $options);
-			self::$_modules[$name] =  $module;
+			self::$_modules[$name] = $module;
+			return $module;
 
 		}
 
@@ -108,6 +122,11 @@
 		protected $_namespace;
 		protected $_urlPrefix;
 
+		/**
+		 * Create a new Module (use Module::load instead)
+		 * @param string 	The Module's name.
+		 * @param array 	Module's options (see above).
+		 */
 		public function __construct($name, $options) {
 
 			// Localize
