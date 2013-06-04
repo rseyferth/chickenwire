@@ -1,1 +1,0 @@
-Hallo <?php echo $this->client->name; ?>
