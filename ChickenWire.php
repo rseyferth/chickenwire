@@ -1,12 +1,14 @@
 <?php
 
-	use ChickenWire\Application;
+	// Set APP root
+	define("APP_ROOT", __DIR__);			
 
 	// Start autoloading of classes
-	require_once 'ChickenWire/AutoLoad.php';
+	require 'vendor/autoload.php';
+	//require_once 'ChickenWire/AutoLoad.php';
 
 	// Now boot the application
-	Application::boot();
+	\ChickenWire\Application::boot();
 
 
 ?>

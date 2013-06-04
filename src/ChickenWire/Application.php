@@ -73,6 +73,18 @@
 	 * </code>
 	 * The port for HTTP requests (only specify when it deviates from the default port 80, otherwise the port number will be added to all generated urls).
 	 *
+	 * **sessionCookieExpireTime**
+	 * <code>
+	 * $config->sessionCookieExpireTime = 3600; // 1 hour
+	 * </code>
+	 * The expire time for the session cookie in seconds.
+	 *
+	 * **sessionRegenerateId**
+	 * <code>
+	 * $config->sessionRegenerateId = false;
+	 * </code>
+	 * Whether to generate a new PHP session id for each request, to prevent session fixation attacks.
+	 * 
 	 * **sslPort**
 	 * <code>
 	 * $config->sslPort = 443;
@@ -170,7 +182,12 @@
 			"autoLoadModules" => false,
 
 			"allowExtensionForDefaultMime" => false,
-			"treatExtensionAsMimeType" => true
+			"treatExtensionAsMimeType" => true,
+
+			"sessionCookieExpireTime" => 3600,
+			"sessionRegenerateId" => false
+
+
 		);
 
 
@@ -204,14 +221,18 @@
 		 */
 		protected function _boot() {
 
-			// Start session :)
-			session_start();
-
 			// Create local inflector
 			static::$inflector = Inflector::instance();
 
 			// Create configuration
 			$this->_configure();
+
+			// Start session :)
+			session_set_cookie_params($this->config->sessionCookieExpireTime);
+			if ($this->config->sessionRegenerateId) {
+				session_regenerate_id();
+			}
+			session_start();
 
 			// Auto load modules?
 			if ($this->config->autoLoadModules == true) {
@@ -258,7 +279,6 @@
 			
 			// Define some paths
 			define("CHICKENWIRE_PATH", dirname(__FILE__));
-			define("APP_ROOT", dirname(__DIR__));
 			define("APP_PATH", APP_ROOT . "/Application");
 			define("CONFIG_PATH", APP_PATH . "/Config");
 			define("CONTROLLER_PATH", APP_PATH . "/Controllers");

@@ -7,17 +7,17 @@
             "email": "ruben.seyferth@gmail.com"
         }
     ],
+    "autoload": {
+        "files": ["src/ChickenWire/AutoLoad.php"]
+    },
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/rseyferth/html-object"
-        }
+     
     ],
     "require": {
         "monolog/monolog": "1.5.*",
         "php-activerecord/php-activerecord": "1.*",
         "eddieantonio/bcrypt": "0.3.0",
-        "anahkiasen/html-object": "dev-master",
+        "wipkip/html-object": "dev-master",
         "ikimea/browser": "dev-master"
     }
 }

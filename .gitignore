@@ -1,4 +1,5 @@
-.sass-cache
+src/.sass-cache
 vendor/
 composer.lock
-Application/Public/docs/
+Application/
+Modules/

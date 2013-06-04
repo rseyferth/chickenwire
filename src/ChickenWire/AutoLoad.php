@@ -2,7 +2,14 @@
 
 	namespace ChickenWire;
 
-	$namespaceMap = array();
+	class AutoLoad
+	{
+
+		static $namespaceMap = array();
+	
+	}	
+
+
 	/**
 	 * @ignore
 	 * @param  [type] $namespace [description]
@@ -12,7 +19,7 @@
 	function autoLoadNamespace($namespace, $path) {
 
 		// Set it!
-		global $namespaceMap;
+		$namespaceMap = AutoLoad::$namespaceMap;
 		$namespaceMap[rtrim($namespace, '\\ ')] = rtrim($path, '/ ');
 
 	}
@@ -25,7 +32,7 @@
 	function autoLoad($class) {
 
 		// In the custom namespace mapping?
-		global $namespaceMap;
+		$namespaceMap = AutoLoad::$namespaceMap;
 		foreach ($namespaceMap as $ns => $path) {
 
 			// Does the namespace match?
@@ -41,7 +48,7 @@
 			}
 
 		}
-
+var_dump($class);
 		// Look in my parent dir
 		$filename = dirname(__DIR__) . '/' . preg_replace("/\\\/", '/', $class) . '.php';
 		if (file_exists($filename)) {
@@ -78,8 +85,8 @@
 	function initAutoLoad() {
 
 
-		// Include composer's autoloading
-		require_once dirname(__DIR__) . '/vendor/autoload.php';
+		/*// Include composer's autoloading
+		require_once APP_ROOT . '/vendor/autoload.php';*/
 
 		// Register my autoloading function (prepending)
 		spl_autoload_register('ChickenWire\autoLoad', true, true);
