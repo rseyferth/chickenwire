@@ -234,6 +234,9 @@
 			}
 			session_start();
 
+			// Apply Application's namespace
+			AutoLoad::autoLoadNamespace($this->config->applicationNamespace, APP_PATH);
+
 			// Auto load modules?
 			if ($this->config->autoLoadModules == true) {
 				$this->_loadModules();

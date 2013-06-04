@@ -7,22 +7,23 @@
 
 		static $namespaceMap = array();
 	
+
+		/**
+		 * @ignore
+		 * @param  [type] $namespace [description]
+		 * @param  [type] $path      [description]
+		 * @return [type]            [description]
+		 */
+		static function autoLoadNamespace($namespace, $path) {
+
+			// Set it!
+			self::$namespaceMap[rtrim($namespace, '\\ ')] = rtrim($path, '/ ');
+
+		}
+
+
 	}	
 
-
-	/**
-	 * @ignore
-	 * @param  [type] $namespace [description]
-	 * @param  [type] $path      [description]
-	 * @return [type]            [description]
-	 */
-	function autoLoadNamespace($namespace, $path) {
-
-		// Set it!
-		$namespaceMap = AutoLoad::$namespaceMap;
-		$namespaceMap[rtrim($namespace, '\\ ')] = rtrim($path, '/ ');
-
-	}
 
 
 
@@ -48,7 +49,7 @@
 			}
 
 		}
-var_dump($class);
+
 		// Look in my parent dir
 		$filename = dirname(__DIR__) . '/' . preg_replace("/\\\/", '/', $class) . '.php';
 		if (file_exists($filename)) {
