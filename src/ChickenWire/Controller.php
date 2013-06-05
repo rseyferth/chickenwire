@@ -86,6 +86,7 @@
 
 		private $_renderingTemplate;
 		private $_buffering;
+		private $_bufferingTo;
 
 		private $_rendered;
 
@@ -386,6 +387,7 @@
 
 				// Start buffering
 				$this->_buffering = true;
+				$this->_bufferingTo = "main";
 				ob_start();
 
 				// Render template?
@@ -461,6 +463,61 @@
 			if (array_key_exists("xml", $options)) {
 				$this->_renderSerialized("xml", $options);
 			}
+
+		}
+
+
+		protected function contentFor($block, $callback)
+		{
+
+			// Currently buffering?
+			$wasBuffering = $this->_buffering;
+			$wasBufferingTo = $this->_bufferingTo;
+			if ($wasBuffering) {
+
+				// Stop and add.
+				$content = ob_get_contents();
+				if (strlen($content)) ob_end_clean();
+				if (!array_key_exists($wasBufferingTo, $this->_renderedContent)) {
+					$this->_renderedContent[$wasBufferingTo] = '';
+				}
+				$this->_renderedContent[$wasBufferingTo] .= $content;
+
+			}
+
+			// Now start buffering for 'block'
+			$this->_bufferingTo = $block;
+			$this->_buffering = true;
+
+			// Callback a string?
+			if (is_string($callback)) {
+
+				// Just echo it
+				echo $callback;
+
+			} else {
+
+				// Do the callback now
+				$callback();
+
+			}
+
+			//  Stop buffering
+			$content = ob_get_contents();
+			if (strlen($content)) ob_end_clean();
+			if (!array_key_exists($block, $this->_renderedContent)) {
+				$this->_renderedContent[$block] = '';
+			}
+			$this->_renderedContent[$block] .= $content;
+
+
+			// Back to where we were
+			$this->_buffering = $wasBuffering;
+			$this->_bufferingTo = $wasBufferingTo;
+			if ($this->_buffering) {
+				ob_start();
+			}
+
 
 		}
 
