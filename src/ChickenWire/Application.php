@@ -340,7 +340,7 @@
 			\HtmlObject\Traits\Tag::$useSelfClosingSlash = $this->config->htmlSelfClosingSlash;
 
 			// Set the webPath
-			$this->config->webPath = trim($this->config->webPath, ' /');
+			$this->config->webPath = rtrim($this->config->webPath, ' /');
 
 		}
 
