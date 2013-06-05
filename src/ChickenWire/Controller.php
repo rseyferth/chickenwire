@@ -195,8 +195,8 @@
 		private function _finish()
 		{
 
-			// Any content rendered?
-			if (count($this->_renderedContent) == 0) return;
+			// Check layout path
+			$layoutPath = !is_null($this->request->route->module) ? $this->request->route->module->path . '/Layouts' : LAYOUT_PATH;
 
 			// Layout set?
 			if (!isset($this->_layout)) {
@@ -205,12 +205,12 @@
 				if (!is_null(static::$layout)) {
 
 					// Use that.
-					$this->_layout = LAYOUT_PATH . '/' . static::$layout;
+					$this->_layout = $layoutPath . '/' . static::$layout;
 
 				} elseif (!is_null($this->request->route->module) && !is_null($this->request->route->module->defaultLayout)) {
 
 					// Use that with module info
-					$this->_layout = $this->request->route->module->path . '/Layouts/' . $this->request->route->module->defaultLayout;
+					$this->_layout = $layoutPath . '/' . $this->request->route->module->defaultLayout;
 					
 
 				} else {
@@ -231,7 +231,13 @@
 			} else {
 
 				// Guess the extension
-				$this->_layout = $this->_guessExtension($this->_layout);
+				$layoutFile = $this->_guessExtension($this->_layout);
+				
+				// Not found?
+				if ($layoutFile === false) {
+					throw new \Exception("Couldn't find layout for " . $this->_layout, 1);					
+				}
+				$this->_layout = $layoutFile;
 
 				// Create and render the layout
 				$layout = new Layout($this->_layout, $this->_renderedContent);

@@ -169,6 +169,7 @@
 			// Store settings
 			$this->_namespace = $settings['namespace'];
 			$this->_urlPrefix = rtrim($settings['urlPrefix'], '/ ');
+			$this->_defaultLayout = $settings['defaultLayout'];
 
 			// Load configuration
 			$this->_loadConfig();
