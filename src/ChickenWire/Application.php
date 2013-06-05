@@ -261,7 +261,7 @@
 			$this->_request = new Request();
 			
 			// Check if static file exists?
-			if ($this->config->staticThroughChickenWire) {
+			if ($this->config->staticThroughChickenWire && $this->_request->rawUri != '') {
 			
 				// In application?
 				$filename = PUBLIC_PATH . $this->_request->rawUri;
