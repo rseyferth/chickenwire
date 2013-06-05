@@ -172,7 +172,7 @@
 		 * @ignore
 		 */
 		public static $defaultSettings = array(
-			"webPath" => null,
+			"webPath" => "/",
 			"httpPort" => null,
 			"sslPort" => null,
 
@@ -338,6 +338,9 @@
 
 			// Set self closing slash
 			\HtmlObject\Traits\Tag::$useSelfClosingSlash = $this->config->htmlSelfClosingSlash;
+
+			// Set the webPath
+			$this->config->webPath = trim($this->config->webPath, ' /');
 
 		}
 
