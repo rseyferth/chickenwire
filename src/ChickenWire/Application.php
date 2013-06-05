@@ -49,6 +49,12 @@
 	 * </code>
 	 * The ActiveRecord database connection to use.
 	 *
+	 * **defaultLayout**
+	 * <code>
+	 * $config->defaultLayout = "application";
+	 * </code>
+	 * The default layout to use for all controllers. You can override this in both Controllers and Modules.
+	 * 
 	 * **defaultOutputMime**
 	 * <code>
 	 * $config->defaultOutputMime = \ChickenWire\Util\Mime::HTML;
@@ -178,6 +184,8 @@
 			"defaultOutputMime" => Mime::HTML,
 			"defaultCharset" => "UTF-8",
 
+			"defaultLayout" => "application",
+
 			"timezone" => "",
 			"autoLoadModules" => false,
 
@@ -285,6 +293,7 @@
 			define("APP_PATH", APP_ROOT . "/Application");
 			define("CONFIG_PATH", APP_PATH . "/Config");
 			define("CONTROLLER_PATH", APP_PATH . "/Controllers");
+			define("LAYOUT_PATH", APP_PATH . "/Layouts");
 			define("MODEL_PATH", APP_PATH . "/Models");
 			define("VIEW_PATH", APP_PATH . "/Views");
 			define("MODULE_PATH", APP_ROOT . "/Modules");

@@ -12,8 +12,8 @@ RewriteRule ^(.+) %{DOCUMENT_ROOT}Application/Public/$1 [L]
 
 # BMK Module Public files
 RewriteCond		  %{REQUEST_URI} ^/bmk/(.+)
-RewriteCond 	  %{DOCUMENT_ROOT}/Modules/BMK/Public/$1 -f [OR]
-RewriteCond 	  %{DOCUMENT_ROOT}/Modules/BMK/Public/$1 -d
+RewriteCond 	  %{DOCUMENT_ROOT}Modules/BMK/Public/$1 -f [OR]
+RewriteCond 	  %{DOCUMENT_ROOT}Modules/BMK/Public/$1 -d
 RewriteRule ^bmk/(.+) %{DOCUMENT_ROOT}Modules/BMK/Public/$1 [L]
 
 # File not found in any of the static directories (>> redirect to ChickenWire)

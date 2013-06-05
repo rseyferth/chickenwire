@@ -79,7 +79,7 @@
 		 * The properties that are available for reading through MagicObject
 		 * @var array
 		 */
-		protected static $_propRead = array("name", "path", "namespace", "urlPrefix");
+		protected static $_propRead = array("name", "path", "namespace", "urlPrefix", "defaultLayout");
 
 		/**
 		 * All loaded Modules
@@ -122,6 +122,8 @@
 		protected $_namespace;
 		protected $_urlPrefix;
 
+		protected $_defaultLayout;
+
 		/**
 		 * Create a new Module (use Module::load instead)
 		 * @param string 	The Module's name.
@@ -135,7 +137,8 @@
 			// Default settings
 			$defaultOptions = array(
 				"namespace" => $name,
-				"urlPrefix" => '/' . Str::slugify($name)
+				"urlPrefix" => '/' . Str::slugify($name),
+				"defaultLayout" => null
 			);
 
 			// Path given?

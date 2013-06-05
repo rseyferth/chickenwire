@@ -58,6 +58,12 @@
 		static $requiresAuth;
 
 
+		/**
+		 * Configurator for layouts
+		 * @var string|boolean
+		 */
+		static $layout;
+
 
 		private static $_instance;
 
@@ -76,6 +82,11 @@
 		protected $auth;
 
 
+		private $_renderedContent;
+
+		private $_renderingTemplate;
+		private $_buffering;
+
 		private $_rendered;
 
 		/**
@@ -88,6 +99,8 @@
 
 
 		private $_actionRespondsTo;
+
+		private $_layout;
 
 
 		/**
@@ -106,6 +119,10 @@
 			// Default values
 			$this->_rendered = false;
 			$this->contentType = null;
+			$this->_renderedContent = array();
+			$this->_renderingTemplate = false;
+			$this->_layout = null;
+			$this->_buffering = false;
 
 			// No responds to set?
 			if (!isset(static::$respondsTo)) {
@@ -156,6 +173,8 @@
 				// Call to action
 				$this->_callToAction($reflection);
 
+				// Show result
+				$this->_finish();
 				
 
 			} else {
@@ -166,6 +185,62 @@
 
 
 		}
+
+		/**
+		 * When the action has completed, the finish method will 
+		 * tie up loose ends
+		 * 
+		 * @return void
+		 */
+		private function _finish()
+		{
+
+			// Any content rendered?
+			if (count($this->_renderedContent) == 0) return;
+
+			// Layout set?
+			if (!isset($this->_layout)) {
+
+				// Layout in controller?
+				if (!is_null(static::$layout)) {
+
+					// Use that.
+					$this->_layout = LAYOUT_PATH . '/' . static::$layout;
+
+				} elseif (!is_null($this->request->route->module) && !is_null($this->request->route->module->defaultLayout)) {
+
+					// Use that with module info
+					$this->_layout = $this->request->route->module->path . '/Layouts/' . $this->request->route->module->defaultLayout;
+					
+
+				} else {
+
+					// Use app's default.
+					$this->_layout = LAYOUT_PATH . '/' . Application::getConfiguration()->defaultLayout;
+
+				}
+
+			}
+
+			// No layout?
+			if ($this->_layout === false) {
+
+				// Just output the content then.
+				echo $this->_renderedContent['main'];
+
+			} else {
+
+				// Guess the extension
+				$this->_layout = $this->_guessExtension($this->_layout);
+
+				// Create and render the layout
+				$layout = new Layout($this->_layout, $this->_renderedContent);
+
+			}
+
+
+		}
+
 
 		private function _checkIfActionReponds()
 		{
@@ -285,27 +360,56 @@
 		protected function render($options = null)
 		{
 
-			// We've rendered
-			$this->_rendered = true;
-
 			// Figure out the options
-			$this->_interpretOptions($options);
+			if ($this->_renderingTemplate) {
+				$this->_interpretOptionsWithinView($options);
+			} else {
+				$this->_interpretOptions($options);
+			}
+			
 			
 			// Nothing?
 			if (array_key_exists("nothing", $options) && $options['nothing'] == true) {
 				return;
 			}
 
-			// Render template?
-			if (array_key_exists("template", $options)) {
-				$this->_renderTemplate($options);
-				return;
-			}
 
-			// Render file?
-			if (array_key_exists("file", $options)) {
-				$this->_renderFile($options);
+			// Buffered rendering?
+			if ((array_key_exists("template", $options) || array_key_exists("file", $options) || array_key_exists("inline", $options)) && 
+					$this->_buffering == false) {
+
+				// Start buffering
+				$this->_buffering = true;
+				ob_start();
+
+				// Render template?
+				if (array_key_exists("template", $options)) {
+					$this->_renderTemplate($options);
+				}
+
+				// Render file?
+				elseif (array_key_exists("file", $options)) {
+					$this->_renderFile($options);				
+				}
+
+				// Render inline?
+				elseif (array_key_exists("inline", $options)) {
+					echo $options['inline'];
+				}
+
+				// Get the rendered content
+				$this->_buffering = false;
+				$content = ob_get_contents();
+				ob_end_clean();
+
+				// Store in rendered content
+				if (!array_key_exists("main", $this->_renderedContent)) {
+					$this->_renderedContent['main'] = $content;
+				} else {
+					$this->_renderedContent['main'] .= $content;
+				}
 				return;
+
 			}
 
 			// Json?
@@ -322,6 +426,7 @@
 			// We start out with nothing
 			$filename = null;
 			$contentType = null;
+			$this->_renderingTemplate = true;
 
 			/**
 			 * This is for a template that already have a file extension.
@@ -402,6 +507,8 @@
 			$this->contentType = Mime::byExtension(Str::getContentExtension($options['template']));
 			Http::sendMimeType($this->contentType);
 
+			// We've rendered
+			$this->_rendered = true;
 
 			// Let's render it :)
 			require $options['template'];
@@ -543,6 +650,18 @@
 
 		}
 
+
+		/**
+		 * Interpret the options given to a render call inside a view.
+		 * @param  array    The options to interpret by reference.
+		 * @return void
+		 */
+		private function _interpretOptionsWithinView(&$options)
+		{
+
+			var_dump($options);
+
+		}
 
 
 		private function _interpretOptions(&$options)
