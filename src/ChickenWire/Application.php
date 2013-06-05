@@ -268,7 +268,7 @@
 				if (file_exists($filename)) {
 					
 					// Mime available?
-					if (!function_exists("mime_content_type")) {
+					if (function_exists("mime_content_type")) {
 						$mime = mime_content_type($filename);
 					} else {
 

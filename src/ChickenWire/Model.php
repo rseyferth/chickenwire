@@ -26,7 +26,7 @@
 	 *
 	 * @package ChickenWire
 	 */
-	class Model extends \ActiveRecord\Model 
+	class Model extends \ActiveRecord\Model implements \ChickenWire\Serialization\ISerializable
 	{
 
 		/**
@@ -216,6 +216,19 @@
 			$class = get_class($this);
 			if (!$namespaced) $class = Str::removeNamespace($class);
 			return $class;
+
+		}
+
+
+		public function toObject($options = array())
+		{
+
+			// Include root?
+			if (array_key_exists("includeRoot", $options) && $options['includeRoot'] == true) {
+				return array(strtolower($this->getClass()) => $this->attributes());
+			} else {
+				return $this->attributes();
+			}
 
 		}
 

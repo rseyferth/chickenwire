@@ -6,9 +6,9 @@ RewriteEngine On
 
 
 # Check if the file exists in the Application Public directory
-#RewriteCond 	  %{DOCUMENT_ROOT}Application/Public/%{REQUEST_URI} -f [OR]
-#RewriteCond 	  %{DOCUMENT_ROOT}Application/Public/%{REQUEST_URI} -d
-#RewriteRule ^(.+) %{DOCUMENT_ROOT}Application/Public/$1 [L]
+RewriteCond 	  %{DOCUMENT_ROOT}Application/Public/%{REQUEST_URI} -f [OR]
+RewriteCond 	  %{DOCUMENT_ROOT}Application/Public/%{REQUEST_URI} -d
+RewriteRule ^(.+) %{DOCUMENT_ROOT}Application/Public/$1 [L]
 
 # BMK Module Public files
 RewriteCond		  %{REQUEST_URI} ^/bmk/(.+)

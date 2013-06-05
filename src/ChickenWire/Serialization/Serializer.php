@@ -5,6 +5,8 @@
 	abstract class Serializer
 	{
 
+		static $includeRoot = false;
+
 		static function get($type) {
 
 			// Create classname from it
@@ -13,25 +15,49 @@
 
 		}
 
+		public $serialized;
 
-		public function serialize($input, $toString = false)
+
+		public function serialize($input)
 		{
-
-			// Result
-			$result = null;
 
 			// Is it an array?
 			if (is_array($input)) {
 
+				// Loop and serialize all
+				$result = array();
+				foreach ($input as $key => $item) {
+					$result[$key] = static::serialize($item, false);
+				}
 
 
+			} elseif (is_object($input) && $input instanceof ISerializable) {
+
+				// Hello
+				$result = $input->toObject(array(
+					"includeRoot" => static::$includeRoot
+				));
+			
 			} else {
 
-				// Is it Iserializable
+				// Just serialize it as it is
+				$result = $input;
 
 			}
 
+			// Store and return
+			$this->serialized = $result;
+			return $result;
 
+
+		}
+
+		abstract public function toString();
+
+
+		public function __toString()
+		{
+			return $this->toString();
 		}
 
 	}

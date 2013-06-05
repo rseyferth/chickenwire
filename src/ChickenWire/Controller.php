@@ -678,11 +678,11 @@
 			// Can we find a mime type for it?
 			$this->contentType = Mime::byExtension($type);
 			
-			// Create a serializer
+			// Serialize it
 			$serializer = \ChickenWire\Serialization\Serializer::get($type);
+			$serializer->serialize($data, true);
+			$response = $serializer->toString();
 
-			// Convert
-			$response = $serializer->serialize($data, true);
 
 			// Header.
 			Http::sendMimeType($this->contentType);
