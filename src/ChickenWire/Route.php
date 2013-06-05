@@ -377,7 +377,7 @@
 			// Model passed?
 			if (array_key_exists('model', $options)) {
 				$options['models'] = array($options['model']);
-				unsert($options['model']);
+				unset($options['model']);
 			}
 
 			// No controller defined?
