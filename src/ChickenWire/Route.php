@@ -374,6 +374,12 @@
 				$options['action'] = $to[1];
 			}
 
+			// Model passed?
+			if (array_key_exists('model', $options)) {
+				$options['models'] = array($options['model']);
+				unsert($options['model']);
+			}
+
 			// No controller defined?
 			if (!array_key_exists('controller', $options)) {
 				throw new \Exception("You cannot have a route without a 'controller' or a 'to' parameter.", 1);
