@@ -46,7 +46,7 @@
 			if (!isset(self::$_modelMap)) {
 			
 				// In which module are we now? Models are indexed by module/application, so we keep those url's seperate
-				$modelPrefix = is_null(Route::current()->module) ? 'App/' : Route::current()->module->namespace;
+				$modelPrefix = is_null(Route::current()->module) ? 'App' : Route::current()->module->namespace;
 			
 				// Loop through Route model map
 				self::$_modelMap = array();
