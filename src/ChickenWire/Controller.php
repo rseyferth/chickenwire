@@ -381,7 +381,7 @@
 
 
 			// Buffered rendering?
-			if ((array_key_exists("template", $options) || array_key_exists("file", $options) || array_key_exists("inline", $options)) && 
+			if ((array_key_exists("template", $options) || array_key_exists("file", $options) || array_key_exists("text", $options)) && 
 					$this->_buffering == false) {
 
 				// Start buffering
@@ -399,8 +399,8 @@
 				}
 
 				// Render inline?
-				elseif (array_key_exists("inline", $options)) {
-					echo $options['inline'];
+				elseif (array_key_exists("text", $options)) {
+					echo $options['text'];
 				}
 
 				// Get the rendered content
@@ -418,9 +418,48 @@
 
 			}
 
+			// Partial?
+			if (array_key_exists("partial", $options)) {
+
+				// Guess the extension
+				$partial = $this->_guessExtension($options['partial']);
+				if ($partial === false) {
+					throw new \Exception("Could not find partial for " . $options['partial'], 1);					
+				}
+				$options['partial'] = $partial;
+
+				// Collection?
+				if (array_key_exists("collection", $options)) {
+
+					// Loop!
+					foreach($options['collection'] as $item) {
+
+						// Set item to local 
+						if (!array_key_exists('locals', $options)) {
+							$options['locals'] = array();
+						}
+						$options['locals'][$options['as']] = $item;
+
+						$this->_renderPartial($options);
+					}
+
+				} else {
+
+					// Just the once.
+					$this->_renderPartial($options);
+
+				}
+
+			}
+
 			// Json?
 			if (array_key_exists("json", $options)) {
 				$this->_renderSerialized("json", $options);
+			}
+
+			// Xml?
+			if (array_key_exists("xml", $options)) {
+				$this->_renderSerialized("xml", $options);
 			}
 
 		}
@@ -521,6 +560,22 @@
 
 		}
 
+		private function _renderPartial($options)
+		{
+
+			// Loop through locals
+			if (array_key_exists("locals", $options)) {
+				foreach ($options['locals'] as $key => $value) {
+					$$key = $value;
+				}
+			}
+
+			// Show the file
+			require $options['partial'];
+			
+
+		}
+
 		private function _renderFile($options)
 		{
 
@@ -561,6 +616,13 @@
 			// Can we find a mime type for it?
 			$this->contentType = Mime::byExtension($type);
 			
+			// An array?
+			if (is_array($data)) {
+
+				// 
+
+			}
+
 			// Try to serialize
 			$method = "to_" . strtolower($type);
 			$response = $data->$method();
@@ -665,7 +727,100 @@
 		private function _interpretOptionsWithinView(&$options)
 		{
 
-			var_dump($options);
+			// Nut'n?
+			if (is_null($options)) {
+				throw new \Exception("Cannot execute an empty render inside a view.", 1);				
+			}
+
+			// A simple string?
+			if (is_string($options)) {
+				$options = array("partial" => $options);
+
+			}
+
+			// Not an array?
+			if (!is_array($options)) {
+				$options = array($options);
+			}
+
+			// Empty?
+			if (count($options) == 0) {
+
+				// Render nothing.
+				$options = array("nothing" => true);
+				return;
+
+			}
+			// Determine my view path
+			$viewPath = !is_null($this->request->route->module) ? $this->request->route->module->path . "/Views/" : VIEW_PATH . "/";
+
+			// Model instances (or empty array)?
+			if (isset($options[0]) && is_object($options[0]) && is_subclass_of($options[0], "\\ChickenWire\\Model")) {
+
+				// Get class name
+				$modelClass = $options[0]->getClass();
+				
+				// Do a partial render for the record set
+				$options = array(
+					"partial" => strtolower($modelClass),
+					"collection" => $options
+				);
+
+			}
+
+			// Partial?
+			if (array_key_exists("partial", $options)) {
+
+				// An object?
+				if (array_key_exists("object", $options)) {
+					$options['collection'] = array($options['object']);
+					unset($options['object']);
+				}
+
+				// Collection?
+				if (array_key_exists("collection", $options) && !array_key_exists("as", $options)) {
+
+					/// Get class name
+					$modelClass = $options['collection'][0]->getClass();
+					$options['as'] = strtolower($modelClass);
+
+				}
+
+				// A slashed location?
+				if (strstr($options['partial'], '/')) {
+
+
+				} else {
+
+					// Does this route have a model?
+					if (is_null($this->request->route->models)) {
+						throw new \Exception("This route does not have a model linked to it, so you have to define a template, instead of an action.", 1);
+					}
+					
+					// Remove namespace
+					$model = $this->request->route->models[count($this->request->route->models) - 1];
+					$model = Str::removeNamespace($model);
+
+					// Convert it to a full template				
+					$options['partial'] = Str::pluralize($model) . "/" . $options['partial'];
+					
+				}
+
+				// Add _ to filename
+				if (!preg_match('/\/_[a-z]+$/', $options['partial'])) {
+					
+					// Add _
+					$options['partial'] = substr($options['partial'], 0, strrpos($options['partial'], "/")) . '/_' . substr($options['partial'], strrpos($options['partial'], "/") + 1);
+
+				}
+
+				// Add view path
+				$options['partial'] = $viewPath . $options['partial'];
+
+			}
+
+
+			// Any other options..?
 
 		}
 
