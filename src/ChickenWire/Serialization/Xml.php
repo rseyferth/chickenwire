@@ -12,20 +12,25 @@
 		public function toString()
 		{
 
-			//return '<xml></xml>';
+			// Is the root an array of items?
+			if (count($this->serialized) > 0 && array_key_exists(0, $this->serialized)) {
+
+				// Get class of first item
+				$itemName = key($this->serialized[0]);
+				$root = \ChickenWire\Util\Str::pluralize($itemName);
+
+			} else {
+				$root = null;
+			}
 			
 			// Create XML writer
 			$this->writer = new \XmlWriter();
 			$this->writer->openMemory();
-			$this->writer->startDocument('1.0', 'UTF-8');
-			$this->writer->startElement("listing");
+			if (!is_null($root)) $this->writer->startElement($root);
 			$this->write($this->serialized);
-			$this->writer->endElement();
+			if (!is_null($root)) $this->writer->endElement();
 			$this->writer->endDocument();
 			$xml = $this->writer->outputMemory(true);
-
-			if (@$this->options['skip_instruct'] == true)
-				$xml = preg_replace('/<\?xml version.*?\?>/','',$xml);
 
 
 

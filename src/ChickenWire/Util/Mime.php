@@ -201,6 +201,38 @@
 
 		}
 
+		public static function byFile($filename)
+		{
+			// By fileinfo?
+			$mime = null;
+			if (function_exists("finfo_open")) {
+
+				$info = finfo_open(FILEINFO_MIME_TYPE);
+				$mime = finfo_file($info, $filename);
+				$mime = Mime::byContentType($mime);
+
+			} elseif (function_exists("mime_content_type")) {
+				$mime = mime_content_type($filename);
+				$mime = Mime::byContentType($mime);
+			}
+
+			// Text?
+			if (is_null($mime) || preg_match('/^text\//', $mime->getContentType())) {
+
+				// Check extension
+				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				if ($ext == '') {
+					$mime = \ChickenWire\Application::getConfiguration()->defaultOutputMime;
+				} else {
+					$mime = Mime::byExtension($ext);
+				}
+
+			}
+
+			return $mime;
+
+		}
+
 		/**
 		 * Find a Mime type by a contentType
 		 * @param  string $contentType The content type to look for, such as application/pdf.

@@ -268,20 +268,8 @@
 				if (file_exists($filename)) {
 					
 					// Mime available?
-					if (function_exists("mime_content_type")) {
-						$mime = mime_content_type($filename);
-					} else {
-
-						// Check extension
-						$ext = pathinfo($filename, PATHINFO_EXTENSION);
-						if ($ext == '') {
-							$mime = $this->config->defaultOutputMime->getContentType();
-						} else {
-							$mime = Mime::byExtension($ext)->getContentType();
-						}
-
-					}
-
+					$mime = Mime::byFile($filename);
+					
 					// Send header
 					Http::sendMimeType($mime);
 					echo file_get_contents($filename);

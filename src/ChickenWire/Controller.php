@@ -90,6 +90,8 @@
 
 		private $_rendered;
 
+		private $_respondToClauses;
+
 		/**
 		 * The content type of the response the Controller will send.
 		 * This will be null until content negotiation is complete.
@@ -124,6 +126,7 @@
 			$this->_renderingTemplate = false;
 			$this->_layout = null;
 			$this->_buffering = false;
+			$this->_respondToClauses = array();
 
 			// No responds to set?
 			if (!isset(static::$respondsTo)) {
@@ -469,6 +472,26 @@
 		}
 
 
+		protected function respondTo($mime, \Closure $callback = null)
+		{
+
+			// An array?
+			if (is_array($mime)) {
+
+				// Loop
+				foreach ($mime as $key => $callback) {
+					$this->respondTo($key, $callback);
+				}
+				return;
+
+			}
+
+			// Already a callback?
+			if (!array_key_exists($mime, $this->_respondToClauses)) $this->_respondToClauses[$mime] = array();
+			$this->_respondToClauses[$mime][] = $callback;
+
+		}
+
 		protected function contentFor($block, $callback)
 		{
 
@@ -683,9 +706,13 @@
 			$serializer->serialize($data, true);
 			$response = $serializer->toString();
 
-
 			// Header.
 			Http::sendMimeType($this->contentType);
+
+			// XML?
+			if ($type == 'xml') {
+				echo '<?xml version="1.0" encoding="' . Application::getConfiguration()->defaultCharset . '" ?>';
+			}
 
 			// Ouptu
 			echo $response;
