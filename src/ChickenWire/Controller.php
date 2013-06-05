@@ -472,7 +472,7 @@
 		}
 
 
-		protected function respondTo($mime, \Closure $callback = null)
+		protected function respondTo($mime, $callback = null)
 		{
 
 			// An array?
@@ -485,6 +485,18 @@
 				return;
 
 			}
+
+			// Callback not a closure?
+			if (!$callback instanceof \Closure) {
+
+				// Assume we meant a render call
+				$arguments = $callback;
+				$callback = function() use ($arguments) {
+					$this->render($arguments);
+				};
+
+			}
+			
 
 			// Already a callback?
 			if (!array_key_exists($mime, $this->_respondToClauses)) $this->_respondToClauses[$mime] = array();
@@ -1038,6 +1050,29 @@
 
 			// Call action
 			$action->invoke($this);
+
+
+			// Check respondTo clauses
+			if (count($this->_respondToClauses) > 0) {
+				
+				// Loop through accepted
+				foreach ($this->request->preferredContent as $mime) {
+
+					// In clauses?
+					if (array_key_exists($mime->type, $this->_respondToClauses)) {
+
+						// Activate those callbacks
+						foreach($this->_respondToClauses[$mime->type] as $callback) {
+							$callback();
+						}
+						break;
+
+					}
+
+				}
+
+			}
+
 
 			// Have we rendered?
 			if ($this->_rendered == false) {
