@@ -99,7 +99,7 @@
 						$url = count($arguments) > 0 ? $route->replaceFields($arguments) : $route->pattern;
 
 						// Done.
-						return $url;
+						return \ChickenWire\Application::getConfiguration()->webPath . $url;
 
 					}
 
@@ -126,7 +126,7 @@
 							$url = count($arguments) > 0 ? $route->replaceFields($arguments) : $route->pattern;
 
 							// Done.
-							return $url;
+							return \ChickenWire\Application::getConfiguration()->webPath . $url;
 
 						}
 
