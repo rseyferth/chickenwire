@@ -97,6 +97,13 @@
 	 * </code>
 	 * The port for HTTPS requests (only specify when it deviates from the default port 443, otherwise the port number will be added to all generated urls).
 	 *
+	 * **staticThroughChickenWire**
+	 * <code>
+	 * $config->staticThroughChickenWire = false;
+	 * </code>
+	 * If you can't configure your .htaccess to serve the static files in the Public/ directories properly, you can set this to true, and ChickenWire
+	 * will serve the static files.
+	 * 
 	 * **treatExtensionAsMimeType**
 	 * <code>
 	 * $config->treatExtensionAsMimeType = true;
@@ -163,8 +170,6 @@
 			return Application::instance()->_request;
 		}
 
-
-
 		/**
 		 * The default settings for the Application. These can be overridden in your config files.
 		 * 
@@ -193,7 +198,9 @@
 			"treatExtensionAsMimeType" => true,
 
 			"sessionCookieExpireTime" => 3600,
-			"sessionRegenerateId" => false
+			"sessionRegenerateId" => false,
+
+			"staticThroughChickenWire" => false
 
 
 		);
@@ -253,6 +260,37 @@
 			// Create request
 			$this->_request = new Request();
 			
+			// Check if static file exists?
+			if ($this->config->staticThroughChickenWire) {
+			
+				// In application?
+				$filename = PUBLIC_PATH . $this->_request->rawUri;
+				if (file_exists($filename)) {
+					
+					// Mime available?
+					if (!function_exists("mime_content_type")) {
+						$mime = mime_content_type($filename);
+					} else {
+
+						// Check extension
+						$ext = pathinfo($filename, PATHINFO_EXTENSION);
+						if ($ext == '') {
+							$mime = $this->config->defaultOutputMime->getContentType();
+						} else {
+							$mime = Mime::byExtension($ext)->getContentType();
+						}
+
+					}
+
+					// Send header
+					Http::sendMimeType($mime);
+					echo file_get_contents($filename);
+					die;
+
+				}
+
+			}
+
 			// Get route
 			$this->_route = Route::request($this->_request, $httpStatus, $urlParams);
 			
@@ -296,6 +334,7 @@
 			define("LAYOUT_PATH", APP_PATH . "/Layouts");
 			define("MODEL_PATH", APP_PATH . "/Models");
 			define("VIEW_PATH", APP_PATH . "/Views");
+			define("PUBLIC_PATH", APP_PATH . "/Public");
 			define("MODULE_PATH", APP_ROOT . "/Modules");
 
 			define("MODEL_NS", $this->config->applicationNamespace . "\\Models");

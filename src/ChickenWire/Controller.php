@@ -227,7 +227,9 @@
 			if ($this->_layout === false) {
 
 				// Just output the content then.
-				echo $this->_renderedContent['main'];
+				if (array_key_exists('main', $this->_renderedContent)) {
+					echo $this->_renderedContent['main'];
+				}
 
 			} else {
 
@@ -408,7 +410,7 @@
 				// Get the rendered content
 				$this->_buffering = false;
 				$content = ob_get_contents();
-				ob_end_clean();
+				if (strlen($content)) ob_end_clean();
 
 				// Store in rendered content
 				if (!array_key_exists("main", $this->_renderedContent)) {
@@ -667,29 +669,29 @@
 		private function _renderSerialized($type, $options)
 		{
 
+			// Remove layout
+			$this->_layout = false;
+
 			// Get data
 			$data = $options[$type];
 
 			// Can we find a mime type for it?
 			$this->contentType = Mime::byExtension($type);
 			
-			// An array?
-			if (is_array($data)) {
+			// Create a serializer
+			$serializer = \ChickenWire\Serialization\Serializer::get($type);
 
-				// 
-
-			}
-
-			// Try to serialize
-			$method = "to_" . strtolower($type);
-			$response = $data->$method();
+			// Convert
+			$response = $serializer->serialize($data, true);
 
 			// Header.
 			Http::sendMimeType($this->contentType);
 
 			// Ouptu
 			echo $response;
-			
+
+			// Done.
+			$this->_rendered = true;						
 
 		}
 

@@ -11,9 +11,10 @@
 	{
 
 		
-		protected static $_propRead = array('uri', 'method', 'route', 'format', 'preferredContent');
+		protected static $_propRead = array('uri', 'rawUri', 'method', 'route', 'format', 'preferredContent');
 
 		protected $_uri;
+		protected $_rawUri;
 		protected $_method;
 		protected $_extension;
 
@@ -45,8 +46,13 @@
 			// Parse request Uri from full SERVER request uri
 			$uri = $config->webPath ? substr($_SERVER['REQUEST_URI'], strlen($config->webPath)) : $_SERVER['REQUEST_URI'];
 
+			// Remove query string
+			$queryIndex = strpos($uri, '?');
+			if ($queryIndex > -1) $uri = substr($uri, 0, $queryIndex);
+
 			// Localize
 			$this->_uri = rtrim($uri, '/ ');
+			$this->_rawUri = $this->_uri;
 
 			// Check method
 			//@TODO Implement fake-PUT/DELETE requests through ajax (like in Ruby on Rails...)
