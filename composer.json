@@ -10,14 +10,14 @@
     "autoload": {
         "files": ["src/ChickenWire/AutoLoad.php"]
     },
-    "repositories": [
-     
-    ],
+    "license": "MIT",
+    "minimum-stability": "dev",
     "require": {
         "monolog/monolog": "1.5.*",
-        "php-activerecord/php-activerecord": "1.*",
         "eddieantonio/bcrypt": "0.3.0",
+        "wipkip/php-activerecord": "dev-master",
         "wipkip/html-object": "dev-master",
         "ikimea/browser": "dev-master"
+
     }
 }

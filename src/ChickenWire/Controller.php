@@ -934,6 +934,14 @@
 
 			}
 
+			// Bool?
+			if ($options === true && !is_null($this->request->route->module)) {
+
+				// Use action as a template
+				$options = $this->request->route->action;
+
+			}
+
 			// Is it a single string?
 			if (is_string($options)) {
 
@@ -1273,6 +1281,17 @@
 				}
 				
 			}
+
+		}
+
+		protected function getModelParam($modelName = '') {
+
+			// No entry?
+			if (empty($modelName)) {
+				$modelName = Str::removeNamespace($this->request->route->models[count($this->request->route->models) - 1]);
+			}
+
+			return $this->request->requestParams->getArray($modelName);
 
 		}
 
