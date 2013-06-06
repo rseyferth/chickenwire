@@ -15,7 +15,7 @@
     "require": {
         "monolog/monolog": "1.5.*",
         "eddieantonio/bcrypt": "0.3.0",
-        "wipkip/php-activerecord": "dev-master",
+        "wipkip/activerecord": "dev-master",
         "wipkip/html-object": "dev-master",
         "ikimea/browser": "dev-master"
 
