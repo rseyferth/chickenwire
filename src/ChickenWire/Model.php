@@ -193,24 +193,7 @@
 
 
 
-		/**
-		 * Check if given attribute exists
-		 * @param  string  Attribute name
-		 * @return boolean           True or false
-		 */
-		public function attribute_exists($attrName)
-		{
-
-			// In default attributes
-			if (array_key_exists($attrName, $this->attributes())) return true;
-
-			// A getter available?
-			if (method_exists($this, "__get_$attrName")) return true;			
-
-			return false;
-
-
-		}
+		
 
 
 		public function getClass($namespaced = false)
