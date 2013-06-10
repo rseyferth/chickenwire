@@ -2,8 +2,8 @@
 
 	namespace ChickenWire;
 
-	use ChickenWire\Util\Http;
-	use ChickenWire\Util\Mime;
+	use ChickenTools\Http;
+	use ChickenWire\Core\Mime;
 	use ActiveRecord\Inflector;
 
 
@@ -57,7 +57,7 @@
 	 * 
 	 * **defaultOutputMime**
 	 * <code>
-	 * $config->defaultOutputMime = \ChickenWire\Util\Mime::HTML;
+	 * $config->defaultOutputMime = \ChickenWire\Core\Mime::HTML;
 	 * </code>
 	 * The default ouptut Mime type that all Controllers will output. Controllers can override this setting by defining a $respondsTo configurator.
 	 * 
@@ -128,12 +128,12 @@
 	 * 
 	 * @see  \ChickenWire\Core\Configuration
 	 * @see  \ChickenWire\Module
-	 * @see  \ChickenWire\Util\Mime
+	 * @see  \ChickenWire\Core\Mime
 	 * @see  \ChickenWire\Util\CsrfGuard	 
 	 * 
 	 * @package ChickenWire
 	 */
-	class Application extends Core\Singleton
+	class Application extends \ChickenTools\Singleton
 	{
 
 		/**
@@ -347,13 +347,13 @@
 			\ActiveRecord\Config::initialize(function($config) use ($dbConnections, $environment) {
 
 				// Set model path
-				$config->set_model_directory(MODEL_PATH);
+				$config->setModelDirectory(MODEL_PATH);
 
 				// Apply connections
-				$config->set_connections($dbConnections);
+				$config->setConnections($dbConnections);
 
 				// Set default to my environment
-				$config->set_default_connection($environment);
+				$config->setDefaultConnection($environment);
 
 			});
 

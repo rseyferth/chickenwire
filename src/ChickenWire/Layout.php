@@ -2,7 +2,7 @@
 
 	namespace ChickenWire;
 
-	use ChickenWire\Util\Mime;
+	use ChickenWire\Core\Mime;
 
 	class Layout
 	{

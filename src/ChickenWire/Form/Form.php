@@ -4,7 +4,7 @@
 
 	use \ChickenWire\Application;
 	use \ChickenWire\Util\Str;
-	use \ChickenWire\Util\Browser;
+	use \ChickenTools\Browser;
 
 	use \HtmlObject\Element;
 	use \HtmlObject\Input;

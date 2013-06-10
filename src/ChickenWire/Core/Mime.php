@@ -1,8 +1,6 @@
 <?php
 
-	namespace ChickenWire\Util;
-
-
+	namespace ChickenWire\Core;
 
 	class Mime
 	{

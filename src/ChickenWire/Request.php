@@ -2,7 +2,7 @@
 
 	namespace ChickenWire;
 
-	use \ChickenWire\Util\Mime;
+	use \ChickenWire\Core\Mime;
 
 	/**
 	 * Request class
@@ -55,9 +55,16 @@
 			$this->_rawUri = $this->_uri;
 
 			// Check method
-			//@TODO Implement fake-PUT/DELETE requests through ajax (like in Ruby on Rails...)
-			$this->_method = $_SERVER['REQUEST_METHOD'];
+			$this->_method = strtolower($_SERVER['REQUEST_METHOD']);
+			if ($this->_method == 'post' && array_key_exists("_method", $_POST) && 
+					($_POST['_method'] == 'put' || $_POST['_method'] == 'delete')) {
 
+				// Another method given.
+				$this->_method = $_POST['_method'];
+				unset($_POST['_method']);
+
+			}
+			
 			// Store query parameters
 			$this->_queryParams = $_GET;
 
@@ -203,19 +210,19 @@
 
 		public function isGet()
 		{
-			return $this->_method === 'GET';
+			return $this->_method === 'get';
 		}
 		public function isPost() 
 		{
-			return $this->_method === 'POST';
+			return $this->_method === 'post';
 		}
 		public function isPut() 
 		{
-			return $this->_method === 'PUT';
+			return $this->_method === 'put';
 		}
 		public function isDelete() 
 		{
-			return $this->_method === 'DELETE';
+			return $this->_method === 'delete';
 		}
 
 
@@ -242,7 +249,7 @@
 
 		public function __get_browser() {
 			if (is_null($this->_browser)) {
-				$this->_browser = new \ChickenWire\Util\Browser();
+				$this->_browser = new \ChickenTools\Browser();
 			}
 			return $this->_browser;
 

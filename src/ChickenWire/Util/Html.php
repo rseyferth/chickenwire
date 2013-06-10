@@ -2,6 +2,8 @@
 
 	namespace ChickenWire\Util;
 
+	use \ChickenTools\Reflection;
+
 	/**
 	 * Html Helper class
 	 *
@@ -16,7 +18,7 @@
 	 *
 	 * @package ChickenWire
 	 */
-	class Html extends \ChickenWire\Core\Singleton
+	class Html extends \ChickenTools\Singleton
 	{
 
 		static $_instance;
@@ -29,7 +31,7 @@
 			if (!array_key_exists("action", $options)) {
 
 				// A new record?
-				if ($record->is_new_record()) {
+				if ($record->isNewRecord()) {
 					$options['action'] = Url::instance()->index($record);
 					$options['method'] = "post";
 				} else {

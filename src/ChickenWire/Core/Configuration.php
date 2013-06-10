@@ -2,7 +2,7 @@
 
 	namespace ChickenWire\Core;
 
-	use ChickenWire\Util\Reflection;
+	use ChickenTools\Reflection;
 	use ChickenWire\Route;
 	use ChickenWire\Module;
 

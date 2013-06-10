@@ -3,9 +3,9 @@
 	namespace ChickenWire;
 
 	use \ChickenWire\Auth\Auth;
-	use \ChickenWire\Util\Http;
-	use \ChickenWire\Util\Mime;
-	use \ChickenWire\Util\Str;
+	use \ChickenWire\Core\Mime;
+	use \ChickenTools\Http;
+	use \ChickenTools\Str;
 
 	/**
 	 * The ChickenWire controller class
@@ -382,6 +382,7 @@
 			
 			// Nothing?
 			if (array_key_exists("nothing", $options) && $options['nothing'] == true) {
+				$this->_rendered = true;
 				return;
 			}
 
@@ -469,6 +470,11 @@
 				$this->_renderSerialized("xml", $options);
 			}
 
+		}
+
+		protected function renderNothing()
+		{
+			$this->render(array("nothing" => true));
 		}
 
 
@@ -849,6 +855,7 @@
 				return;
 
 			}
+
 			// Determine my view path
 			$viewPath = !is_null($this->request->route->module) ? $this->request->route->module->path . "/Views/" : VIEW_PATH . "/";
 
@@ -1155,7 +1162,7 @@
 				if (!is_null($this->auth->loginAction)) {
 					$this->_invokeAuthLoginAction();
 				} else {
-					$this->redirectTo($this->auth->loginUri);
+					$this->redirect($this->auth->loginUri);
 				}
 				return false;
 
@@ -1175,8 +1182,18 @@
 		 * @param  string  The HTTP status code to use
 		 * @return void     
 		 */
-		protected function redirectTo($uri, $statusCode = 302)
+		protected function redirect($uri, $statusCode = 302)
 		{
+
+			// Was it an action and not a url?
+			if (preg_match('/^[a-z]+$/', $uri)) {
+				
+				// Do I have a model to base it on?
+				if (false !== ($model = $this->route->getModel())) {
+					$model = Str::removeNamespace($model);
+					$uri = $this->url->{$uri . $model};					
+				}
+			}
 
 			// Send header
 			Http::sendStatus($statusCode);

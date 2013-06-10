@@ -2,9 +2,10 @@
 
 	namespace ChickenWire\Auth;
 
-	use \ChickenWire\Util\Str;
+	use \ChickenTools\Str;
 	use \ChickenWire\Util\Url;
 	use \ChickenWire\Module;
+	use \Hautelook\Phpass\PasswordHash;
 
 	/**
 	 * Authentication class for user authentication
@@ -332,7 +333,7 @@
 				// Store it in the session
 				$storeObject = array(
 					'username' => $username,
-					'password' => $result->user->read_attribute($this->_passwordField)
+					'password' => $result->user->readAttribute($this->_passwordField)
 				);
 				$_SESSION[self::$_sessionPrefix . $this->name] = $storeObject;
 
@@ -405,18 +406,20 @@
 
 			// Pre-salt password
 			if ($this->_useSalt) {
-				$password = $user->read_attribute($this->_saltField) . $password;
+				$password = $user->readAttribute($this->_saltField) . $password;
 			}
 
-
 			// What type of validation to do?
+			$loginSuccess = false;
+			$serverPassword = $user->readAttribute($this->_passwordField);
 			switch ($this->_type) {
 				case self::MD5:
-					$password = md5($password);
+					$loginSuccess = md5($password) == $serverPassword;
 					break;
 				
 				case self::BLOWFISH:
-					$password = crypt($password, $user->read_attribute($this->_passwordField));
+					$hasher = new PasswordHash(8, false);
+					$loginSuccess = $hasher->CheckPassword($password, $serverPassword);
 					break;
 
 				default:
@@ -424,11 +427,8 @@
 					break;
 			}
 
-			// Validate passwords
-			$userPass = $user->read_attribute($this->_passwordField);
-
-			// Same?
-			if ($password != $userPass) {
+			// Success?
+			if (!$loginSuccess) {
 			
 				// Nope.
 				return new AuthResult(AuthResult::INCORRECT_PASSWORD);

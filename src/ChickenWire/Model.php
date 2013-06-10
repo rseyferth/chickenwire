@@ -2,7 +2,7 @@
 
 	namespace ChickenWire;
 
-	use \ChickenWire\Util\Str;
+	use \ChickenTools\Str;
 	use \ChickenWire\Auth\Auth;
 
 	/**
@@ -104,7 +104,9 @@
 				self::$auth = $myAuth;
 
 				// Register auth save callback
-				$table->callback->register("before_save", function (\ActiveRecord\Model $model) { $model->_setAuthValues(); });
+				$table->callback->register("beforeSave", function (\ActiveRecord\Model $model) { 
+					$model->_setAuthValues(); 
+				});
 
 			}
 
@@ -118,16 +120,16 @@
 		{
 
 			// Get dirty fields
-			$dirty = $this->dirty_attributes();
+			$dirty = $this->dirtyAttributes();
 
 			// Get auth object
 			$auth = self::$auth;
 			
 			// Salt empty?
-			if ($auth->useSalt && $this->read_attribute($auth->saltField) == '') {
+			if ($auth->useSalt && $this->readAttribute($auth->saltField) == '') {
 				
 				// Generate a salt!
-				$this->set_attributes(array(
+				$this->setAttributes(array(
 					$auth->saltField => Str::random($auth->saltLength)
 				));
 
@@ -136,27 +138,28 @@
 			// Password dirty?
 			if (array_key_exists($auth->passwordField, $dirty)) {
 				
+				// Salt it?
+				$password  = ($auth->useSalt ? $this->readAttribute($auth->saltField) : "") . $this->readAttribute($auth->passwordField);
+				
 				// What sort of encryption then?
 				switch ($auth->type) {
 					case Auth::MD5:
 
 						// Hash password using md5
-						$this->set_attributes(array(
-							$auth->passwordField => md5(
-								($auth->useSalt ? $this->read_attribute($auth->saltField) : "") . 
-								$this->read_attribute($auth->passwordField)
-							)
+						$this->setAttributes(array(
+							$auth->passwordField => md5($password)
 						));
 						break;
 					
 					case Auth::BLOWFISH:
 						
+						// Create the hasher
+						$hasher = new \Hautelook\Phpass\PasswordHash(8, false);
+						$passwordHashed = $hasher->HashPassword($password);
+
 						// Blowfish!
-						$this->set_attributes(array(
-							$auth->passwordField => 
-								Str::blowFish(
-									$this->read_attribute($auth->passwordField), 
-									$auth->useSalt ? $this->read_attribute($auth->saltField) : "")							
+						$this->setAttributes(array(
+							$auth->passwordField => $passwordHashed			
 						));
 						break;
 				}
@@ -181,7 +184,7 @@
 			}
 
 			// Apply the values to the record
-			$this->set_attributes(array(
+			$this->setAttributes(array(
 				$auth->saltField => $salt,
 				$auth->passwordField => $password
 			));
@@ -202,7 +205,7 @@
 			if (array_key_exists($attrName, $this->attributes())) return true;
 
 			// A getter available?
-			if (method_exists($this, "get_$attrName")) return true;			
+			if (method_exists($this, "__get_$attrName")) return true;			
 
 			return false;
 

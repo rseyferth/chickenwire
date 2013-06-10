@@ -3,7 +3,7 @@
 	namespace ChickenWire\Util;
 
 	use \ChickenWire\Route;
-
+	use \ChickenTools\Str;
 
 	/**
 	 * The Url Helper class
@@ -14,7 +14,7 @@
 	 *
 	 * @package ChickenWire
 	 */
-	class Url extends \ChickenWire\Core\Singleton
+	class Url extends \ChickenTools\Singleton
 	{
 
 
@@ -76,7 +76,11 @@
 			// Is it a {action}{Model}?
 			if (preg_match('/^' . $regexAction . $regexModels . '$/', $name, $matches)) {
 
-				// Delete? That becomes destroy... And new becomes add... (php reserved keywords)
+				// Convert action to proper name
+				// delete => destroy 		(reserved keyword)
+				// new => add 				(reserved keyword)
+				// create => index 			(create is POST to the index url)
+				// update => show 			(update is PUT to the show url)
 				$action = str_replace(
 					array('delete', 'new', 'create', 'update'), 
 					array('destroy', 'add', 'index', 'show'), 

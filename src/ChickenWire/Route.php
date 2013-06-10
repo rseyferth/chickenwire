@@ -2,9 +2,9 @@
 
 	namespace ChickenWire;
 
-	use \ActiveRecord\Inflector;
-	use \ChickenWire\Util\Arry;
-	use \ChickenWire\Util\Str;
+	use ActiveRecord\Inflector;
+	use ChickenTools\Arry;
+	use ChickenTools\Str;
 
 	class Route extends Core\MagicObject
 	{
@@ -499,6 +499,18 @@
 
 		}
 
+
+		public function getModel() 
+		{
+
+			// Any models
+			if (count($this->_models) == 0) return false;
+
+			// Get last one
+			return $this->_models[count($this->_models) - 1];
+
+
+		}
 
 		/**
 		 * Replace fields in the Route with values from the Model instances

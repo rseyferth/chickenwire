@@ -2,7 +2,7 @@
 
 	namespace ChickenWire;
 
-	use \ChickenWire\Util\Str;
+	use \ChickenTools\Str;
 
 	/**
 	 * Module class containing information on loaded modules

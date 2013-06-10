@@ -2,7 +2,7 @@
 
 	namespace ChickenWire\Form;
 
-	use \ChickenWire\Util\Arry;
+	use \ChickenTools\Arry;
 
 	abstract class Field
 	{
@@ -44,7 +44,7 @@
 			}
 
 			// Merge with default options
-			$options = \ChickenWire\Util\Arry::mergeRecursiveDistinct(Arry::mergeStatic(get_called_class(), "defaultOptions"), $options);
+			$options = Arry::mergeRecursiveDistinct(Arry::mergeStatic(get_called_class(), "defaultOptions"), $options);
 
 			// Loop and set options
 			foreach ($options as $option => $value) {
