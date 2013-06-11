@@ -197,7 +197,11 @@
 
 			// Specifically set in settings?
 			if (!is_null($this->_settings['action'])) {
-				return $this->_settings['action'];
+
+				// Get action
+				$action = \ChickenWire\Application::getConfiguration()->webPath . $this->_settings['action'];
+				return $action;
+
 			}
 
 			// Nothing found :(

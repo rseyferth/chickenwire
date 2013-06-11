@@ -1196,7 +1196,7 @@
 			}
 
 			// Add webpath
-			$uri = Application::getConfiguration()->webPath . $uri;			
+			$uri = Application::getConfiguration()->webPath . $uri;
 
 			// Send header
 			Http::sendStatus($statusCode);

@@ -283,8 +283,9 @@
 				
 				// Prefix url
 				$this->_loginUri = $module->urlPrefix . "/" . ltrim($this->_loginUri, '/ ');
+
 			}
-			
+
 			// Store locally
 			$this->_name = $name;
 			$this->_model = $options['model'];

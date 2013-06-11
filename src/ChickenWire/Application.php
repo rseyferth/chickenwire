@@ -279,6 +279,22 @@
 
 				}
 
+				// In modules
+				foreach (Module::all() as $module) {
+					$filename = $module->path . "/Public" . $this->_request->rawUri;
+					if (file_exists($filename)) {
+						
+						// Mime available?
+						$mime = Mime::byFile($filename);
+						
+						// Send header
+						Http::sendMimeType($mime);
+						echo file_get_contents($filename);
+						die;
+
+					}
+				}
+
 			}
 
 			// Get route
