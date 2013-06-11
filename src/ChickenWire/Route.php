@@ -567,7 +567,7 @@
 
 				// Is there a slug var available?
 				$sluggedVarName = $varName . "Slug";
-				if ($model->attribute_exists($sluggedVarName)) {
+				if ($model->hasAttribute($sluggedVarName)) {
 					$value = $model->$sluggedVarName;
 				} else {
 					$value = $model->$varName;

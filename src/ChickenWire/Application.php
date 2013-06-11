@@ -236,19 +236,21 @@
 		 */
 		protected function _boot() {
 
+			// Start the session
+			session_start();
+
 			// Create local inflector
 			static::$inflector = Inflector::instance();
 
 			// Create configuration
 			$this->_configure();
 
-			// Start session :)
+			// Configure session :)
 			session_set_cookie_params($this->config->sessionCookieExpireTime);
 			if ($this->config->sessionRegenerateId) {
 				session_regenerate_id();
 			}
-			session_start();
-
+			
 			// Apply Application's namespace
 			AutoLoad::autoLoadNamespace($this->config->applicationNamespace, APP_PATH);
 

@@ -19,7 +19,6 @@
         "monolog/monolog": "1.5.*",
         "hautelook/phpass": "dev-master",
         "wipkip/html-object": "dev-master",
-        "wipkip/activerecord": "dev-master",
         "wipkip/chickentools": "dev-master"
         
     }
