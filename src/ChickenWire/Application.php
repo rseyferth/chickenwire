@@ -67,6 +67,12 @@
 	 * </code>
 	 * Whether to require CSRF tokens for each form. Read more on {@link https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF) Cross-Site Request Forgery}
 	 *
+	 * **enableI18n**
+	 * <code>
+	 * $config->enableI18n = false;
+	 * </code>
+	 * Whether the i18n module is enabled in your controllers. Though the default value is false, once you configure I18n itself, this value will automatically be set to true.
+	 * 
 	 * **htmlSelfClosingSlash**
 	 * <code>
 	 * $config->htmlSelfClosingSlash = true;
@@ -184,6 +190,8 @@
 			"enableCsrfGuard" => true,
 			"htmlSelfClosingSlash" => true,
 
+			"enableI18n" => false,
+
 			"applicationNamespace" => "Application",
 
 			"defaultOutputMime" => Mime::HTML,
@@ -281,18 +289,27 @@
 
 				// In modules
 				foreach (Module::all() as $module) {
-					$filename = $module->path . "/Public" . $this->_request->rawUri;
-					if (file_exists($filename)) {
-						
-						// Mime available?
-						$mime = Mime::byFile($filename);
-						
-						// Send header
-						Http::sendMimeType($mime);
-						echo file_get_contents($filename);
-						die;
 
-					}
+					// In this module?
+					$regex = '/^' . preg_quote($module->urlPrefix, '/') . '\/(?<url>.+)$/';
+					if (preg_match($regex, $this->_request->rawUri, $matches)) {
+
+						// Does the file exist?
+						$filename = $module->path . "/Public/" . $matches['url'];
+						if (file_exists($filename)) {
+							
+							// Mime available?
+							$mime = Mime::byFile($filename);
+							
+							// Send header
+							Http::sendMimeType($mime);
+							echo file_get_contents($filename);
+							die;
+
+						}
+
+					} 
+
 				}
 
 			}
