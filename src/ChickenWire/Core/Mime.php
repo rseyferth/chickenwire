@@ -120,7 +120,7 @@
 			"rss" => self::RSS,
 
 			"atom" => self::ATOM,
-			"json" => self::JSON
+			"json" => self::JSON,
 
 			"pdf" => self::PDF,
 			"zip" => self::ZIP,
@@ -223,6 +223,9 @@
 					$mime = \ChickenWire\Application::getConfiguration()->defaultOutputMime;
 				} else {
 					$mime = Mime::byExtension($ext);
+					if ($mime === false) {
+						$mime = \ChickenWire\Application::getConfiguration()->defaultOutputMime;
+					}
 				}
 
 			}
