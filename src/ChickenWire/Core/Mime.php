@@ -215,7 +215,7 @@
 			}
 
 			// Text?
-			if (is_null($mime) || preg_match('/^text\//', $mime->getContentType())) {
+			if ($mime === false || preg_match('/^text\//', $mime->getContentType())) {
 
 				// Check extension
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
