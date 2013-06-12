@@ -18,7 +18,7 @@
 		const JSON = "JSON";
 		const CSS = "CSS";
 		
-	/*	const SOAP = "SOAP";
+		const SOAP = "SOAP";
 
 		const PDF = "PDF";
 		const ZIP = "ZIP";
@@ -40,7 +40,7 @@
 		const QUICKTIME = "QUICKTIME";
 		const WEBM = "WEBM";
 		const FLV = "FLV";
-		const MATROSKA = "MATROSKA";*/
+		const MATROSKA = "MATROSKA";
 
 		/**
 		 * The mapping of actual mime-types to simplified content types
@@ -82,14 +82,14 @@
 			"application/json" => self::JSON,
 			"text/x-json" => self::JSON,
 
-			/*"application/soap+xml" => self::SOAP,
+			"application/soap+xml" => self::SOAP,
 
 			"image/gif" => self::GIF,
 			"image/jpeg" => self::JPEG,
 			"image/pjpeg" => self::JPEG,
 			"image/png" => self::PNG,
 			"image/svg+xml" => self::SVG,
-			"image/tiff" => self::TIFF,*/
+			"image/tiff" => self::TIFF,
 
 			"text/css" => self::CSS
 
@@ -122,7 +122,7 @@
 			"atom" => self::ATOM,
 			"json" => self::JSON
 
-		/*	"pdf" => self::PDF,
+			"pdf" => self::PDF,
 			"zip" => self::ZIP,
 			"gzip" => self::ZIP,
 
@@ -147,7 +147,7 @@
 			"webm" => self::WEBM,
 			"flv" => self::FLV,
 			"f4v" => self::FLV,
-			"mkv" => self::MATROSKA*/
+			"mkv" => self::MATROSKA
 
 		);	
 
@@ -215,7 +215,7 @@
 			}
 
 			// Text?
-			if ($mime === false || preg_match('/^text\//', $mime->getContentType())) {
+			if (is_null($mime) || $mime === false || preg_match('/^text\//', $mime->getContentType())) {
 
 				// Check extension
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
