@@ -370,7 +370,7 @@
 		 * @param  array 	Render options
 		 * @return void
 		 */
-		protected function render($options = null)
+		public function render($options = null)
 		{
 
 			// Figure out the options
