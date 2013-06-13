@@ -66,12 +66,6 @@
 	 * $config->enableCsrfGuard = true;
 	 * </code>
 	 * Whether to require CSRF tokens for each form. Read more on {@link https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF) Cross-Site Request Forgery}
-	 *
-	 * **enableI18n**
-	 * <code>
-	 * $config->enableI18n = false;
-	 * </code>
-	 * Whether the i18n module is enabled in your controllers. Though the default value is false, once you configure I18n itself, this value will automatically be set to true.
 	 * 
 	 * **htmlSelfClosingSlash**
 	 * <code>
@@ -189,8 +183,6 @@
 
 			"enableCsrfGuard" => true,
 			"htmlSelfClosingSlash" => true,
-
-			"enableI18n" => false,
 
 			"applicationNamespace" => "Application",
 

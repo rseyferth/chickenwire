@@ -6,6 +6,7 @@
 	use \ChickenWire\Core\Mime;
 	use \ChickenTools\Http;
 	use \ChickenTools\Str;
+	use \ChickenWire\I18n\I18n;
 
 	/**
 	 * The ChickenWire controller class
@@ -497,8 +498,9 @@
 
 				// Assume we meant a render call
 				$arguments = $callback;
-				$callback = function() use ($arguments) {
-					$this->render($arguments);
+				$controller = $this;
+				$callback = function() use ($arguments, $controller) {
+					$controller->render($arguments);
 				};
 
 			}
@@ -655,6 +657,12 @@
 			// We've rendered
 			$this->_rendered = true;
 
+			// Create translation functions
+			$t = function($key, $options = array())
+			{
+				return I18n::translate($key, $options);
+			};
+			
 			// Let's render it :)
 			require $options['template'];
 
