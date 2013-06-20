@@ -40,7 +40,7 @@
 				}
 
 			}
-
+			
 			// Default options
 			$options = array_merge(array(
 				"record" => $record
@@ -49,7 +49,7 @@
 
 
 			// Create form
-			$form = new \ChickenWire\Form\Form($options);
+			$form = new \ChickenWire\Form($options);
 
 			return $form;
 

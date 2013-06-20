@@ -1,6 +1,6 @@
 <?php
 
-	namespace ChickenWire\Form;
+	namespace ChickenWire;
 
 	use \ChickenWire\Application;
 	use \ChickenWire\Util\Str;
@@ -14,7 +14,6 @@
 	{
 
 		public static $fieldNamespaces = array('\\ChickenWire\\Form');
-
 
 		protected $_fields;
 
@@ -36,13 +35,13 @@
 				"method" => "get",
 				"auth" => null,
 				"record" => null,
-				"labels" => "before"
+				"labels" => "before",
 			), $options);
 
 		}
 
 	
-		public function render()
+		public function open()
 		{
 
 			// Check if method was one of the non-supported ones
@@ -57,11 +56,11 @@
 			$form = Element::form();
 			$form->setAttribute("accept-charset", 'UTF-8');
 			$form->setAttribute("method", $method);
-			$form->setAttribute("action", $this->action);
-			
+			$form->setAttribute("action", $this->action);			
+			echo $form->open();
+
 			// Create meta div
 			$metaDiv = Element::div()->style("margin:0;padding:0;");
-			$form->addChild($metaDiv);
 			
 			
 			// Real method?
@@ -95,14 +94,40 @@
 				$metaDiv->addChild($inputUTF8);
 
 			}
+			echo ($metaDiv);
 
-			// Render all fields
-			foreach ($this->_fields as $field) {
-				$form->addChild($field->getElement());
-			}
 
 			// Output!
-			return $form->render();
+			/*$formHtml = $form->render();
+
+
+			// Render all fields
+			$fieldsHtml = '';
+			foreach ($this->_fields as $field) {
+
+				// Label
+				if ($field->label) {
+					$label = Element::label($field->label, array("for" => $field->id))->render();					
+				} else {
+					$label = '';
+				}
+				
+				// Create html
+				$html = $field->template();
+				if (is_null($html)) $html = $this->_settings['defaultTemplate'];
+
+				$html = str_replace('%label%', $label, $html);
+				$html = str_replace('%field%', $field->getElement()->render(), $html);
+
+				// Add field
+				$fieldsHtml .= $html;
+			}
+
+			// Put html inside form
+			$closingIndex = strrpos($formHtml, '</form>');
+			$formHtml = substr($formHtml, 0, $closingIndex) . $fieldsHtml . substr($formHtml, $closingIndex);
+			
+			return $formHtml;*/
 
 
 		}
@@ -169,19 +194,29 @@
 
 						// Set value
 						$options['value'] = $this->_settings['record']->$fieldName;
-						
+					
+						// Check if label was passed
+						if (!array_key_exists("label", $options)) {
+
+							// Look it up in the i18n dictionary
+							$options['label'] = $this->_settings['record']->humanAttributeName($fieldName);
+
+						}
+
 					}
 
 					// Instantiate
 					$field = new $className($options);
 					$this->add($field);
-					return $field;
+					echo $field->render();
+					return true;
 
 				}
 				
 			}
 
 			return false;
+			
 
 		}
 

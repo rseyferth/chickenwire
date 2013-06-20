@@ -95,6 +95,11 @@
 			return self::$_modules;
 		}
 
+		public static function get($name)
+		{
+			return self::$_modules[$name];
+		}
+
 
 		/**
 		 * Load a Module
@@ -205,6 +210,11 @@
 			self::$_configuringModule = false;
 
 		
+		}
+
+		protected function __get_webPath()
+		{
+			return trim(\ChickenWire\Application::getConfiguration()->webPath, '/ ') . $this->_urlPrefix;
 		}
 
 

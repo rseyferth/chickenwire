@@ -9,11 +9,18 @@
 
 		private $_content;
 
-		public function __construct($layout, $content)
+		protected $controller;
+
+		public function __construct($layout, $controller, $content)
 		{
 
 			// Localize
 			$this->_content = $content;
+			$this->controller = $controller;
+
+			// Create translation functions
+			$t = I18n::translateClosure();
+			
 
 			// Load the file
 			require $layout;

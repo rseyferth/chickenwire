@@ -3,7 +3,6 @@
 	namespace ChickenWire;
 
 	use \ChickenTools\Str;
-	use \ChickenWire\Auth\Auth;
 
 	/**
 	 * The ChickenWire Model class
@@ -105,7 +104,7 @@
 
 				// Register auth save callback
 				$table->callback->register("beforeSave", function (\ActiveRecord\Model $model) { 
-					$model->_setAuthValues(); 
+					$model->_setAuthValues();
 				});
 
 			}
@@ -218,6 +217,18 @@
 
 		}
 
+
+
+		public function humanAttributeName($attribute)
+		{
+
+			// Try the i18n
+			$key = "activerecord.attributes." . lcfirst($this->getClass() . "." . $attribute);
+			$label = I18n::translate($key);
+			
+			return $label;
+
+		}
 
 
 

@@ -23,6 +23,32 @@
 
 		}
 
+		public function translations($prefix = '')
+		{
+
+			// Any prefix?
+			if (strlen($prefix) == 0) return $this->_translations;
+
+			// Trim it.
+			$prefix = rtrim($prefix, ' .');
+
+			// Do the lookup
+			$keys = $this->_lookup($prefix);
+			
+			// Anything?
+			if ($keys === false) return false;
+
+			// Prepend the array with the prefix again
+			$parts = explode('.', $prefix);
+			for ($q = count($parts) - 1; $q >= 0; $q--) {
+				$keys = array($parts[$q] => $keys);
+			}
+
+			// Done
+			return $keys;
+
+		}
+
 		public function translate($locale, $key, $options = array())
 		{
 
@@ -30,7 +56,7 @@
 			$result = $this->_lookup($locale . "." . $key);
 
 			// Already found?
-			if ($result !== false) return $result;
+			if ($result !== false) return $this->_processValue($result, $options);
 
 			// Still files to load?
 			if (sizeof($this->_files)) {
@@ -47,7 +73,7 @@
 
 						// Now can it be found?
 						$result = $this->_lookup($locale . "." . $key);
-						if ($result !== false) return $result;
+						if ($result !== false) return $this->_processValue($result, $options);
 
 					}
 
@@ -70,7 +96,7 @@
 
 						// Now can it be found?
 						$result = $this->_lookup($locale . "." . $key);
-						if ($result !== false) return $result;
+						if ($result !== false) return $this->_processValue($result, $options);
 
 					}
 
@@ -90,7 +116,7 @@
 
 					// Now can it be found?
 					$result = $this->_lookup($locale . "." . $key);
-					if ($result !== false) return $result;
+					if ($result !== false) return $this->_processValue($result, $options);
 
 				}
 
@@ -157,11 +183,11 @@
 			$this->_loadPaths[] = $path;
 
 			// Read the directory for .yml files
-			$dir = \ChickenTools\File::scanDir($path, '/^.*\.yml$/', true, false);
+			$dir = \ChickenTools\File::scanDir($path, '/^.*\.(yaml|yml)$/', true, false);
 			foreach($dir as $file) {
 
 				// Convert filename to section
-				$section = str_replace('/', '.', substr($file, 0, -4));
+				$section = str_replace('/', '.', substr($file, 0, strrpos($file, '.')));
 
 				// Language in there?
 				if (preg_match('/\.(?<locale>[a-z]+)$/', $section, $matches)) {
@@ -173,6 +199,34 @@
 
 				// Make a map
 				$this->_files[$section] = $path . '/' . $file;
+
+			}
+
+		}
+
+		/**
+		 * Load all locale files 
+		 * @return void
+		 */
+		public function loadAll($prefix = '')
+		{
+
+			// Loop through files
+			foreach ($this->_files as $section => $file) {
+
+				// Load it?
+				if (strlen($prefix) == 0 || 
+					$prefix == $section ||
+					(strlen($section) > strlen($prefix) && substr($section, 0, strlen($prefix)) == $prefix) ||
+					(strlen($section) < strlen($prefix) && substr($prefix, 0, strlen($section)) == $section)) {
+				
+					// Load file
+					$this->_loadFile($file);
+
+					// Remove from queue
+					unset($this->_files[$section]);
+
+				}
 
 			}
 

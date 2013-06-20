@@ -14,6 +14,10 @@
 			"name" => ""
 		);
 
+		static $defaultTemplate = <<<EOD
+%field%
+EOD;
+
 
 		public function getElement()
 		{

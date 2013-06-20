@@ -1,6 +1,6 @@
 <?php
 
-	namespace ChickenWire\I18n;
+	namespace ChickenWire;
 
 	class I18n
 	{
@@ -8,6 +8,8 @@
 		private static $_backend = null;
 		private static $_locale = null;
 		private static $_defaultLocale = "en";
+
+
 
 
 		/**
@@ -21,7 +23,7 @@
 			if (is_null(static::$_backend)) {
 
 				// Create simple backend
-				static::$_backend = new SimpleBackend();
+				static::$_backend = new I18n\SimpleBackend();
 
 			}
 
@@ -91,10 +93,33 @@
 
 
 
+		/**
+		 * Get an array containing all i18n keys for all locales
+		 * @param string    A prefix filter for the keys to load, e.g.: nl.bmk.
+		 * @return array 
+		 */
+		public static function getAll($prefix = '')
+		{
+
+			// Make backend load all
+			$backend = static::getBackend();
+			$backend->loadAll($prefix);
+
+			// Now return requested translations
+			return $backend->translations($prefix);
+
+		}
 
 
 
 
+		public static function translateClosure()
+		{
+			$t = function($key, $options = array()) {
+					return I18n::translate($key, $options);
+				};
+			return $t;
+		}
 
 
 	}

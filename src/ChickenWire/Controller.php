@@ -2,11 +2,9 @@
 
 	namespace ChickenWire;
 
-	use \ChickenWire\Auth\Auth;
 	use \ChickenWire\Core\Mime;
 	use \ChickenTools\Http;
 	use \ChickenTools\Str;
-	use \ChickenWire\I18n\I18n;
 
 	/**
 	 * The ChickenWire controller class
@@ -247,7 +245,7 @@
 				$this->_layout = $layoutFile;
 
 				// Create and render the layout
-				$layout = new Layout($this->_layout, $this->_renderedContent);
+				$layout = new Layout($this->_layout, $this, $this->_renderedContent);
 
 			}
 
@@ -324,6 +322,9 @@
 			// Now look at accepted types!
 			foreach ($this->request->preferredContent as $accept) {
 				
+				// All?
+				if ($accept->type == Mime::ALL) return true;
+
 				// Match?
 				if (in_array($accept->type, $respondsTo)) {
 
@@ -658,10 +659,7 @@
 			$this->_rendered = true;
 
 			// Create translation functions
-			$t = function($key, $options = array())
-			{
-				return I18n::translate($key, $options);
-			};
+			$t = I18n::translateClosure();
 			
 			// Let's render it :)
 			require $options['template'];
@@ -678,6 +676,9 @@
 				}
 			}
 
+			// Create translation functions
+			$t = I18n::translateClosure();
+			
 			// Show the file
 			require $options['partial'];
 			
@@ -1074,11 +1075,11 @@
 			// Call action
 			$action->invoke($this);
 
-
 			// Check respondTo clauses
 			if (count($this->_respondToClauses) > 0) {
 				
 				// Loop through accepted
+				$acceptsAll = false;
 				foreach ($this->request->preferredContent as $mime) {
 
 					// In clauses?
@@ -1092,10 +1093,13 @@
 
 					}
 
+					// All?
+					if ($mime->type == Mime::ALL) $acceptsAll = true;
+
 				}
 
-			}
 
+			}
 
 			// Have we rendered?
 			if ($this->_rendered == false) {
@@ -1105,8 +1109,15 @@
 
 					// Try to render my action
 					$this->render($this->request->route->action);
+					return;
 
 				}
+
+			
+
+				// We don't provide that type around here...
+				Http::sendStatus(406);
+				die("Content-type not allowed. Action is not properly responding.");
 
 			}
 
@@ -1187,11 +1198,19 @@
 		/**
 		 * Send a redirect header to the given location
 		 * @param  string  The Uri to redirect to
-		 * @param  string  The HTTP status code to use
+		 * @param  array   Optional array of extra options
+		 *
+		 * 
+		 * 
 		 * @return void     
 		 */
-		protected function redirect($uri, $statusCode = 302)
+		protected function redirect($uri, $options = array())
 		{
+
+			// Default options
+			$options = array_merge(array(
+				"statusCode" => 302
+			), $options);
 
 			// Was it an action and not a url?
 			if (preg_match('/^[a-z]+$/', $uri)) {
@@ -1207,8 +1226,9 @@
 			$uri = Application::getConfiguration()->webPath . $uri;
 
 			// Send header
-			Http::sendStatus($statusCode);
+			Http::sendStatus($options['statusCode']);
 			Http::redirect($uri);
+			die;
 
 		}
 
@@ -1365,8 +1385,9 @@
 		{
 
 			//@TODO Real implementation...
-			Util\Http::sendStatus(404);
+			Http::sendStatus(404);
 			echo ('Page cannot be found');
+			die;
 
 		}
 

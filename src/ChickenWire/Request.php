@@ -200,6 +200,20 @@
 
 		}
 
+		public function accepts($mime)
+		{
+
+			// Check mime
+			if (is_object($mime)) $mime = $mime->type;
+
+			// Loop through it
+			foreach ($this->_preferredContent as $prefMime) {
+				if ($prefMime->type == $mime) return true;
+			}
+			return false;
+
+		}
+
 		public function setUrlParams($params) {
 
 			// Store it

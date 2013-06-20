@@ -187,7 +187,7 @@
 			"applicationNamespace" => "Application",
 
 			"defaultOutputMime" => Mime::HTML,
-			"defaultCharset" => "UTF-8",
+			"defaultCharset" => "utf-8",
 
 			"defaultLayout" => "application",
 

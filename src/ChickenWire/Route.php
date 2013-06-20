@@ -43,7 +43,48 @@
 		 */
 		public static function errors($controller, $pattern = '/')
 		{
-			
+
+
+		}
+
+
+		/**
+		 * Create a pattern for client-side I18n requests
+		 * @param  string  The base pattern to link to the I18n controller
+		 * @param  array   Additional options
+		 * @return void
+		 */
+		public static function i18n($pattern, array $options = array())
+		{
+
+			// Trim the pattern
+			$pattern = rtrim($pattern, '/ ');
+
+			// Do the default options
+			$options = array_merge(array(
+				"controller" => "\\ChickenWire\\I18n\\I18nController"
+			), $options);
+
+			// Create basic route for all
+			Route::match($pattern, array_merge(array(
+				"action" => "all"
+			), $options));
+
+			// Get current language
+			Route::match($pattern . '/current', array_merge(array(
+				"action" => "current"
+			), $options));
+
+			// All sub requests
+			Route::match($pattern . '/current/{*path}', array_merge(array(
+				"action" => "current"
+			), $options));
+
+			// All sub requests with a language
+			Route::match($pattern . '/{*path}', array_merge(array(
+				"action" => "all"
+			), $options));
+
 		}
 
 
@@ -119,6 +160,11 @@
 					$value = $foundParams[$index];
 					if (substr($varName, 0, 1) == '#') {
 						$value = intval($value);
+						$varName = substr($varName, 1);
+					}
+
+					// *'ed param?
+					if (substr($varName, 0, 1) == '*') {
 						$varName = substr($varName, 1);
 					}
 
@@ -445,6 +491,17 @@
 				// Add!
 				self::$modelMap[$mapKey][] = $this;
 
+				// Make sure the models are namespaced\
+				foreach ($this->_models as $index => $model) {
+					if (!Str::hasNamespace($model)) {
+						if (empty($this->_module)) {
+							$this->_models[$index] = Application::getConfiguration()->applicationNamespace . "\\Models\\" . $model;
+						} else {
+							$this->_models[$index] = $this->_module->namespace . "\\Models\\" . $model;
+						}
+					}
+				}
+				
 			}
 
 			// Look for params in the pattern
@@ -456,10 +513,12 @@
 							preg_replace(
 								array(
 									"/({#([^}]*)})/",
+									"/({\*([^}]*)})/",
 									"/({([^}]*)})/",
 								),
 								array(
 									"(\d[a-zA-Z0-9_\-]*)",
+									"([a-zA-Z0-9_\/\-]*)",
 									"([a-zA-Z0-9_-]+)"
 								),
 								str_replace("/", "\\/", $this->_pattern))
@@ -468,6 +527,9 @@
 		}
 
 		public function __get_controllerClass() {
+
+			// Already namespaced?
+			if ($this->_controller[0] == '\\') return $this->_controller;
 
 			// Part of a module?
 			if (is_null($this->_module)) {
