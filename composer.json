@@ -21,7 +21,8 @@
         "hautelook/phpass": "dev-master",
         "wipkip/html-object": "dev-master",
         "wipkip/chickentools": "dev-master",
-        "symfony/yaml": "2.4.*@dev"
+        "symfony/yaml": "2.4.*@dev",
+        "wipkip/activerecord": "dev-master"
         
     }
 }
