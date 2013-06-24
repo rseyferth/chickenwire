@@ -11,7 +11,8 @@
 		static $mandatoryOptions = array();
 		static $defaultOptions = array(
 			"type" => "button",
-			"name" => ""
+			"name" => "",
+			"html" => array()
 		);
 
 		static $defaultTemplate = <<<EOD
@@ -23,7 +24,7 @@ EOD;
 		{
 
 			// Create input
-			$input = new Input($this->type, $this->name, $this->value);
+			$input = new Input($this->type, $this->name, $this->value, $this->html);
 
 			// Done.
 			return $input;

@@ -45,7 +45,7 @@ EOD;
 				unset($options[0]);
 			}
 
-
+			
 			// Check my mandatory options
 			if (isset(static::$mandatoryOptions)) {
 

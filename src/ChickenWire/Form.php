@@ -15,6 +15,13 @@
 
 		public static $fieldNamespaces = array('\\ChickenWire\\Form');
 
+		public static function addNamespace($ns)
+		{
+			static::$fieldNamespaces[] = $ns;
+		}
+
+
+
 		protected $_fields;
 
 		protected $_csrfName;
@@ -36,6 +43,7 @@
 				"auth" => null,
 				"record" => null,
 				"labels" => "before",
+				"html" => array()
 			), $options);
 
 		}
@@ -53,7 +61,7 @@
 			}
 			
 			// Create dom doc
-			$form = Element::form();
+			$form = Element::form(null, $this->_settings['html']);
 			$form->setAttribute("accept-charset", 'UTF-8');
 			$form->setAttribute("method", $method);
 			$form->setAttribute("action", $this->action);			
@@ -96,39 +104,11 @@
 			}
 			echo ($metaDiv);
 
+		}
+		public function close()
+		{
 
-			// Output!
-			/*$formHtml = $form->render();
-
-
-			// Render all fields
-			$fieldsHtml = '';
-			foreach ($this->_fields as $field) {
-
-				// Label
-				if ($field->label) {
-					$label = Element::label($field->label, array("for" => $field->id))->render();					
-				} else {
-					$label = '';
-				}
-				
-				// Create html
-				$html = $field->template();
-				if (is_null($html)) $html = $this->_settings['defaultTemplate'];
-
-				$html = str_replace('%label%', $label, $html);
-				$html = str_replace('%field%', $field->getElement()->render(), $html);
-
-				// Add field
-				$fieldsHtml .= $html;
-			}
-
-			// Put html inside form
-			$closingIndex = strrpos($formHtml, '</form>');
-			$formHtml = substr($formHtml, 0, $closingIndex) . $fieldsHtml . substr($formHtml, $closingIndex);
-			
-			return $formHtml;*/
-
+			echo ('</form>');
 
 		}
 
@@ -215,7 +195,8 @@
 				
 			}
 
-			return false;
+			throw new \Exception("No Field class found for $className", 1);
+			
 			
 
 		}

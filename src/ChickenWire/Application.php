@@ -136,6 +136,8 @@
 	class Application extends \ChickenTools\Singleton
 	{
 
+		static $_instance;
+
 		/**
 		 * The default inflector used throughout the Application
 		 * @var \ActiveRecord\Inflector

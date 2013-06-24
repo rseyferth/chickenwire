@@ -35,6 +35,15 @@
 		static $authModel; 
 
 
+
+		/**
+		 * The field to use when a generic function wants to show the title of the record.
+		 * @var string
+		 */
+		static $titleColumn;
+
+
+
 		private static $_cwInitialized = false;
 		
 
@@ -229,6 +238,25 @@
 			return $label;
 
 		}
+
+		public function title()
+		{
+
+			// Field set?
+			if (static::$titleColumn)
+			{
+				return $this->{static::$titleColumn};
+			}
+
+			// Guest it
+			if ($this->hasAttribute("title")) return $this->title;
+			if ($this->hasAttribute("name")) return $this->name;
+			if ($this->hasAttribute("fullname")) return $this->fullname;
+			return "Could not guess title column for " . $this->getClass();
+
+		}
+
+
 
 
 

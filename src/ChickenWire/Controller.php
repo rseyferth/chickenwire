@@ -74,6 +74,14 @@
 		protected $request;
 
 		/**
+		 * Flash messages received from previous page
+		 * 
+		 * @var array
+		 */
+		public $flash;
+		
+
+		/**
 		 * Authentication object that was used to validate the current user. This is only set when
 		 * authentication was need for the current action.,
 		 * @var \ChickenWire\Util\Auth
@@ -105,6 +113,8 @@
 		private $_layout;
 
 
+
+
 		/**
 		 * Create a new Controller instance.
 		 *
@@ -126,6 +136,12 @@
 			$this->_layout = null;
 			$this->_buffering = false;
 			$this->_respondToClauses = array();
+
+			// Check flash
+			if (array_key_exists("ChickenWireFlash", $_SESSION)) {
+				$this->flash = $_SESSION['ChickenWireFlash'];
+				unset($_SESSION['ChickenWireFlash']);
+			}
 
 			// No responds to set?
 			if (!isset(static::$respondsTo)) {
@@ -173,6 +189,9 @@
 					return;
 				}
 
+				// Before filter?
+				if ($this->beforeFilter() === false) return;
+
 				// Call to action
 				$this->_callToAction($reflection);
 
@@ -188,6 +207,16 @@
 
 
 		}
+
+		protected function beforeFilter() 
+		{
+
+			// Does nothing... Can be overriden
+			return true; 
+
+		}
+
+
 
 		/**
 		 * When the action has completed, the finish method will 
@@ -1195,6 +1224,25 @@
 
 		}
 
+
+		protected function setFlash($message)
+		{
+
+			// Is it an array?
+			if (!is_array($message)) {
+				$message = array("message" => $message);
+			}
+
+			// Set messages
+			$flash = array();
+			if (array_key_exists("error", $message)) $flash['error'] = $message['error'];
+			if (array_key_exists("message", $message)) $flash['message'] = $message['message'];
+
+			// Store in session
+			$_SESSION['ChickenWireFlash'] = $flash;
+
+		}
+
 		/**
 		 * Send a redirect header to the given location
 		 * @param  string  The Uri to redirect to
@@ -1224,6 +1272,11 @@
 
 			// Add webpath
 			$uri = Application::getConfiguration()->webPath . $uri;
+
+			// Set flash
+			if (array_key_exists("message", $options) || array_key_exists("error", $options)) {
+				$this->setFlash($options);
+			}
 
 			// Send header
 			Http::sendStatus($options['statusCode']);

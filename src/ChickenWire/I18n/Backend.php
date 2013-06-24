@@ -23,13 +23,24 @@
 			// Any options?
 			if (count($options) == 0) return $value;
 
-			// Create replace array
-			$find = array(); $replace = array();
-			foreach ($options as $key => $val) {
-				$find[] = '%{' . $key . '}';
-				$replace[] = $val;
+			// Find fields
+			preg_match_all('/%{(?<field>[a-zA-Z\_0-9]+)}/', $value, $matches);
+			foreach ($matches['field'] as $field) {
+				if (array_key_exists($field, $options)) {
+					$value = str_replace('%{' . $field . '}', $options[$field], $value);
+				}
 			}
-			return str_replace($find, $replace, $value);
+
+			// Find function fields
+			preg_match_all('/%{(?<function>[a-zA-Z\_]+)\((?<field>[a-zA-Z\_0-9]+)\)/', $value, $matches);	
+			foreach ($matches['function'] as $index => $function) {
+				$field = $matches['field'][$index];
+				if (array_key_exists($field, $options)) {
+					$value = str_replace('%{' . $function . '(' . $field . ')}', $function($options[$field]), $value);
+				}
+			}
+
+			return $value;
 
 		}
 

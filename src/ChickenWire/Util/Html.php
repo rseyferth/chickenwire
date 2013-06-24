@@ -45,8 +45,8 @@
 			$options = array_merge(array(
 				"record" => $record
 			), $options);
-				
 
+			
 
 			// Create form
 			$form = new \ChickenWire\Form($options);
@@ -131,7 +131,8 @@
 
 			// Set method to delete
 			$attributes = array_merge(array(
-				"data-method" => "delete"
+				"data-method" => "delete",
+				"rel" => "nofollow"
 			), $attributes);
 
 			// Confirm?
