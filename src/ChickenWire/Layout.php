@@ -11,6 +11,9 @@
 
 		protected $controller;
 
+		protected $config;
+
+
 		public function __construct($layout, $controller, $content)
 		{
 
@@ -18,10 +21,13 @@
 			$this->_content = $content;
 			$this->controller = $controller;
 
+			// Get config
+			$this->config = Application::getConfiguration();
+
+
 			// Create translation functions
 			$t = I18n::translateClosure();
 			
-
 			// Load the file
 			require $layout;
 
