@@ -258,6 +258,11 @@
 		}
 
 
+		public function raw($sourceIndex = 0) {
+			return $this->_sources[$sourceIndex];
+		}
+
+
 	}
 
 

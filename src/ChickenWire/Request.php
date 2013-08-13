@@ -20,6 +20,7 @@
 
 		protected $_queryParams;
 		protected $_urlParams = array();
+		protected $_rawRequestParams = null;
 		protected $_requestParams;
 
 		protected $_queryParamsStore = null;
@@ -77,7 +78,8 @@
 			} else {
 
 				// Parse RAW data
-				parse_str(file_get_contents("php://input"), $this->_requestParams);
+				$this->_rawRequestParams = file_get_contents("php://input");
+				parse_str($this->_rawRequestParams, $this->_requestParams);
 
 			}
 
@@ -239,6 +241,10 @@
 			return $this->_method === 'delete';
 		}
 
+
+		protected function __get_raw() {
+			return $this->_rawRequestParams;
+		}
 
 		protected function __get_urlParams() {
 			if (is_null($this->_urlParamsStore)) {

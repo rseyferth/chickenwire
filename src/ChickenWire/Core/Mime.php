@@ -95,6 +95,14 @@
 
 		);
 
+		public static $webImageTypes = array(
+			self::JPEG, self::PNG
+		);
+
+		public static $webVideoTypes = array(
+			
+		);
+
 		/**
 		 * The mapping of file extentions to simplified content types
 		 * @var array
