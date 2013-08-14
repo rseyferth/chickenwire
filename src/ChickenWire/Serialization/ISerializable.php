@@ -5,8 +5,9 @@
 	interface ISerializable
 	{
 
-		public function toObject($options = array());
+		public function asObject($type, $options = array());
 	
+
 
 
 	}

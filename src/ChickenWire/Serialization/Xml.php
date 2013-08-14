@@ -6,6 +6,8 @@
 	{
 
 		static $includeRoot = true;
+		static $type = "xml";
+
 
 		private $writer;
 		

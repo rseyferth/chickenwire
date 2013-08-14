@@ -6,6 +6,7 @@
 	{
 
 		static $includeRoot = false;
+		static $type = "";
 
 		static function get($type) {
 
@@ -34,7 +35,7 @@
 			} elseif (is_object($input) && $input instanceof ISerializable) {
 
 				// Hello
-				$result = $input->toObject(array(
+				$result = $input->asObject(static::$type, array(
 					"includeRoot" => static::$includeRoot
 				));
 			

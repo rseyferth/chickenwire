@@ -64,7 +64,7 @@ EOD;
 
 			// Default id?
 			if (!array_key_exists("id", $options)) {
-				$options['id'] = $options['name'];
+				$options['id'] = rtrim(str_replace("-", "_", \ChickenTools\Str::slugify($options['name'])), '_');
 			}
 
 			// Loop and set options

@@ -1392,7 +1392,9 @@
 				$modelName = Str::removeNamespace($this->request->route->models[count($this->request->route->models) - 1]);
 			}
 
-			return $this->request->requestParams->getArray($modelName);
+			$params = $this->request->requestParams->getArray($modelName);
+			var_dump($params);
+			return $params;
 
 		}
 

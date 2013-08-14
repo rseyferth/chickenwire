@@ -54,6 +54,10 @@
 		protected static $auth;
 
 
+		protected static $asJsonOptions = array();
+		protected static $asXmlOptions = array();
+
+
 
 		/**
 		 * Retrieve the Table instance for this Model
@@ -214,14 +218,83 @@
 		}
 
 
-		public function toObject($options = array())
+		public function asObject($format, $options = array())
 		{
+
+
+			// Check default options
+			$defaultOptions = \ChickenTools\Arry::mergeStatic(get_called_class(), "as" . ucfirst($format) . "Options");
+			$options = \ChickenTools\Arry::mergeRecursiveDistinct($options, $defaultOptions);
+
+			// Get attributes
+			$obj = $this->attributes();
+
+			// Except?
+			if (array_key_exists("except", $options)) {
+				$except = is_array($options['except']) ? $options['except'] : array($options['except']);
+				foreach ($except as $key) {
+					unset($obj[$key]);
+				}
+			}
+
+			// Only?
+			if (array_key_exists("only", $options)) {
+				$only = is_array($options['only']) ? $options['only'] : array($options['only']);
+				$value = [];
+				foreach ($only as $key) {
+					$value[$key] = $obj[$key];
+				}
+				$obj = $value;
+			}
+
+			// Methods?
+			if (array_key_exists("methods", $options)) {
+				$methods = is_array($options['methods']) ? $options['methods'] : array($options['methods']);
+				foreach ($methods as $method) {
+					$obj[$method] = $this->$method();
+				}
+			}
+
+			// Includes?
+			if (array_key_exists("include", $options)) {
+				$includes = is_array($options['include']) ? $options['include'] : array($options['include']);
+				foreach ($includes as $key => $inc) {
+
+					if (is_numeric($key)) {
+						$subOptions = [];
+					} else {
+						$subOptions = $inc;
+						$inc = $key;
+					}
+					
+					// Get included value
+					$value = $this->$inc;
+
+					// An array or an instance?
+					if (is_array($value)) {
+						$list = [];
+						foreach ($value as $model) {
+							$list[] = $model->asObject($format, $subOptions);
+						}
+						$value = $list;
+					} elseif (is_subclass_of($value, '\\ChickenWire\\Model')) {
+
+						// Apply sub-options to model
+						$value = $value->asObject($format, $subOptions);
+
+					} 
+
+
+					$obj[$inc] = $value;					
+				}
+			}
+
 
 			// Include root?
 			if (array_key_exists("includeRoot", $options) && $options['includeRoot'] == true) {
-				return array(strtolower($this->getClass()) => $this->attributes());
+				return array(strtolower($this->getClass()) => $obj);
 			} else {
-				return $this->attributes();
+				return $obj;
 			}
 
 		}
