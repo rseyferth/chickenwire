@@ -64,8 +64,14 @@
 
 				// Map keys to new array
 				self::$_modelNames = array_keys(self::$_modelMap);
-				
+			
 			}
+			
+			// First argument an array? (Means it's called with an argument-array instead of seperate arguments)
+			if (count($arguments) > 0 && is_array($arguments[0])) {
+				$arguments = $arguments[0];
+			}
+
 
 			// Create regex operator for all model names
 			$regexModels = '(?<model>' . implode("|", self::$_modelNames) . (count($arguments) > 0 ? '|' : '') . ')';
@@ -88,11 +94,19 @@
 				
 				// Model not given?
 				if (empty($matches['model'])) {
-					$model = Str::removeNamespace(get_class($arguments[count($arguments) - 1]));
+					$model = '';
+					$arg = $arguments;
+					if (is_array($arg)) {
+						foreach ($arg as $m) {
+							$model .= Str::removeNamespace(get_class($m));	
+						}
+					} else {
+						$model = Str::removeNamespace(get_class($arg));
+					} 
 				} else {
 					$model = $matches['model'];
 				}
-				
+
 				// Loop through model's routes to see if there's a match on the action
 				foreach (self::$_modelMap[$model] as $route) {
 					

@@ -208,7 +208,7 @@
 
 			// Default controller?
 			if (!array_key_exists('controller', $options)) {
-				$options['controller'] = Str::removeNamespace($modelClass[count($modelClass) - 1]) . 'Controller';
+				$options['controller'] = Str::removeNamespace($options['models'][count($options['models']) - 1]) . 'Controller';
 			}
 
 			// With a module?
@@ -588,6 +588,21 @@
 			// Get last one
 			return $this->_models[count($this->_models) - 1];
 
+		}
+
+		public function getModels() 
+		{
+			return $this->_models;
+		}
+
+
+		public function getModelNames() {
+
+			$str = '';
+			foreach ($this->_models as $model) {
+				$str .= \ChickenTools\Str::removeNamespace($model);
+			}
+			return $str;
 
 		}
 
@@ -598,7 +613,6 @@
 		 */
 		public function replaceFields($models)
 		{
-
 
 			// Loop through my fields
 			$url = $this->_pattern;
@@ -614,9 +628,8 @@
 					list($modelName, $varName) = explode(".", $varName);
 					
 					// Loop through model instances to see if we have a match for the model name
-					$model = null;
+					$model = null;					
 					foreach ($models as $m) {
-
 						if (Str::removeNamespace(get_class($m)) == $modelName) {
 
 							// Use this model instead
@@ -629,7 +642,6 @@
 					
 					// !Found?
 					if (is_null($model)) {
-
 						// Too bad...
 						throw new \Exception("You need to pass an Model instance of $modelName to generate a url for " . $this->_pattern, 1);
 						

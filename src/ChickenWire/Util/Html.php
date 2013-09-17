@@ -27,15 +27,24 @@
 		public function formFor(\ChickenWire\Model $record, $options = array())
 		{
 
+			// Parent objects?
+			if (array_key_exists("parents", $options)) {
+				$options['records'] = $options['parents'];
+				array_push($options['records'], $record);
+			} else {
+				$options['records'] = array($record);
+			}
+
+
 			// No action?
 			if (!array_key_exists("action", $options)) {
 
 				// A new record?
 				if ($record->isNewRecord()) {
-					$options['action'] = Url::instance()->index($record);
+					$options['action'] = Url::instance()->index($options['records']);
 					$options['method'] = "post";
 				} else {
-					$options['action'] = Url::instance()->update($record);
+					$options['action'] = Url::instance()->update($options['records']);
 					$options['method'] = "put";
 				}
 

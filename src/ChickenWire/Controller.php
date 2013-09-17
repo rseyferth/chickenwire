@@ -1263,11 +1263,26 @@
 			// Was it an action and not a url?
 			if (preg_match('/^[a-z]+$/', $uri)) {
 				
-				// Do I have a model to base it on?
-				if (false !== ($model = $this->route->getModel())) {
-					$model = Str::removeNamespace($model);
-					$uri = $this->url->{$uri . $model};					
+				// Records?
+				if (!array_key_exists("records", $options)) {
+					$options['records'] = [];
+
+					// Check if any of the models are known
+					foreach ($this->route->getModels() as $m) {
+						$m = strtolower(\ChickenTools\Str::removeNamespace($m));
+						if (!is_null($this->$m)) {
+							array_push($options['records'], $this->$m);
+						}
+					}
+
 				}
+
+				// Do I have a model to base it on?
+				if (false !== ($model = $this->route->getModelNames())) {
+					$uri = $this->url->{$uri . $model}($options['records']);					
+				}
+
+
 			}
 
 			// Add webpath
@@ -1277,7 +1292,7 @@
 			if (array_key_exists("message", $options) || array_key_exists("error", $options)) {
 				$this->setFlash($options);
 			}
-
+			
 			// Send header
 			Http::sendStatus($options['statusCode']);
 			Http::redirect($uri);
@@ -1393,7 +1408,6 @@
 			}
 
 			$params = $this->request->requestParams->getArray($modelName);
-			var_dump($params);
 			return $params;
 
 		}
