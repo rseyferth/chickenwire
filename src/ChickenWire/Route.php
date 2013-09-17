@@ -14,6 +14,9 @@
 		protected static $_routes = array();
 		protected static $_currentRoute = null;
 
+
+		protected $checked = false;		
+
 		public static function current()
 		{
 			return self::$_currentRoute;
@@ -105,8 +108,14 @@
 			// Loop through routes
 			foreach (self::$_routes as $route) {
 
+				// Already done?
+				if ($route->checked) continue;
+
 				// Do the regex!
 				preg_match_all($route->_regexPattern, $request->uri, $matches);
+
+				// Set flag that this route has been matched
+				$route->checked = true;
 
 				// Does the route match?
 				if (count($matches[0]) == 1) {

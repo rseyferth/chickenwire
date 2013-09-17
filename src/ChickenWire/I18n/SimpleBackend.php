@@ -147,12 +147,7 @@
 
 		}
 
-		public function localize($locale, $object, $format = null, $options = array())
-		{
-
-			return 'lokaal';
-
-		}
+		
 
 		public function addLoadPath($path)
 		{

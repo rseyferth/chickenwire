@@ -103,6 +103,15 @@
 	 * </code>
 	 * If you can't configure your .htaccess to serve the static files in the Public/ directories properly, you can set this to true, and ChickenWire
 	 * will serve the static files.
+	 *
+	 * **systemLocales**
+	 * <code>
+	 * $config->systemLocales = array(
+	 * 	"nl" => "nl_NL.UTF-8",
+	 * 	"en" => "en_US.UTF-8"
+	 * );	
+	 * </code>
+	 * To enable the use of `strftime`'s localization options, you'll need to match ChickenWire's locales to the system locales. E.g. Ubuntu/Debian's dpkg-reconfigure locales.
 	 * 
 	 * **treatExtensionAsMimeType**
 	 * <code>
@@ -202,8 +211,9 @@
 			"sessionCookieExpireTime" => 3600,
 			"sessionRegenerateId" => false,
 
-			"staticThroughChickenWire" => false
+			"staticThroughChickenWire" => false,
 
+			"systemLocales" => []
 
 		);
 
@@ -307,6 +317,16 @@
 				}
 
 			}
+
+			// Try to route!
+			$this->_matchRoute();
+
+		}
+
+
+		protected function _matchRoute()
+		{
+
 
 			// Get route
 			$this->_route = Route::request($this->_request, $httpStatus, $urlParams);

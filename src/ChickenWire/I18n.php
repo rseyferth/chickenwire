@@ -53,6 +53,25 @@
 			return static::getBackend()->translate(static::getLocale(), $key, $options);
 		}
 
+		/**
+		 * Localize the given object and return the localized value (usually a string)
+		 * @param  mixed  $object  An object that supports localization (\ActiveRecord\DateTime)
+		 * @param  mixed  $format  (default = null) Optional formatting options appertaining to the given $object
+		 * @param  array  $options (default = []) Optional additional options
+		 * @return mixed 	The localized value
+		 */
+		public static function localize($object, $format = null, $options = array())
+		{
+
+			return static::getBackend()->localize(static::getLocale(), $object, $format, $options);
+
+		}
+
+
+		public static function date($object, $format = 'LL')
+		{
+			return static::getBackend()->date(static::getLocale(), $object, $format);
+		}
 
 		/**
 		 * Set the current locale
@@ -61,6 +80,13 @@
 		public static function setLocale($locale)
 		{
 			static::$_locale = $locale;
+
+			// Apply to PHP locale
+			$sysLocales = \ChickenWire\Application::getConfiguration()->systemLocales;
+			if (array_key_exists($locale, $sysLocales)) {
+				setlocale(LC_ALL, $sysLocales[$locale]);
+			}
+
 		}
 
 		/**
@@ -79,7 +105,16 @@
 		 */
 		public static function setDefaultLocale($locale)
 		{
+
 			static::$_defaultLocale = $locale;
+			
+			// Apply to PHP locale
+			if (is_null(static::$_locale)) {
+				$sysLocales = \ChickenWire\Application::getConfiguration()->systemLocales;
+				if (array_key_exists($locale, $sysLocales)) {
+					setlocale(LC_ALL, $sysLocales[$locale]);
+				}				
+			}
 		}
 
 		/**
