@@ -1341,8 +1341,8 @@
 				} else {
 
 					// Prefix with modelname
-					$field = strtolower($model) . "_id";
-
+					$field = \ChickenTools\Str::removeNamespace($model) . ".id";
+ 
 				}
 
 				// Present?

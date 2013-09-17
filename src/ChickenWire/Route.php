@@ -196,7 +196,15 @@
 
 			// Store model in all routes
 			if (!is_array($modelClass)) { $modelClass = array($modelClass); }
-			$options['models'] = $modelClass;
+
+			// Loop through models
+			$options['models'] = array();
+			foreach ($modelClass as $model) {
+				if (substr($model, 0, 4) === 'App:') {
+					$model = '\\Application\\Models\\' . substr($model, 4);					
+				}
+				array_push($options['models'], $model);
+			}
 
 			// Default controller?
 			if (!array_key_exists('controller', $options)) {
