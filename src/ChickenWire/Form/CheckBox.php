@@ -25,7 +25,9 @@ EOD;
 		{
 
 			// Create the tag
-			$this->html['value'] = $this->value;
+			if ($this->value === 1 || $this->value === "1" || $this->value === true) {
+				$this->html['checked'] = "checked";
+			}
 			$this->html['id'] = $this->id;
 			$input = new Input($this->type, $this->name, null, $this->html);
 

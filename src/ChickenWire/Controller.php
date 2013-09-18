@@ -1404,10 +1404,33 @@
 
 			// No entry?
 			if (empty($modelName)) {
-				$modelName = Str::removeNamespace($this->request->route->models[count($this->request->route->models) - 1]);
+				$modelName = $this->request->route->models[count($this->request->route->models) - 1];
 			}
 
-			$params = $this->request->requestParams->getArray($modelName);
+			// Get array from request
+			$params = $this->request->requestParams->getArray(Str::removeNamespace($modelName));
+
+			// Try to get table info
+			if (false !== ($table = $modelName::table())) {
+
+				// Loop through params and try to cast the value
+				foreach ($params as $key => $value) {
+					if (array_key_exists($key, $table->columns)) {
+						
+						// Decimal type?
+						$column = $table->columns[$key];
+						if ($column->type === \ActiveRecord\Column::DECIMAL) {
+							$value = I18n::parseFloat($value);
+						}
+
+						// Cast the value into the column now
+						$params[$key] = $column->cast($value, $table->conn);
+					}
+				}
+
+
+			}
+
 			return $params;
 
 		}
@@ -1459,7 +1482,7 @@
 			die;
 
 		}
-
+ 
 
 	}
 
