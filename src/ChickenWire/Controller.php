@@ -417,6 +417,11 @@
 				return;
 			}
 
+			// Layout?
+			if (array_key_exists("layout", $options)) {
+				$this->_layout = $options['layout'];
+			}
+
 
 			// Buffered rendering?
 			if ((array_key_exists("template", $options) || array_key_exists("file", $options) || array_key_exists("text", $options)) && 
@@ -563,6 +568,7 @@
 			// Now start buffering for 'block'
 			$this->_bufferingTo = $block;
 			$this->_buffering = true;
+			ob_start();
 
 			// Callback a string?
 			if (is_string($callback)) {
@@ -1423,6 +1429,11 @@
 							$value = I18n::parseFloat($value);
 						}
 
+						// Checkbox into int?
+						if ($value == 'on' && $column->mapRawType() === \ActiveRecord\Column::INTEGER) {
+							$value = 1;
+						}
+
 						// Cast the value into the column now
 						$params[$key] = $column->cast($value, $table->conn);
 					}
@@ -1483,6 +1494,19 @@
 
 		}
  
+		/**
+		 * Convert markdown text to HTML
+		 * @param  string $text The original Markdown syntaxed text
+		 * @return string       Converted HTML
+		 */
+		protected function markup($text) {
+
+			// Convert it
+			$parser = new \dflydev\markdown\MarkdownParser();
+			return $parser->transformMarkdown($text);
+
+		}
+
 
 	}
 

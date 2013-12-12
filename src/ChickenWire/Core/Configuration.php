@@ -129,7 +129,7 @@
 			}
 
 			// Multiple settings?
-			if (is_array($value)) {
+			if (is_array($value) && (array_key_exists("development", $value) || array_key_exists("test", $value) || array_key_exists("production", $value))) {
 
 				// Loop and apply key as environment
 				foreach ($value as $env => $val) {

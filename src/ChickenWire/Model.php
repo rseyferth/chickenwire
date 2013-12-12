@@ -32,10 +32,10 @@
 		 * Configurator for authentication
 		 * @var string
 		 */
-		static $authModel; 
+		static $authModel;
 
 
-
+		
 		/**
 		 * The field to use when a generic function wants to show the title of the record.
 		 * @var string
@@ -44,7 +44,7 @@
 
 
 
-		private static $_cwInitialized = false;
+		private static $_cwInitialized = [];
 		
 
 		/**
@@ -69,11 +69,16 @@
 			// Do the basics
 			$table = parent::table();
 
-			// ChickenWire features initialized?
-			if (self::$_cwInitialized == false) {
-				self::_initializeCW($table);
-				self::$_cwInitialized = true;
+			// Check if this class was already initialized for ChickenWire
+			$c = get_called_class();
+			if (!in_array($c, self::$_cwInitialized)) {
+			
+				// Initialize 
+				static::_initializeCW($table);				
+				array_push(self::$_cwInitialized, $c);
+				
 			}
+
 
 			// Done.
 			return $table;
@@ -122,6 +127,7 @@
 
 			}
 
+			
 		}
 
 
@@ -221,7 +227,6 @@
 		public function asObject($format, $options = array())
 		{
 
-
 			// Check default options
 			$defaultOptions = \ChickenTools\Arry::mergeStatic(get_called_class(), "as" . ucfirst($format) . "Options");
 			$options = \ChickenTools\Arry::mergeRecursiveDistinct($options, $defaultOptions);
@@ -305,7 +310,7 @@
 		{
 
 			// Try the i18n
-			$key = "activerecord.attributes." . lcfirst($this->getClass() . "." . $attribute);
+			$key = "activerecord.attributes." . strtolower($this->getClass() . "." . $attribute);
 			$label = I18n::translate($key);
 			
 			return $label;
@@ -328,7 +333,6 @@
 			return "Could not guess title column for " . $this->getClass();
 
 		}
-
 
 
 

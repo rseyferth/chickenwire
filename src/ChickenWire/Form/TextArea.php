@@ -14,9 +14,15 @@
 		public function getElement()
 		{
 
+			// Check value
+			$value = $this->value;
+			if (is_array($value)) {
+				$value = '[Array: ' . implode(",", array_keys($value)) . ']';
+			}
+
 			// Create the tag
 			$this->html['name'] = $this->name;
-			$input = Element::textarea($this->value, $this->html);
+			$input = Element::textarea($value, $this->html);
 
 			// Render
 			return $input;

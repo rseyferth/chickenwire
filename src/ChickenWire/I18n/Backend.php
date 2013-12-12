@@ -20,13 +20,25 @@
 			if (is_array($value)) return $value;
 
 			// Any options?
-			if (count($options) == 0) return $value;
+			if (is_array($options) && count($options) == 0) return $value;
 
 			// Find fields
 			preg_match_all('/%{(?<field>[a-zA-Z\_0-9]+)}/', $value, $matches);
 			foreach ($matches['field'] as $field) {
-				if (array_key_exists($field, $options)) {
-					$value = str_replace('%{' . $field . '}', $options[$field], $value);
+
+				// Model?
+				if (is_array($options)) {
+
+					if (array_key_exists($field, $options)) {
+						$value = str_replace('%{' . $field . '}', $options[$field], $value);
+					}
+
+				} elseif (is_subclass_of($options, "\ChickenWire\Model")) { 
+
+					if ($options->hasAttribute($field)) {
+						$value = str_replace('%{' . $field . '}', $options->$field, $value);	
+					}
+
 				}
 			}
 

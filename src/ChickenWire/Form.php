@@ -168,12 +168,38 @@
 						), $options);
 					if (!is_null($this->_settings['record']) && $options['partOfModel'] === true && array_key_exists("name", $options)) {
 
+						// Strip off array selectors
+						$arraySelectors = preg_match_all('/([^\[]+)(\[.*\])/', $options['name'], $matches, PREG_SET_ORDER);
+						$arrayAdd = '';
+						if (count($matches) > 0) {
+							$name = $matches[0][1];
+							$arrayAdd = $matches[0][2];
+						} else {
+							$name = $options['name'];
+						}
+						
 						// Apply name.
-						$fieldName = $options['name'];
-						$options['name'] = $this->_settings['record']->getClass()  . '[' . $options['name'] . ']';
+						$fieldName = $name;
+						$options['name'] = $this->_settings['record']->getClass()  . '[' . $name . ']' . $arrayAdd;
 
 						// Set value
 						$options['value'] = $this->_settings['record']->$fieldName;
+
+						// Array?
+						if (is_array($options['value']) && $arrayAdd != '') {
+
+							// Use the array value
+							preg_match_all('/\[(\d+)\]/', $arrayAdd, $arrayValues, PREG_SET_ORDER);
+							foreach ($arrayValues as $aV) {
+								if (array_key_exists($aV[1], $options['value'])) {
+									$options['value'] = $options['value'][$aV[1]];
+								} else {
+									$options['value'] = null;
+									break;
+								}
+							}
+
+						}
 					
 						// Check if label was passed
 						if (!array_key_exists("label", $options)) {

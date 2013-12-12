@@ -9,7 +9,7 @@
 		private static $_locale = null;
 		private static $_defaultLocale = "en";
 
-
+		private static $_availableLocales = null;
 
 
 		/**
@@ -126,6 +126,14 @@
 			return static::$_defaultLocale;
 		}
 
+
+		public static function getAvailableLocales()
+		{
+			if (is_null(static::$_availableLocales)) {
+				static::$_availableLocales = \ChickenWire\Application::getConfiguration()->locales;
+			}
+			return static::$_availableLocales;
+		}
 
 
 		/**

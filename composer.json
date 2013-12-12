@@ -22,7 +22,7 @@
         "wipkip/html-object": "dev-master",
         "wipkip/chickentools": "dev-master",
         "symfony/yaml": "2.4.*@dev",
-        "wipkip/activerecord": "dev-master"
-        
+        "wipkip/activerecord": "dev-master",
+        "swiftmailer/swiftmailer": "v5.0.2"
     }
 }

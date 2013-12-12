@@ -94,7 +94,7 @@
 
 			// Is there a setter function available?
 			if (method_exists($this, '__set_' . $prop)) {
-				return call_user_method_array('__set_' . $prop, $this, array($value));
+				return call_user_func_array([$this, '__set_' . $prop], array($value));
 			}
 
 			// Check if it is in read/write or write array

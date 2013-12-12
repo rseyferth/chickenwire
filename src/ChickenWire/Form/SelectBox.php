@@ -31,7 +31,7 @@
 			}
 
 			// Loop through options
-			foreach ($this->options as $option) {
+			foreach ($this->options as $key => $option) {
 
 				// An array?
 				if (is_array($option)) {
@@ -48,8 +48,19 @@
 
 				} else {
 
-					// Just use value and caption as same
-					$value = $option;
+					// Numeric key?
+					if (is_numeric($key)) {
+
+						// Just use value and caption as same
+						$value = $option;
+
+					} else {
+
+						// Use the key as value
+						$value =$key;
+
+					}
+
 					$caption = $option;
 
 				}

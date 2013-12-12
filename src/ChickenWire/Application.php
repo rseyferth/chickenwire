@@ -378,7 +378,8 @@
 
 			// Include all php files in the config directory
 			$dh = opendir(CONFIG_PATH);
-			while (false !== ($file = readdir($dh))) {
+			$configFiles = scandir(CONFIG_PATH, SCANDIR_SORT_ASCENDING);
+			foreach ($configFiles as $file) {
 
 				// PHP?
 				if (preg_match("/\.php$/", $file)) {
