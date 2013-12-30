@@ -120,10 +120,24 @@
 
 		}
 
+		public function checkBoxPlus() {
 
-		public function __call($name, $arguments)
-		{
+			// Interpet options
+			$options = $this->interpretOptions(func_get_args());
+
+			// Add checkbox
+			$hiddenField = $this->hiddenField([
+				"name" => $options['name'],
+				"value" => 0
+			]);
 			
+			// And the checkbox itself
+			$checkbox = $this->checkBox($options);
+			
+		}
+
+		private function interpretOptions($arguments) {
+
 			// Check options
 			if (sizeof($arguments) == 0) {
 				$options = array();
@@ -151,6 +165,17 @@
 				}
 				
 			}
+
+			return $options;
+
+		}
+
+
+		public function __call($name, $arguments)
+		{
+			
+			// Interpet options
+			$options = $this->interpretOptions($arguments);
 
 			// UC first to make it a class name
 			$name = ucfirst($name);
@@ -183,7 +208,9 @@
 						$options['name'] = $this->_settings['record']->getClass()  . '[' . $name . ']' . $arrayAdd;
 
 						// Set value
-						$options['value'] = $this->_settings['record']->$fieldName;
+						if (!array_key_exists('value', $options)) {
+							$options['value'] = $this->_settings['record']->$fieldName;
+						}
 
 						// Array?
 						if (is_array($options['value']) && $arrayAdd != '') {
