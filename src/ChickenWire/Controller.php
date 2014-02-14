@@ -224,7 +224,7 @@
 		 * 
 		 * @return void
 		 */
-		private function _finish()
+		protected function _finish()
 		{
 
 			// Check layout path
@@ -1489,7 +1489,18 @@
 
 			//@TODO Real implementation...
 			Http::sendStatus(404);
-			echo ('Page cannot be found');
+			
+			if (class_exists("\\Application\\Controllers\\ErrorController")) {
+
+				$controller = new \Application\Controllers\ErrorController($this->request, false);
+				$controller->show(404);
+
+			} else {
+
+				echo ("404 Page not found");
+
+			}
+
 			die;
 
 		}
